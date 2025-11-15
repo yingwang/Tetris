@@ -48,31 +48,34 @@ public class HighScoresActivity extends AppCompatActivity {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
 
-        for (int i = 0; i < scores.size(); i++) {
+        for (int i = 0; i < scores.size() && i < 10; i++) {
             HighScoreManager.ScoreEntry entry = scores.get(i);
+            boolean isTopThree = i < 3;
 
             // Create a container for each score entry
             LinearLayout entryLayout = new LinearLayout(this);
             entryLayout.setOrientation(LinearLayout.HORIZONTAL);
-            entryLayout.setPadding(16, 12, 16, 12);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             );
-            params.setMargins(0, 4, 0, 4);
+            params.setMargins(0, 8, 0, 8);
             entryLayout.setLayoutParams(params);
-            entryLayout.setBackgroundColor(getResources().getColor(
-                i % 2 == 0 ? android.R.color.transparent : android.R.color.black
-            ));
+            entryLayout.setBackgroundResource(
+                isTopThree ? R.drawable.high_score_entry_top : R.drawable.high_score_entry
+            );
 
             // Rank
             TextView rankView = new TextView(this);
             rankView.setText(String.format(Locale.getDefault(), "#%d", i + 1));
-            rankView.setTextColor(getResources().getColor(
-                i < 3 ? android.R.color.holo_orange_light : android.R.color.white
-            ));
-            rankView.setTextSize(20);
-            rankView.setLayoutParams(new LinearLayout.LayoutParams(80, LinearLayout.LayoutParams.WRAP_CONTENT));
+            rankView.setTextColor(isTopThree ? 0xFFFFD700 : 0xFF4CAF50);
+            rankView.setTextSize(28);
+            rankView.setTypeface(null, android.graphics.Typeface.BOLD);
+            rankView.setShadowLayer(3, 2, 2, 0xFF000000);
+            LinearLayout.LayoutParams rankParams = new LinearLayout.LayoutParams(120, LinearLayout.LayoutParams.WRAP_CONTENT);
+            rankParams.gravity = android.view.Gravity.CENTER_VERTICAL;
+            rankView.setLayoutParams(rankParams);
+            rankView.setGravity(android.view.Gravity.CENTER);
             entryLayout.addView(rankView);
 
             // Score and details
@@ -83,16 +86,19 @@ public class HighScoresActivity extends AppCompatActivity {
             ));
 
             TextView scoreView = new TextView(this);
-            scoreView.setText(String.format(Locale.getDefault(), "Score: %,d", entry.score));
-            scoreView.setTextColor(getResources().getColor(android.R.color.white));
-            scoreView.setTextSize(18);
+            scoreView.setText(String.format(Locale.getDefault(), "%,d", entry.score));
+            scoreView.setTextColor(isTopThree ? 0xFFFFD700 : 0xFFFFFFFF);
+            scoreView.setTextSize(22);
+            scoreView.setTypeface(null, android.graphics.Typeface.BOLD);
+            scoreView.setShadowLayer(2, 1, 1, 0xFF000000);
             detailsLayout.addView(scoreView);
 
             TextView levelView = new TextView(this);
-            levelView.setText(String.format(Locale.getDefault(), "Level: %d  •  %s",
+            levelView.setText(String.format(Locale.getDefault(), "Level %d  •  %s",
                 entry.level, dateFormat.format(new Date(entry.timestamp))));
-            levelView.setTextColor(getResources().getColor(android.R.color.darker_gray));
+            levelView.setTextColor(0xFF999999);
             levelView.setTextSize(14);
+            levelView.setPadding(0, 4, 0, 0);
             detailsLayout.addView(levelView);
 
             entryLayout.addView(detailsLayout);
