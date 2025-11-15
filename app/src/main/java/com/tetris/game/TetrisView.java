@@ -19,6 +19,7 @@ public class TetrisView extends View {
     private Paint shadowPaint;
     private Paint borderPaint;
     private Paint flashPaint;
+    private Paint ghostPaint;
     private float blockSize;
     private float offsetX;
     private float offsetY;
@@ -71,6 +72,12 @@ public class TetrisView extends View {
         flashPaint = new Paint();
         flashPaint.setStyle(Paint.Style.FILL);
         flashPaint.setAntiAlias(true);
+
+        ghostPaint = new Paint();
+        ghostPaint.setStyle(Paint.Style.STROKE);
+        ghostPaint.setStrokeWidth(3);
+        ghostPaint.setAntiAlias(true);
+        ghostPaint.setAlpha(100); // 半透明虚线效果
     }
 
     public void startLineClearAnimation(int[] lines) {
@@ -151,6 +158,33 @@ public class TetrisView extends View {
                 // Draw placed blocks with 3D effect
                 if (boardState[i][j] != 0) {
                     draw3DBlock(canvas, x, y, blockSize, colors[i][j]);
+                }
+            }
+        }
+
+        // Draw ghost piece (shadow showing where piece will land)
+        if (!game.isGameOver()) {
+            TetrisPiece ghostPiece = game.getGhostPiece();
+            if (ghostPiece != null) {
+                int[][] ghostShape = ghostPiece.getShape();
+                ghostPaint.setColor(game.getCurrentPiece().getColor());
+
+                for (int i = 0; i < ghostShape.length; i++) {
+                    for (int j = 0; j < ghostShape[i].length; j++) {
+                        if (ghostShape[i][j] != 0) {
+                            int boardX = ghostPiece.getX() + j;
+                            int boardY = ghostPiece.getY() + i;
+
+                            if (boardY >= 0) {
+                                float x = offsetX + boardX * blockSize;
+                                float y = offsetY + boardY * blockSize;
+                                float inset = 4;
+                                canvas.drawRect(x + inset, y + inset,
+                                              x + blockSize - inset, y + blockSize - inset,
+                                              ghostPaint);
+                            }
+                        }
+                    }
                 }
             }
         }

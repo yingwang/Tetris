@@ -20,10 +20,6 @@ public class SoundManager {
     private Thread musicThread;
     private volatile boolean isPlayingMusic = false;
     private AudioTrack musicTrack;
-
-    // Background music
-    private Thread musicThread;
-    private volatile boolean isPlayingMusic = false;
     private volatile boolean isMusicPaused = false;
     private volatile float musicSpeed = 1.0f; // 1.0 = normal, higher = faster
 
@@ -66,7 +62,7 @@ public class SoundManager {
             sample = sample * envelope;
 
             // Convert to 16-bit PCM
-            short val = (short) (sample * 32767 * 0.3); // 30% volume
+            short val = (short) (sample * 32767 * 0.12); // 12% volume - 再降低音效音量
             sound[i * 2] = (byte) (val & 0x00ff);
             sound[i * 2 + 1] = (byte) ((val & 0xff00) >>> 8);
         }
@@ -106,13 +102,14 @@ public class SoundManager {
     }
 
     public void playDrop() {
-        // Deep thud - piece locking sound
-        playSound(new double[]{150}, new int[]{80});
+        // Bright, satisfying drop sound - descending chirp
+        playSound(new double[]{880, 660}, new int[]{60, 80});
     }
 
     public void playLineClear() {
-        // Pleasant bell-like chime - classic Tetris line clear
-        playSound(new double[]{1568, 1976, 2349}, new int[]{120, 120, 200});
+        // Bright, triumphant ascending arpeggio - rewarding and celebratory
+        // C - E - G - C(high) - E(high) with crescendo ending
+        playSound(new double[]{523, 659, 784, 1047, 1319}, new int[]{80, 80, 80, 100, 140});
     }
 
     public void playGameOver() {
@@ -142,43 +139,31 @@ public class SoundManager {
     }
 
     public void startBackgroundMusic() {
-        if (isPlayingMusic || isMuted) return;
+        if (isPlayingMusic) return;
 
         isPlayingMusic = true;
+        isMusicPaused = false;
         musicThread = new Thread(() -> {
-            // Upbeat, cheerful Tetris-style melody - faster and more energetic
-            // Using brighter notes and faster tempo
-            double[] melody = {
-                // Part 1 - Main melody (energetic and bright)
-                659, 494, 523, 587, 523, 494, 440, 440, 523, 659, 587, 523,
-                494, 494, 523, 587, 659, 523, 440, 440,
-                // Part 2 - Bridge (higher and more cheerful)
-                587, 784, 880, 784, 659, 659, 523, 587, 659, 523, 440, 494,
-                440, 440, 523, 587, 659, 784, 880, 1047,
-                // Part 3 - Variation (uplifting)
-                1047, 880, 784, 659, 784, 659, 523, 659, 587, 523, 494, 440,
-                523, 659, 784, 880, 784, 659, 523, 494,
-                // Part 4 - Return to main theme
-                659, 494, 523, 587, 523, 494, 440, 523, 659, 784, 880, 784,
-                659, 523, 587, 659, 523, 440, 494, 440
-            };
-
-            // Faster tempo for more energetic feel
-            int[] durations = new int[melody.length];
-            for (int i = 0; i < melody.length; i++) {
-                // Shorter notes (180ms) for faster, more upbeat tempo
-                durations[i] = 180;
-            }
-
-            try {
-                while (isPlayingMusic && !Thread.currentThread().isInterrupted()) {
-                    for (int i = 0; i < melody.length && isPlayingMusic; i++) {
-                        playMusicTone(melody[i], durations[i]);
-                        Thread.sleep(5); // Very small gap for smooth flow
+            while (isPlayingMusic) {
+                if (!isMuted && !isMusicPaused) {
+                    playMusicLoop();
+                    // 旋律之间停顿，根据音乐速度调整
+                    try {
+                        int loopGap = (int) (600 / musicSpeed); // 危险时加快
+                        Thread.sleep(loopGap);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
+                } else {
+                    // If muted or paused, just wait a bit before checking again
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        break;
                     }
                 }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
             }
         });
         musicThread.start();
@@ -186,6 +171,7 @@ public class SoundManager {
 
     public void stopBackgroundMusic() {
         isPlayingMusic = false;
+        isMusicPaused = false;
         if (musicThread != null) {
             musicThread.interrupt();
             musicThread = null;
@@ -198,90 +184,6 @@ public class SoundManager {
                 // Ignore
             }
             musicTrack = null;
-        }
-    }
-
-    private void playMusicTone(double frequency, int durationMs) {
-        if (!isPlayingMusic || isMuted) return;
-
-        int numSamples = durationMs * SAMPLE_RATE / 1000;
-        byte[] sound = new byte[2 * numSamples];
-
-        // Generate sine wave for smoother music
-        for (int i = 0; i < numSamples; i++) {
-            double angle = 2.0 * Math.PI * i / (SAMPLE_RATE / frequency);
-            double sample = Math.sin(angle);
-
-            // Apply gentle envelope for music
-            double envelope = 1.0;
-            if (i < numSamples * 0.1) {
-                envelope = (double) i / (numSamples * 0.1);  // Fade in
-            } else if (i > numSamples * 0.9) {
-                envelope = 1.0 - ((double) (i - numSamples * 0.9) / (numSamples * 0.1));  // Fade out
-            }
-            sample = sample * envelope;
-
-            // Convert to 16-bit PCM at lower volume for background music
-            short val = (short) (sample * 32767 * 0.15);  // 15% volume for background
-            sound[i * 2] = (byte) (val & 0x00ff);
-            sound[i * 2 + 1] = (byte) ((val & 0xff00) >>> 8);
-        }
-
-        AudioTrack track = new AudioTrack.Builder()
-                .setAudioAttributes(new AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_GAME)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                        .build())
-                .setAudioFormat(new AudioFormat.Builder()
-                        .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-                        .setSampleRate(SAMPLE_RATE)
-                        .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
-                        .build())
-                .setBufferSizeInBytes(sound.length)
-                .setTransferMode(AudioTrack.MODE_STATIC)
-                .build();
-
-        track.write(sound, 0, sound.length);
-        track.play();
-
-        try {
-            Thread.sleep(durationMs);
-            track.stop();
-            track.release();
-        } catch (InterruptedException e) {
-            track.stop();
-            track.release();
-            Thread.currentThread().interrupt();
-        }
-    }
-
-    public void startBackgroundMusic() {
-        if (isPlayingMusic) return;
-
-        isPlayingMusic = true;
-        isMusicPaused = false;
-        musicThread = new Thread(() -> {
-            while (isPlayingMusic) {
-                if (!isMuted && !isMusicPaused) {
-                    playMusicLoop();
-                }
-                try {
-                    Thread.sleep(100); // Small pause between loops
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    break;
-                }
-            }
-        });
-        musicThread.start();
-    }
-
-    public void stopBackgroundMusic() {
-        isPlayingMusic = false;
-        isMusicPaused = false;
-        if (musicThread != null) {
-            musicThread.interrupt();
-            musicThread = null;
         }
     }
 
@@ -299,37 +201,44 @@ public class SoundManager {
     }
 
     private void playMusicLoop() {
-        // Tetris-inspired melody (simplified A-Type theme)
-        // Notes: E, B, C, D, C, B, A, A, C, E, D, C, B, C, D, E, C, A, A
-        // Frequencies in Hz (notes from Tetris theme, slower tempo)
+        // 欢快有节奏感的游戏旋律 - Energetic, rhythmic game melody
+        // 类似经典街机游戏风格
         double[] notes = {
-            659, 988, 1047, 1175, 1047, 988, 880, 880, 1047, 659, 1175, 1047, 988,  // First phrase
-            1047, 1175, 1319, 1047, 880, 880, 0,  // Second phrase
-            1175, 1397, 1568, 1319, 1175, 1047, 1047, 1319, 659, 1175, 1047, 988,  // Third phrase
-            1047, 1175, 1319, 1047, 880, 880  // Fourth phrase
+            659, 659, 0, 659,       // E E - E  (节奏感开场)
+            523, 659, 784,          // C E G    (跳跃上行)
+            392, 0, 523, 0,         // G - C -  (停顿增加节奏)
+            392, 330, 349, 440,     // G E F A  (快速音阶)
+            523, 587, 523, 440,     // C D C A  (活泼跳跃)
+            392, 523, 659,          // G C E    (再次上行)
+            587, 659, 587, 523,     // D E D C  (下行回旋)
+            440, 392, 523           // A G C    (结束)
         };
 
-        // Durations in ms (slower tempo for Tetris feel, adjusted by speed)
-        int baseDuration = 300; // Slower base duration
-        int[] durations = new int[notes.length];
-        for (int i = 0; i < notes.length; i++) {
-            // Vary note lengths for musical rhythm
-            if (i == 6 || i == 7 || i == 18 || i == 19 || i == 35 || i == 36) {
-                durations[i] = (int) (baseDuration * 2 / musicSpeed); // Longer notes
-            } else if (i == 19) { // Rest
-                durations[i] = (int) (baseDuration / musicSpeed);
-            } else {
-                durations[i] = (int) (baseDuration / musicSpeed);
-            }
-        }
+        // 节奏模式 - varied rhythm for more energy
+        // 1 = 正常, 0.5 = 短促, 1.5 = 长音
+        double[] rhythmPattern = {
+            0.7, 0.7, 0.4, 0.7,     // 快速节奏
+            0.7, 0.7, 1.2,          // 跳跃感
+            1.0, 0.4, 1.0, 0.4,     // 停顿节奏
+            0.6, 0.6, 0.6, 0.6,     // 快速音阶
+            0.7, 0.7, 0.7, 0.7,     // 均匀节奏
+            0.7, 0.7, 1.2,          // 再次跳跃
+            0.6, 0.6, 0.6, 0.6,     // 快速下行
+            0.7, 0.7, 1.5           // 结束长音
+        };
+
+        // 根据musicSpeed调整节奏 - rhythm adjusted by music speed
+        int baseNoteDuration = 320; // 更短的基础时长，更快节奏
 
         try {
-            for (int i = 0; i < notes.length && isPlayingMusic; i++) {
-                if (notes[i] > 0) { // Skip rests (0 frequency)
-                    playMusicTone(notes[i], durations[i]);
-                }
-                if (i < notes.length - 1) {
-                    Thread.sleep((int) (50 / musicSpeed)); // Gap between notes
+            for (int i = 0; i < notes.length && isPlayingMusic && !isMusicPaused; i++) {
+                if (notes[i] > 0) {
+                    int noteDuration = (int) (baseNoteDuration * rhythmPattern[i] / musicSpeed);
+                    playMusicTone(notes[i], noteDuration);
+                    Thread.sleep((int) (40 / musicSpeed)); // 短暂间隔
+                } else {
+                    // 休止符
+                    Thread.sleep((int) (baseNoteDuration * rhythmPattern[i] / musicSpeed));
                 }
             }
         } catch (InterruptedException e) {
@@ -360,8 +269,8 @@ public class SoundManager {
             }
             sample = sample * envelope;
 
-            // Convert to 16-bit PCM (lower volume for background music)
-            short val = (short) (sample * 32767 * 0.15); // 15% volume for background
+            // Convert to 16-bit PCM (balanced volume for background music)
+            short val = (short) (sample * 32767 * 0.18); // 18% volume - 背景音乐更清晰
             sound[i * 2] = (byte) (val & 0x00ff);
             sound[i * 2 + 1] = (byte) ((val & 0xff00) >>> 8);
         }
@@ -383,11 +292,15 @@ public class SoundManager {
         audioTrack.write(sound, 0, sound.length);
         audioTrack.play();
 
-        // Release after playback
-        handler.postDelayed(() -> {
+        // 同步等待音符播放完成 - Wait synchronously for note to finish
+        try {
+            Thread.sleep(durationMs);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } finally {
             audioTrack.stop();
             audioTrack.release();
-        }, durationMs + 50);
+        }
     }
 
     public void release() {

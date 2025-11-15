@@ -196,6 +196,24 @@ public class TetrisGame {
         return nextPiece;
     }
 
+    // Get ghost piece position (where current piece will land)
+    public TetrisPiece getGhostPiece() {
+        if (currentPiece == null || gameOver) return null;
+
+        TetrisPiece ghost = currentPiece.copy();
+        // Move ghost piece down until it can't move anymore
+        while (true) {
+            TetrisPiece temp = ghost.copy();
+            temp.moveDown();
+            if (board.isValidPosition(temp)) {
+                ghost.moveDown();
+            } else {
+                break;
+            }
+        }
+        return ghost;
+    }
+
     public int getScore() {
         return score;
     }
