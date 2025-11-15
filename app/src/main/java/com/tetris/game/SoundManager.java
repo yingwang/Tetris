@@ -146,9 +146,9 @@ public class SoundManager {
             while (isPlayingMusic) {
                 if (!isMuted && !isMusicPaused) {
                     playMusicLoop();
-                    // 旋律之间停顿1.5秒，让音乐更舒缓
+                    // 旋律之间停顿600ms，节奏更流畅
                     try {
-                        Thread.sleep(1500); // 1.5秒停顿，更放松
+                        Thread.sleep(600); // 较短停顿，保持节奏
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                         break;
@@ -199,7 +199,7 @@ public class SoundManager {
     }
 
     private void playMusicLoop() {
-        // 简单清爽的俄罗斯方块旋律 - Simple, clear, relaxing Tetris melody
+        // 简单清爽的俄罗斯方块旋律 - Simple, clear, upbeat Tetris melody
         // 只保留最经典的主旋律片段
         double[] notes = {
             659, 494, 523, 587,     // E, B, C, D
@@ -208,14 +208,14 @@ public class SoundManager {
             587, 523, 494           // D, C, B
         };
 
-        // 统一的节奏 - uniform rhythm for clarity
-        int noteDuration = 500; // 每个音符500ms，慢速放松
+        // 更快的节奏，稍微欢快 - faster, more upbeat rhythm
+        int noteDuration = 380; // 每个音符380ms，更欢快的节奏
 
         try {
             for (int i = 0; i < notes.length && isPlayingMusic && !isMusicPaused; i++) {
                 playMusicTone(notes[i], noteDuration);
-                // 音符之间停顿100ms，清晰分离
-                Thread.sleep(100);
+                // 音符之间停顿60ms，流畅清晰
+                Thread.sleep(60);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
