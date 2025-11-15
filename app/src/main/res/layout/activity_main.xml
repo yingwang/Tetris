@@ -181,8 +181,8 @@
             <!-- Left button - far left -->
             <ImageButton
                 android:id="@+id/btnLeft"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginStart="4dp"
@@ -190,14 +190,14 @@
                 android:src="@drawable/ic_arrow_left"
                 android:contentDescription="@string/left"
                 android:scaleType="centerInside"
-                android:padding="16dp"
+                android:padding="18dp"
                 android:background="@drawable/button_background_enhanced"/>
 
             <!-- Rotate button - close to left button -->
             <ImageButton
                 android:id="@+id/btnRotate"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_toEndOf="@id/btnLeft"
                 android:layout_toRightOf="@id/btnLeft"
                 android:layout_marginStart="8dp"
@@ -205,14 +205,14 @@
                 android:src="@drawable/ic_rotate"
                 android:contentDescription="@string/rotate"
                 android:scaleType="centerInside"
-                android:padding="16dp"
+                android:padding="18dp"
                 android:background="@drawable/button_background_enhanced"/>
 
             <!-- Right button - far right -->
             <ImageButton
                 android:id="@+id/btnRight"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginEnd="4dp"
@@ -220,14 +220,14 @@
                 android:src="@drawable/ic_arrow_right"
                 android:contentDescription="@string/right"
                 android:scaleType="centerInside"
-                android:padding="16dp"
+                android:padding="18dp"
                 android:background="@drawable/button_background_enhanced"/>
 
             <!-- Drop button - close to right button -->
             <ImageButton
                 android:id="@+id/btnDrop"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_toStartOf="@id/btnRight"
                 android:layout_toLeftOf="@id/btnRight"
                 android:layout_marginEnd="8dp"
@@ -235,7 +235,7 @@
                 android:src="@drawable/ic_drop"
                 android:contentDescription="@string/drop"
                 android:scaleType="centerInside"
-                android:padding="16dp"
+                android:padding="18dp"
                 android:background="@drawable/button_background_enhanced"/>
         </RelativeLayout>
     </LinearLayout>

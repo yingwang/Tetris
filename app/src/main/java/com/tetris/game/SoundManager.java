@@ -146,9 +146,9 @@ public class SoundManager {
             while (isPlayingMusic) {
                 if (!isMuted && !isMusicPaused) {
                     playMusicLoop();
-                    // Longer pause between melody loops for relaxing, chill vibe
+                    // 旋律之间停顿1.5秒，让音乐更舒缓
                     try {
-                        Thread.sleep(800); // 800ms pause between complete melody loops
+                        Thread.sleep(1500); // 1.5秒停顿，更放松
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                         break;
@@ -199,46 +199,23 @@ public class SoundManager {
     }
 
     private void playMusicLoop() {
-        // Classic Tetris A-Type Theme - relaxing, clear, and chill
-        // Simplified for a more peaceful experience
-        // E5, B4, C5, D5, C5, B4, A4 (main phrase)
+        // 简单清爽的俄罗斯方块旋律 - Simple, clear, relaxing Tetris melody
+        // 只保留最经典的主旋律片段
         double[] notes = {
-            // Main phrase - slow and melodic
-            659, 494, 523, 587, 523, 494, 440, 0,
-            440, 523, 659, 0, 587, 523, 494, 0,
-
-            // Variation - higher register for interest
-            587, 659, 0, 523, 440, 0, 440, 0
+            659, 494, 523, 587,     // E, B, C, D
+            523, 494, 440,          // C, B, A
+            440, 523, 659,          // A, C, E
+            587, 523, 494           // D, C, B
         };
 
-        // Relaxed rhythm pattern - longer notes for chill vibe
-        // 1.5 = dotted quarter (600ms), 1 = quarter (400ms), 0.5 = eighth (200ms)
-        double[] rhythmPattern = {
-            1, 0.5, 0.5, 1, 0.5, 0.5, 1.5, 0.5,
-            1, 0.5, 1, 0.5, 0.5, 0.5, 1.5, 0.5,
-
-            0.5, 1, 0.5, 0.5, 1, 0.5, 1.5, 1
-        };
-
-        // Slower tempo for maximum relaxation
-        int baseNoteDuration = 450; // Even slower for chill vibe
-        int[] durations = new int[notes.length];
-        for (int i = 0; i < notes.length; i++) {
-            durations[i] = (int) (baseNoteDuration * rhythmPattern[i] / musicSpeed);
-        }
+        // 统一的节奏 - uniform rhythm for clarity
+        int noteDuration = 500; // 每个音符500ms，慢速放松
 
         try {
             for (int i = 0; i < notes.length && isPlayingMusic && !isMusicPaused; i++) {
-                if (notes[i] > 0) {
-                    playMusicTone(notes[i], durations[i]);
-                } else {
-                    // Rest (silence) for breathing room
-                    Thread.sleep((int) (durations[i] / musicSpeed));
-                }
-                // Slightly longer gap for clearer, more relaxed sound
-                if (i < notes.length - 1) {
-                    Thread.sleep((int) (40 / musicSpeed));
-                }
+                playMusicTone(notes[i], noteDuration);
+                // 音符之间停顿100ms，清晰分离
+                Thread.sleep(100);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -269,7 +246,7 @@ public class SoundManager {
             sample = sample * envelope;
 
             // Convert to 16-bit PCM (very low volume for chill background music)
-            short val = (short) (sample * 32767 * 0.10); // 10% volume for relaxing background
+            short val = (short) (sample * 32767 * 0.12); // 12% volume for clear but relaxing sound
             sound[i * 2] = (byte) (val & 0x00ff);
             sound[i * 2 + 1] = (byte) ((val & 0xff00) >>> 8);
         }
@@ -291,11 +268,15 @@ public class SoundManager {
         audioTrack.write(sound, 0, sound.length);
         audioTrack.play();
 
-        // Release after playback
-        handler.postDelayed(() -> {
+        // 同步等待音符播放完成 - Wait synchronously for note to finish
+        try {
+            Thread.sleep(durationMs);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } finally {
             audioTrack.stop();
             audioTrack.release();
-        }, durationMs + 50);
+        }
     }
 
     public void release() {
