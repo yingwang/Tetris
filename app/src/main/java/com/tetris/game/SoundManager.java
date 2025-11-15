@@ -146,12 +146,21 @@ public class SoundManager {
             while (isPlayingMusic) {
                 if (!isMuted && !isMusicPaused) {
                     playMusicLoop();
-                }
-                try {
-                    Thread.sleep(100); // Small pause between loops
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    break;
+                    // Longer pause between melody loops for relaxing, chill vibe
+                    try {
+                        Thread.sleep(800); // 800ms pause between complete melody loops
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
+                } else {
+                    // If muted or paused, just wait a bit before checking again
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
                 }
             }
         });
@@ -190,34 +199,29 @@ public class SoundManager {
     }
 
     private void playMusicLoop() {
-        // Classic Tetris A-Type Theme (Korobeiniki) - relaxing and nostalgic
-        // Original melody with proper rhythm and pacing
-        // E5, B4, C5, D5, C5, B4, A4, A4, C5, E5, D5, C5, B4, B4, C5, D5, E5, C5, A4, A4
-        // Frequencies in Hz (proper Tetris A-Type theme)
+        // Classic Tetris A-Type Theme - relaxing, clear, and chill
+        // Simplified for a more peaceful experience
+        // E5, B4, C5, D5, C5, B4, A4 (main phrase)
         double[] notes = {
-            // Main theme - Part 1
-            659, 494, 523, 587, 523, 494, 440, 440, 523, 659, 587, 523,
-            494, 0, 494, 523, 587, 0, 659, 0, 523, 0, 440, 0, 440, 0, 0, 0,
+            // Main phrase - slow and melodic
+            659, 494, 523, 587, 523, 494, 440, 0,
+            440, 523, 659, 0, 587, 523, 494, 0,
 
-            // Main theme - Part 2 (repeated with variation)
-            587, 0, 784, 880, 784, 659, 0, 659, 523, 659, 587, 523,
-            494, 0, 494, 523, 587, 0, 659, 0, 523, 0, 440, 0, 440, 0, 0, 0
+            // Variation - higher register for interest
+            587, 659, 0, 523, 440, 0, 440, 0
         };
 
-        // Proper rhythm - using longer, more relaxed note durations
-        // 1 = quarter note (400ms), 2 = half note (800ms), 0.5 = eighth note (200ms)
+        // Relaxed rhythm pattern - longer notes for chill vibe
+        // 1.5 = dotted quarter (600ms), 1 = quarter (400ms), 0.5 = eighth (200ms)
         double[] rhythmPattern = {
-            // Part 1
-            1, 0.5, 0.5, 1, 0.5, 0.5, 1, 0.5, 0.5, 1, 0.5, 0.5,
-            1, 0.5, 0.5, 1, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1.5, 0.5, 0.5, 0.5,
+            1, 0.5, 0.5, 1, 0.5, 0.5, 1.5, 0.5,
+            1, 0.5, 1, 0.5, 0.5, 0.5, 1.5, 0.5,
 
-            // Part 2
-            1, 0.5, 0.5, 1, 0.5, 0.5, 1, 0.5, 0.5, 1, 0.5, 0.5,
-            1, 0.5, 0.5, 1, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1.5, 0.5, 0.5, 0.5
+            0.5, 1, 0.5, 0.5, 1, 0.5, 1.5, 1
         };
 
-        // Calculate durations based on rhythm pattern (slower, more relaxing tempo)
-        int baseNoteDuration = 400; // Slower base tempo for relaxation
+        // Slower tempo for maximum relaxation
+        int baseNoteDuration = 450; // Even slower for chill vibe
         int[] durations = new int[notes.length];
         for (int i = 0; i < notes.length; i++) {
             durations[i] = (int) (baseNoteDuration * rhythmPattern[i] / musicSpeed);
@@ -225,14 +229,15 @@ public class SoundManager {
 
         try {
             for (int i = 0; i < notes.length && isPlayingMusic && !isMusicPaused; i++) {
-                if (notes[i] > 0) { // Skip rests (0 frequency = silence)
+                if (notes[i] > 0) {
                     playMusicTone(notes[i], durations[i]);
                 } else {
-                    // Rest (silence)
+                    // Rest (silence) for breathing room
                     Thread.sleep((int) (durations[i] / musicSpeed));
                 }
+                // Slightly longer gap for clearer, more relaxed sound
                 if (i < notes.length - 1) {
-                    Thread.sleep((int) (30 / musicSpeed)); // Small gap between notes
+                    Thread.sleep((int) (40 / musicSpeed));
                 }
             }
         } catch (InterruptedException e) {
@@ -263,8 +268,8 @@ public class SoundManager {
             }
             sample = sample * envelope;
 
-            // Convert to 16-bit PCM (lower volume for background music)
-            short val = (short) (sample * 32767 * 0.15); // 15% volume for background
+            // Convert to 16-bit PCM (very low volume for chill background music)
+            short val = (short) (sample * 32767 * 0.10); // 10% volume for relaxing background
             sound[i * 2] = (byte) (val & 0x00ff);
             sound[i * 2 + 1] = (byte) ((val & 0xff00) >>> 8);
         }
