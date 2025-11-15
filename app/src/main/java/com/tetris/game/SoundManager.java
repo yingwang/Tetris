@@ -146,9 +146,10 @@ public class SoundManager {
             while (isPlayingMusic) {
                 if (!isMuted && !isMusicPaused) {
                     playMusicLoop();
-                    // 旋律之间停顿600ms，节奏更流畅
+                    // 旋律之间停顿，根据音乐速度调整
                     try {
-                        Thread.sleep(600); // 较短停顿，保持节奏
+                        int loopGap = (int) (600 / musicSpeed); // 危险时加快
+                        Thread.sleep(loopGap);
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                         break;
@@ -212,14 +213,16 @@ public class SoundManager {
             330, 330, 294           // E E D
         };
 
-        // 欢快的节奏 - upbeat rhythm
-        int noteDuration = 380; // 每个音符380ms
+        // 根据musicSpeed调整节奏 - rhythm adjusted by music speed (faster when board fills up)
+        int baseNoteDuration = 380; // 基础音符时长
+        int noteDuration = (int) (baseNoteDuration / musicSpeed);
+        int noteGap = (int) (60 / musicSpeed);
 
         try {
             for (int i = 0; i < notes.length && isPlayingMusic && !isMusicPaused; i++) {
                 playMusicTone(notes[i], noteDuration);
-                // 音符之间停顿60ms，流畅清晰
-                Thread.sleep(60);
+                // 音符之间停顿，根据速度调整
+                Thread.sleep(noteGap);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
