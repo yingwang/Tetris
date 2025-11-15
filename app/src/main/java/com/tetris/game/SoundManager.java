@@ -62,7 +62,7 @@ public class SoundManager {
             sample = sample * envelope;
 
             // Convert to 16-bit PCM
-            short val = (short) (sample * 32767 * 0.15); // 15% volume - 降低音效音量
+            short val = (short) (sample * 32767 * 0.12); // 12% volume - 再降低音效音量
             sound[i * 2] = (byte) (val & 0x00ff);
             sound[i * 2 + 1] = (byte) ((val & 0xff00) >>> 8);
         }
@@ -102,13 +102,13 @@ public class SoundManager {
     }
 
     public void playDrop() {
-        // Deep thud - piece locking sound
-        playSound(new double[]{150}, new int[]{80});
+        // Bright, satisfying drop sound - descending chirp
+        playSound(new double[]{880, 660}, new int[]{60, 80});
     }
 
     public void playLineClear() {
-        // Pleasant bell-like chime - classic Tetris line clear
-        playSound(new double[]{1568, 1976, 2349}, new int[]{120, 120, 200});
+        // Bright, positive ascending melody - matches animation duration (~280ms)
+        playSound(new double[]{523, 659, 784, 1047}, new int[]{70, 70, 70, 70});
     }
 
     public void playGameOver() {
@@ -269,7 +269,7 @@ public class SoundManager {
             sample = sample * envelope;
 
             // Convert to 16-bit PCM (balanced volume for background music)
-            short val = (short) (sample * 32767 * 0.15); // 15% volume - 与游戏音效平衡
+            short val = (short) (sample * 32767 * 0.18); // 18% volume - 背景音乐更清晰
             sound[i * 2] = (byte) (val & 0x00ff);
             sound[i * 2 + 1] = (byte) ((val & 0xff00) >>> 8);
         }
