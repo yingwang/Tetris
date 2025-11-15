@@ -194,6 +194,14 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         updateScore(game.getScore());
         updateLevel(game.getLevel());
 
+        // Start background music
+        if (soundManager != null) {
+            soundManager.startBackgroundMusic();
+        }
+
+        // Initialize pause button to show pause icon (game is playing)
+        updatePauseButton();
+
         startGameLoop();
     }
 
@@ -221,6 +229,10 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         if (gameHandler != null && gameRunnable != null) {
             gameHandler.removeCallbacks(gameRunnable);
         }
+        // Stop background music
+        if (soundManager != null) {
+            soundManager.stopBackgroundMusic();
+        }
     }
 
     private void togglePause() {
@@ -229,8 +241,14 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
             invalidateOptionsMenu(); // Update menu to change Pause/Resume text
             if (game.isPaused()) {
                 Toast.makeText(this, "Game Paused", Toast.LENGTH_SHORT).show();
+                if (soundManager != null) {
+                    soundManager.pauseMusic();
+                }
             } else {
                 Toast.makeText(this, "Game Resumed", Toast.LENGTH_SHORT).show();
+                if (soundManager != null) {
+                    soundManager.resumeMusic();
+                }
             }
         }
     }
@@ -311,6 +329,19 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
             game.setPaused(true);
             invalidateOptionsMenu();
             updatePauseButton();
+        }
+        // Pause music when app goes to background
+        if (soundManager != null) {
+            soundManager.pauseMusic();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Resume music when app comes back, but only if game is not paused
+        if (soundManager != null && game != null && !game.isPaused() && !game.isGameOver()) {
+            soundManager.resumeMusic();
         }
     }
 

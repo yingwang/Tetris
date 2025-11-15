@@ -18,6 +18,12 @@ public class SoundManager {
     private boolean isMuted;
     private Handler handler;
 
+    // Background music
+    private Thread musicThread;
+    private volatile boolean isPlayingMusic = false;
+    private volatile boolean isMusicPaused = false;
+    private volatile float musicSpeed = 1.0f; // 1.0 = normal, higher = faster
+
     public SoundManager(Context context) {
         this.context = context;
         this.prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -129,7 +135,142 @@ public class SoundManager {
         setMuted(!isMuted);
     }
 
+    public void startBackgroundMusic() {
+        if (isPlayingMusic) return;
+
+        isPlayingMusic = true;
+        isMusicPaused = false;
+        musicThread = new Thread(() -> {
+            while (isPlayingMusic) {
+                if (!isMuted && !isMusicPaused) {
+                    playMusicLoop();
+                }
+                try {
+                    Thread.sleep(100); // Small pause between loops
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+        });
+        musicThread.start();
+    }
+
+    public void stopBackgroundMusic() {
+        isPlayingMusic = false;
+        isMusicPaused = false;
+        if (musicThread != null) {
+            musicThread.interrupt();
+            musicThread = null;
+        }
+    }
+
+    public void pauseMusic() {
+        isMusicPaused = true;
+    }
+
+    public void resumeMusic() {
+        isMusicPaused = false;
+    }
+
+    public void setMusicSpeed(float speed) {
+        // speed: 1.0 = normal (slow), 1.3-1.5 = faster when board fills up
+        this.musicSpeed = Math.max(0.5f, Math.min(2.0f, speed));
+    }
+
+    private void playMusicLoop() {
+        // Tetris-inspired melody (simplified A-Type theme)
+        // Notes: E, B, C, D, C, B, A, A, C, E, D, C, B, C, D, E, C, A, A
+        // Frequencies in Hz (notes from Tetris theme, slower tempo)
+        double[] notes = {
+            659, 988, 1047, 1175, 1047, 988, 880, 880, 1047, 659, 1175, 1047, 988,  // First phrase
+            1047, 1175, 1319, 1047, 880, 880, 0,  // Second phrase
+            1175, 1397, 1568, 1319, 1175, 1047, 1047, 1319, 659, 1175, 1047, 988,  // Third phrase
+            1047, 1175, 1319, 1047, 880, 880  // Fourth phrase
+        };
+
+        // Durations in ms (slower tempo for Tetris feel, adjusted by speed)
+        int baseDuration = 300; // Slower base duration
+        int[] durations = new int[notes.length];
+        for (int i = 0; i < notes.length; i++) {
+            // Vary note lengths for musical rhythm
+            if (i == 6 || i == 7 || i == 18 || i == 19 || i == 35 || i == 36) {
+                durations[i] = (int) (baseDuration * 2 / musicSpeed); // Longer notes
+            } else if (i == 19) { // Rest
+                durations[i] = (int) (baseDuration / musicSpeed);
+            } else {
+                durations[i] = (int) (baseDuration / musicSpeed);
+            }
+        }
+
+        try {
+            for (int i = 0; i < notes.length && isPlayingMusic; i++) {
+                if (notes[i] > 0) { // Skip rests (0 frequency)
+                    playMusicTone(notes[i], durations[i]);
+                }
+                if (i < notes.length - 1) {
+                    Thread.sleep((int) (50 / musicSpeed)); // Gap between notes
+                }
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    private void playMusicTone(double frequency, int durationMs) {
+        if (!isPlayingMusic || isMuted || isMusicPaused) return;
+
+        int numSamples = durationMs * SAMPLE_RATE / 1000;
+        byte[] sound = new byte[2 * numSamples];
+        double sample;
+
+        // Generate smoother sine wave for music (not square wave)
+        for (int i = 0; i < numSamples; i++) {
+            double angle = 2.0 * Math.PI * i / (SAMPLE_RATE / frequency);
+            sample = Math.sin(angle);
+
+            // Apply gentle envelope for smoother music
+            double envelope = 1.0;
+            if (i < numSamples * 0.05) {
+                // Fade in
+                envelope = (double) i / (numSamples * 0.05);
+            } else if (i > numSamples * 0.8) {
+                // Fade out
+                envelope = 1.0 - ((double) i - numSamples * 0.8) / (numSamples * 0.2);
+            }
+            sample = sample * envelope;
+
+            // Convert to 16-bit PCM (lower volume for background music)
+            short val = (short) (sample * 32767 * 0.15); // 15% volume for background
+            sound[i * 2] = (byte) (val & 0x00ff);
+            sound[i * 2 + 1] = (byte) ((val & 0xff00) >>> 8);
+        }
+
+        AudioTrack audioTrack = new AudioTrack.Builder()
+                .setAudioAttributes(new AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_GAME)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .build())
+                .setAudioFormat(new AudioFormat.Builder()
+                        .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                        .setSampleRate(SAMPLE_RATE)
+                        .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
+                        .build())
+                .setBufferSizeInBytes(sound.length)
+                .setTransferMode(AudioTrack.MODE_STATIC)
+                .build();
+
+        audioTrack.write(sound, 0, sound.length);
+        audioTrack.play();
+
+        // Release after playback
+        handler.postDelayed(() -> {
+            audioTrack.stop();
+            audioTrack.release();
+        }, durationMs + 50);
+    }
+
     public void release() {
-        // Nothing to release with AudioTrack approach
+        stopBackgroundMusic();
     }
 }
