@@ -84,6 +84,7 @@ public class HighScoresActivity extends AppCompatActivity {
             detailsLayout.setLayoutParams(new LinearLayout.LayoutParams(
                 0, LinearLayout.LayoutParams.WRAP_CONTENT, 1
             ));
+            detailsLayout.setPadding(16, 0, 0, 0); // Add left padding for spacing
 
             TextView scoreView = new TextView(this);
             scoreView.setText(String.format(Locale.getDefault(), "%,d", entry.score));
@@ -98,7 +99,12 @@ public class HighScoresActivity extends AppCompatActivity {
                 entry.level, dateFormat.format(new Date(entry.timestamp))));
             levelView.setTextColor(0xFF999999);
             levelView.setTextSize(14);
-            levelView.setPadding(0, 4, 0, 0);
+            LinearLayout.LayoutParams levelParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            levelParams.setMargins(0, 4, 0, 0); // Add small top margin
+            levelView.setLayoutParams(levelParams);
             detailsLayout.addView(levelView);
 
             entryLayout.addView(detailsLayout);

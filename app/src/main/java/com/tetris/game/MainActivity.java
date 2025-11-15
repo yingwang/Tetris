@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         ImageButton btnRight = findViewById(R.id.btnRight);
         ImageButton btnRotate = findViewById(R.id.btnRotate);
         ImageButton btnDrop = findViewById(R.id.btnDrop);
+        ImageButton btnPause = findViewById(R.id.btnPause);
 
         btnLeft.setOnClickListener(v -> {
             if (game != null) game.moveLeft();
@@ -113,6 +114,13 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
 
         btnDrop.setOnClickListener(v -> {
             if (game != null) game.drop();
+        });
+
+        btnPause.setOnClickListener(v -> {
+            if (game != null) {
+                togglePause();
+                updatePauseButton();
+            }
         });
     }
 
@@ -186,6 +194,14 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         updateScore(game.getScore());
         updateLevel(game.getLevel());
 
+        // Start background music
+        if (soundManager != null) {
+            soundManager.startBackgroundMusic();
+        }
+
+        // Initialize pause button to show pause icon (game is playing)
+        updatePauseButton();
+
         startGameLoop();
 
         // Start background music
@@ -218,6 +234,10 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         if (gameHandler != null && gameRunnable != null) {
             gameHandler.removeCallbacks(gameRunnable);
         }
+        // Stop background music
+        if (soundManager != null) {
+            soundManager.stopBackgroundMusic();
+        }
     }
 
     private void togglePause() {
@@ -226,8 +246,27 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
             invalidateOptionsMenu(); // Update menu to change Pause/Resume text
             if (game.isPaused()) {
                 Toast.makeText(this, "Game Paused", Toast.LENGTH_SHORT).show();
+                if (soundManager != null) {
+                    soundManager.pauseMusic();
+                }
             } else {
                 Toast.makeText(this, "Game Resumed", Toast.LENGTH_SHORT).show();
+                if (soundManager != null) {
+                    soundManager.resumeMusic();
+                }
+            }
+        }
+    }
+
+    private void updatePauseButton() {
+        ImageButton btnPause = findViewById(R.id.btnPause);
+        if (game != null && btnPause != null) {
+            if (game.isPaused()) {
+                btnPause.setImageResource(R.drawable.ic_play);
+                btnPause.setContentDescription(getString(R.string.resume));
+            } else {
+                btnPause.setImageResource(R.drawable.ic_pause);
+                btnPause.setContentDescription(getString(R.string.pause));
             }
         }
     }
@@ -297,6 +336,20 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         if (game != null && !game.isGameOver()) {
             game.setPaused(true);
             invalidateOptionsMenu();
+            updatePauseButton();
+        }
+        // Pause music when app goes to background
+        if (soundManager != null) {
+            soundManager.pauseMusic();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Resume music when app comes back, but only if game is not paused
+        if (soundManager != null && game != null && !game.isPaused() && !game.isGameOver()) {
+            soundManager.resumeMusic();
         }
     }
 

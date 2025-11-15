@@ -177,4 +177,33 @@ public class TetrisBoard {
             colors[0][j] = Color.TRANSPARENT;
         }
     }
+
+    /**
+     * Get the highest row that contains blocks (0 = top, ROWS-1 = bottom)
+     * Returns ROWS if board is empty
+     */
+    public int getHighestBlockRow() {
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLS; j++) {
+                if (board[i][j] != 0) {
+                    return i;
+                }
+            }
+        }
+        return ROWS; // Board is empty
+    }
+
+    /**
+     * Get fill percentage (0.0 to 1.0) based on how close blocks are to top
+     * Returns higher values when blocks are near the top
+     */
+    public float getBoardFillLevel() {
+        int highestRow = getHighestBlockRow();
+        if (highestRow == ROWS) return 0.0f; // Empty board
+
+        // Convert to fill level: higher when blocks are near top
+        // Top 25% of board (rows 0-4) = danger zone
+        float fillLevel = 1.0f - ((float) highestRow / ROWS);
+        return Math.max(0.0f, Math.min(1.0f, fillLevel));
+    }
 }

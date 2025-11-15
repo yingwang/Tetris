@@ -136,6 +136,9 @@ public class TetrisGame {
                 updateScore(linesCleared);
             }
 
+            // Update music speed based on board fill level
+            updateMusicSpeed();
+
             // Get next piece
             currentPiece = nextPiece;
             nextPiece = createRandomPiece();
@@ -249,5 +252,22 @@ public class TetrisGame {
         if (listener != null) {
             listener.onLinesClearing(lines);
         }
+    }
+
+    private void updateMusicSpeed() {
+        if (soundManager == null) return;
+
+        float fillLevel = board.getBoardFillLevel();
+
+        // Speed up music when board is 40% or more full
+        // Normal speed (1.0) when empty, up to 1.5x when 80%+ full
+        float musicSpeed = 1.0f;
+        if (fillLevel > 0.4f) {
+            // Gradually increase speed from 1.0 to 1.5 as fillLevel goes from 0.4 to 0.8+
+            musicSpeed = 1.0f + ((fillLevel - 0.4f) / 0.4f) * 0.5f;
+            musicSpeed = Math.min(1.5f, musicSpeed); // Cap at 1.5x
+        }
+
+        soundManager.setMusicSpeed(musicSpeed);
     }
 }

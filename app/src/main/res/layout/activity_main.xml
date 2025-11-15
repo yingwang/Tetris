@@ -208,6 +208,18 @@
                 android:padding="18dp"
                 android:background="@drawable/button_background_enhanced"/>
 
+            <!-- Pause/Play button - center -->
+            <ImageButton
+                android:id="@+id/btnPause"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_pause"
+                android:contentDescription="@string/pause"
+                android:scaleType="centerInside"
+                android:padding="18dp"
+                android:background="@drawable/button_background_enhanced"/>
+
             <!-- Right button - far right -->
             <ImageButton
                 android:id="@+id/btnRight"
