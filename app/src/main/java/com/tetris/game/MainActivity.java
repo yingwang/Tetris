@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         ImageButton btnRight = findViewById(R.id.btnRight);
         ImageButton btnRotate = findViewById(R.id.btnRotate);
         ImageButton btnDrop = findViewById(R.id.btnDrop);
+        ImageButton btnPause = findViewById(R.id.btnPause);
 
         btnLeft.setOnClickListener(v -> {
             if (game != null) game.moveLeft();
@@ -113,6 +114,13 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
 
         btnDrop.setOnClickListener(v -> {
             if (game != null) game.drop();
+        });
+
+        btnPause.setOnClickListener(v -> {
+            if (game != null) {
+                togglePause();
+                updatePauseButton();
+            }
         });
     }
 
@@ -227,6 +235,19 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         }
     }
 
+    private void updatePauseButton() {
+        ImageButton btnPause = findViewById(R.id.btnPause);
+        if (game != null && btnPause != null) {
+            if (game.isPaused()) {
+                btnPause.setImageResource(R.drawable.ic_play);
+                btnPause.setContentDescription(getString(R.string.resume));
+            } else {
+                btnPause.setImageResource(R.drawable.ic_pause);
+                btnPause.setContentDescription(getString(R.string.pause));
+            }
+        }
+    }
+
     private void showSpeedSelection() {
         stopGame();
         gameLayout.setVisibility(View.GONE);
@@ -289,6 +310,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         if (game != null && !game.isGameOver()) {
             game.setPaused(true);
             invalidateOptionsMenu();
+            updatePauseButton();
         }
     }
 
