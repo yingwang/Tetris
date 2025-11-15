@@ -107,8 +107,9 @@ public class SoundManager {
     }
 
     public void playLineClear() {
-        // Bright, positive ascending melody - matches animation duration (~280ms)
-        playSound(new double[]{523, 659, 784, 1047}, new int[]{70, 70, 70, 70});
+        // Bright, triumphant ascending arpeggio - rewarding and celebratory
+        // C - E - G - C(high) - E(high) with crescendo ending
+        playSound(new double[]{523, 659, 784, 1047, 1319}, new int[]{80, 80, 80, 100, 140});
     }
 
     public void playGameOver() {
