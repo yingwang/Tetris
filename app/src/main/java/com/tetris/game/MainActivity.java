@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     private SoundManager soundManager;
 
     private int selectedSpeed = 5; // Default speed
+    private int selectedStartingLines = 0; // Default starting lines
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
 
         initializeViews();
         setupSpeedButtons();
+        setupStartingLinesButtons();
+        setupStartGameButton();
         setupGameControls();
     }
 
@@ -60,8 +63,34 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         for (int i = 0; i < speedButtonIds.length; i++) {
             final int speed = i + 1;
             Button btn = findViewById(speedButtonIds[i]);
-            btn.setOnClickListener(v -> startGameWithSpeed(speed));
+            btn.setOnClickListener(v -> {
+                selectedSpeed = speed;
+                Toast.makeText(this, "Speed: " + speed, Toast.LENGTH_SHORT).show();
+            });
         }
+    }
+
+    private void setupStartingLinesButtons() {
+        int[] linesButtonIds = {
+            R.id.btnLines0, R.id.btnLines1, R.id.btnLines2,
+            R.id.btnLines3, R.id.btnLines4, R.id.btnLines5,
+            R.id.btnLines6, R.id.btnLines7, R.id.btnLines8,
+            R.id.btnLines9
+        };
+
+        for (int i = 0; i < linesButtonIds.length; i++) {
+            final int lines = i;
+            Button btn = findViewById(linesButtonIds[i]);
+            btn.setOnClickListener(v -> {
+                selectedStartingLines = lines;
+                Toast.makeText(this, "Starting Lines: " + lines, Toast.LENGTH_SHORT).show();
+            });
+        }
+    }
+
+    private void setupStartGameButton() {
+        Button btnStartGame = findViewById(R.id.btnStartGame);
+        btnStartGame.setOnClickListener(v -> startGame());
     }
 
     private void setupGameControls() {
@@ -139,8 +168,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         return super.onOptionsItemSelected(item);
     }
 
-    private void startGameWithSpeed(int speed) {
-        selectedSpeed = speed;
+    private void startGame() {
         speedSelectionLayout.setVisibility(View.GONE);
         gameLayout.setVisibility(View.VISIBLE);
         startNewGame();
@@ -151,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
             stopGame();
         }
 
-        game = new TetrisGame(selectedSpeed, soundManager);
+        game = new TetrisGame(selectedSpeed, soundManager, selectedStartingLines);
         game.setGameListener(this);
         tetrisView.setGame(game);
 
@@ -240,6 +268,11 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     @Override
     public void onBoardChanged() {
         runOnUiThread(() -> tetrisView.refresh());
+    }
+
+    @Override
+    public void onLinesClearing(int[] lines) {
+        runOnUiThread(() -> tetrisView.startLineClearAnimation(lines));
     }
 
     private void updateScore(int score) {

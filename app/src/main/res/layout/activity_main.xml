@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="60dp"
         android:visibility="visible">
 
         <TextView
@@ -21,8 +21,8 @@
             android:layout_height="wrap_content"
             android:text="@string/select_speed"
             android:textColor="@color/white"
-            android:textSize="24sp"
-            android:layout_marginBottom="20dp"/>
+            android:textSize="20sp"
+            android:layout_marginBottom="12dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -98,6 +98,108 @@
                 android:text="9"
                 android:layout_margin="4dp"/>
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/starting_lines"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnLines0"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="0"
+                android:layout_margin="4dp"/>
+
+            <Button
+                android:id="@+id/btnLines1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="1"
+                android:layout_margin="4dp"/>
+
+            <Button
+                android:id="@+id/btnLines2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="2"
+                android:layout_margin="4dp"/>
+
+            <Button
+                android:id="@+id/btnLines3"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="3"
+                android:layout_margin="4dp"/>
+
+            <Button
+                android:id="@+id/btnLines4"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="4"
+                android:layout_margin="4dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnLines5"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="5"
+                android:layout_margin="4dp"/>
+
+            <Button
+                android:id="@+id/btnLines6"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="6"
+                android:layout_margin="4dp"/>
+
+            <Button
+                android:id="@+id/btnLines7"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="7"
+                android:layout_margin="4dp"/>
+
+            <Button
+                android:id="@+id/btnLines8"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="8"
+                android:layout_margin="4dp"/>
+
+            <Button
+                android:id="@+id/btnLines9"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="9"
+                android:layout_margin="4dp"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnStartGame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start_game"
+            android:textSize="18sp"
+            android:paddingHorizontal="40dp"
+            android:paddingVertical="12dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/button_background_enhanced"/>
     </LinearLayout>
 
     <!-- Game Layout (visible during game) -->

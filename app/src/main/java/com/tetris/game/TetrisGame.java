@@ -19,11 +19,16 @@ public class TetrisGame {
         void onLevelChanged(int level);
         void onGameOver();
         void onBoardChanged();
+        void onLinesClearing(int[] lines);
     }
 
     private GameListener listener;
 
     public TetrisGame(int speed, SoundManager soundManager) {
+        this(speed, soundManager, 0);
+    }
+
+    public TetrisGame(int speed, SoundManager soundManager, int startingLines) {
         this.speed = speed;
         this.soundManager = soundManager;
         this.random = new Random();
@@ -34,6 +39,10 @@ public class TetrisGame {
         this.paused = false;
         this.currentPiece = createRandomPiece();
         this.nextPiece = createRandomPiece();
+
+        if (startingLines > 0) {
+            board.addStartingLines(startingLines);
+        }
     }
 
     public void setGameListener(GameListener listener) {
@@ -100,6 +109,13 @@ public class TetrisGame {
         } else {
             // Piece can't move down, place it on the board
             board.placePiece(currentPiece);
+
+            // Check for full lines first
+            int[] fullLines = board.getFullLines();
+            if (fullLines.length > 0) {
+                // Notify for animation
+                notifyLinesClearing(fullLines);
+            }
 
             // Clear lines and update score
             int linesCleared = board.clearLines();
@@ -214,6 +230,12 @@ public class TetrisGame {
     private void notifyBoardChanged() {
         if (listener != null) {
             listener.onBoardChanged();
+        }
+    }
+
+    private void notifyLinesClearing(int[] lines) {
+        if (listener != null) {
+            listener.onLinesClearing(lines);
         }
     }
 }
