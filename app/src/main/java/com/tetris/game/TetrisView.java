@@ -32,8 +32,8 @@ public class TetrisView extends View {
 
         gridPaint = new Paint();
         gridPaint.setStyle(Paint.Style.STROKE);
-        gridPaint.setColor(Color.parseColor("#444444"));
-        gridPaint.setStrokeWidth(1);
+        gridPaint.setColor(Color.parseColor("#666666"));
+        gridPaint.setStrokeWidth(2);
 
         textPaint = new Paint();
         textPaint.setColor(Color.WHITE);
@@ -83,7 +83,6 @@ public class TetrisView extends View {
                 float y = offsetY + i * blockSize;
 
                 // Draw grid
-                gridPaint.setColor(Color.parseColor("#444444"));
                 canvas.drawRect(x, y, x + blockSize, y + blockSize, gridPaint);
 
                 // Draw placed blocks

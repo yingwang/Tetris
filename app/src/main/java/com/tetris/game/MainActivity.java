@@ -1,9 +1,13 @@
 package com.tetris.game;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     private LinearLayout gameLayout;
     private TextView tvScore;
     private TextView tvLevel;
-    private Button btnPause;
+    private HighScoreManager scoreManager;
 
     private int selectedSpeed = 5; // Default speed
 
@@ -41,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         tetrisView = findViewById(R.id.tetrisView);
         tvScore = findViewById(R.id.tvScore);
         tvLevel = findViewById(R.id.tvLevel);
-        btnPause = findViewById(R.id.btnPause);
+        scoreManager = new HighScoreManager(this);
     }
 
     private void setupSpeedButtons() {
@@ -59,11 +63,10 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     }
 
     private void setupGameControls() {
-        Button btnLeft = findViewById(R.id.btnLeft);
-        Button btnRight = findViewById(R.id.btnRight);
-        Button btnRotate = findViewById(R.id.btnRotate);
-        Button btnDrop = findViewById(R.id.btnDrop);
-        Button btnNewGame = findViewById(R.id.btnNewGame);
+        ImageButton btnLeft = findViewById(R.id.btnLeft);
+        ImageButton btnRight = findViewById(R.id.btnRight);
+        ImageButton btnRotate = findViewById(R.id.btnRotate);
+        ImageButton btnDrop = findViewById(R.id.btnDrop);
 
         btnLeft.setOnClickListener(v -> {
             if (game != null) game.moveLeft();
@@ -80,10 +83,42 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         btnDrop.setOnClickListener(v -> {
             if (game != null) game.drop();
         });
+    }
 
-        btnPause.setOnClickListener(v -> togglePause());
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.game_menu, menu);
+        return true;
+    }
 
-        btnNewGame.setOnClickListener(v -> showSpeedSelection());
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem pauseItem = menu.findItem(R.id.menu_pause);
+        if (game != null && game.isPaused()) {
+            pauseItem.setTitle(R.string.resume);
+        } else {
+            pauseItem.setTitle(R.string.pause);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.menu_new_game) {
+            showSpeedSelection();
+            return true;
+        } else if (id == R.id.menu_pause) {
+            togglePause();
+            return true;
+        } else if (id == R.id.menu_high_scores) {
+            Intent intent = new Intent(this, HighScoresActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void startGameWithSpeed(int speed) {
@@ -137,11 +172,10 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     private void togglePause() {
         if (game != null) {
             game.togglePause();
+            invalidateOptionsMenu(); // Update menu to change Pause/Resume text
             if (game.isPaused()) {
-                btnPause.setText(R.string.resume);
                 Toast.makeText(this, "Game Paused", Toast.LENGTH_SHORT).show();
             } else {
-                btnPause.setText(R.string.pause);
                 Toast.makeText(this, "Game Resumed", Toast.LENGTH_SHORT).show();
             }
         }
@@ -168,9 +202,20 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         runOnUiThread(() -> {
             stopGame();
             tetrisView.refresh();
-            Toast.makeText(MainActivity.this,
-                getString(R.string.game_over) + " Score: " + game.getScore(),
-                Toast.LENGTH_LONG).show();
+
+            int finalScore = game.getScore();
+            int finalLevel = game.getLevel();
+
+            // Save score to high scores
+            scoreManager.addScore(finalScore, finalLevel);
+            int rank = scoreManager.getRank(finalScore);
+
+            String message = getString(R.string.game_over_message, finalScore, rank);
+            if (scoreManager.isHighScore(finalScore)) {
+                message = getString(R.string.new_high_score) + "\n" + message;
+            }
+
+            Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
         });
     }
 
@@ -192,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         super.onPause();
         if (game != null && !game.isGameOver()) {
             game.setPaused(true);
-            btnPause.setText(R.string.resume);
+            invalidateOptionsMenu();
         }
     }
 

@@ -145,77 +145,73 @@
             android:layout_weight="1"/>
 
         <!-- Control Buttons -->
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:paddingBottom="16dp">
 
-            <!-- Top Row: Rotate and Drop -->
+            <!-- Left button - far left -->
+            <ImageButton
+                android:id="@+id/btnLeft"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:src="@drawable/ic_arrow_left"
+                android:contentDescription="@string/left"
+                android:scaleType="centerInside"
+                android:padding="20dp"/>
+
+            <!-- Right button - far right -->
+            <ImageButton
+                android:id="@+id/btnRight"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:src="@drawable/ic_arrow_right"
+                android:contentDescription="@string/right"
+                android:scaleType="centerInside"
+                android:padding="20dp"/>
+
+            <!-- Center controls -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
                 android:orientation="horizontal"
-                android:layout_marginBottom="10dp">
+                android:gravity="center">
 
-                <Button
+                <!-- Rotate button -->
+                <ImageButton
                     android:id="@+id/btnRotate"
-                    android:layout_width="120dp"
-                    android:layout_height="60dp"
-                    android:text="@string/rotate"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/ic_rotate"
+                    android:contentDescription="@string/rotate"
+                    android:scaleType="centerInside"
+                    android:padding="20dp"
                     android:layout_margin="4dp"/>
 
-                <Button
+                <!-- Drop button -->
+                <ImageButton
                     android:id="@+id/btnDrop"
-                    android:layout_width="120dp"
-                    android:layout_height="60dp"
-                    android:text="@string/drop"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/ic_drop"
+                    android:contentDescription="@string/drop"
+                    android:scaleType="centerInside"
+                    android:padding="20dp"
                     android:layout_margin="4dp"/>
             </LinearLayout>
-
-            <!-- Bottom Row: Left and Right -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btnLeft"
-                    android:layout_width="120dp"
-                    android:layout_height="60dp"
-                    android:text="@string/left"
-                    android:layout_margin="4dp"/>
-
-                <Button
-                    android:id="@+id/btnRight"
-                    android:layout_width="120dp"
-                    android:layout_height="60dp"
-                    android:text="@string/right"
-                    android:layout_margin="4dp"/>
-            </LinearLayout>
-
-            <!-- Game Control Buttons -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp">
-
-                <Button
-                    android:id="@+id/btnPause"
-                    android:layout_width="120dp"
-                    android:layout_height="60dp"
-                    android:text="@string/pause"
-                    android:layout_margin="4dp"/>
-
-                <Button
-                    android:id="@+id/btnNewGame"
-                    android:layout_width="120dp"
-                    android:layout_height="60dp"
-                    android:text="@string/new_game"
-                    android:layout_margin="4dp"/>
-            </LinearLayout>
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>
