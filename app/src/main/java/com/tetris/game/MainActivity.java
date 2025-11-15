@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     private TextView tvScore;
     private TextView tvLevel;
     private HighScoreManager scoreManager;
+    private SoundManager soundManager;
 
     private int selectedSpeed = 5; // Default speed
 
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         tvScore = findViewById(R.id.tvScore);
         tvLevel = findViewById(R.id.tvLevel);
         scoreManager = new HighScoreManager(this);
+        soundManager = new SoundManager(this);
     }
 
     private void setupSpeedButtons() {
@@ -99,6 +101,14 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         } else {
             pauseItem.setTitle(R.string.pause);
         }
+
+        MenuItem muteItem = menu.findItem(R.id.menu_mute);
+        if (soundManager != null && soundManager.isMuted()) {
+            muteItem.setTitle(R.string.unmute);
+        } else {
+            muteItem.setTitle(R.string.mute);
+        }
+
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -115,6 +125,14 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         } else if (id == R.id.menu_high_scores) {
             Intent intent = new Intent(this, HighScoresActivity.class);
             startActivity(intent);
+            return true;
+        } else if (id == R.id.menu_mute) {
+            if (soundManager != null) {
+                soundManager.toggleMute();
+                invalidateOptionsMenu();
+                String message = soundManager.isMuted() ? "Sound Muted" : "Sound Enabled";
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            }
             return true;
         }
 
@@ -133,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
             stopGame();
         }
 
-        game = new TetrisGame(selectedSpeed);
+        game = new TetrisGame(selectedSpeed, soundManager);
         game.setGameListener(this);
         tetrisView.setGame(game);
 
@@ -245,5 +263,8 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     protected void onDestroy() {
         super.onDestroy();
         stopGame();
+        if (soundManager != null) {
+            soundManager.release();
+        }
     }
 }

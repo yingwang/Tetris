@@ -17,4 +17,9 @@
         android:title="@string/high_scores"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/menu_mute"
+        android:title="@string/mute"
+        app:showAsAction="never"/>
+
 </menu>

@@ -17,4 +17,6 @@
     <string name="no_scores">No high scores yet. Start playing!</string>
     <string name="new_high_score">New High Score!</string>
     <string name="game_over_message">Game Over! Score: %1$d\nRank: #%2$d</string>
+    <string name="mute">Mute Sound</string>
+    <string name="unmute">Unmute Sound</string>
 </resources>

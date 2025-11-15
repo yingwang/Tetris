@@ -12,6 +12,7 @@ public class TetrisGame {
     private boolean gameOver;
     private boolean paused;
     private Random random;
+    private SoundManager soundManager;
 
     public interface GameListener {
         void onScoreChanged(int score);
@@ -22,8 +23,9 @@ public class TetrisGame {
 
     private GameListener listener;
 
-    public TetrisGame(int speed) {
+    public TetrisGame(int speed, SoundManager soundManager) {
         this.speed = speed;
+        this.soundManager = soundManager;
         this.random = new Random();
         this.board = new TetrisBoard();
         this.score = 0;
@@ -50,6 +52,7 @@ public class TetrisGame {
         temp.moveLeft();
         if (board.isValidPosition(temp)) {
             currentPiece.moveLeft();
+            if (soundManager != null) soundManager.playMove();
             notifyBoardChanged();
         }
     }
@@ -60,6 +63,7 @@ public class TetrisGame {
         temp.moveRight();
         if (board.isValidPosition(temp)) {
             currentPiece.moveRight();
+            if (soundManager != null) soundManager.playMove();
             notifyBoardChanged();
         }
     }
@@ -70,6 +74,7 @@ public class TetrisGame {
         temp.rotate();
         if (board.isValidPosition(temp)) {
             currentPiece.rotate();
+            if (soundManager != null) soundManager.playRotate();
             notifyBoardChanged();
         }
     }
@@ -79,6 +84,7 @@ public class TetrisGame {
         while (moveDown()) {
             // Keep moving down until it can't
         }
+        if (soundManager != null) soundManager.playDrop();
     }
 
     public boolean moveDown() {
@@ -98,6 +104,7 @@ public class TetrisGame {
             // Clear lines and update score
             int linesCleared = board.clearLines();
             if (linesCleared > 0) {
+                if (soundManager != null) soundManager.playLineClear();
                 updateScore(linesCleared);
             }
 
@@ -108,6 +115,7 @@ public class TetrisGame {
             // Check if game over
             if (!board.isValidPosition(currentPiece)) {
                 gameOver = true;
+                if (soundManager != null) soundManager.playGameOver();
                 notifyGameOver();
             }
 
@@ -138,6 +146,7 @@ public class TetrisGame {
         int newLevel = (score / 1000) + 1;
         if (newLevel != level) {
             level = newLevel;
+            if (soundManager != null) soundManager.playLevelUp();
             notifyLevelChanged();
         }
 
