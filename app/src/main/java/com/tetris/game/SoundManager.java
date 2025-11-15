@@ -140,29 +140,35 @@ public class SoundManager {
 
         isPlayingMusic = true;
         musicThread = new Thread(() -> {
-            // Classic Tetris Theme A (Korobeiniki) - simplified melody
-            // Notes: E5, B4, C5, D5, C5, B4, A4, A4, C5, E5, D5, C5, B4, C5, D5, E5, C5, A4, A4
+            // Upbeat, cheerful Tetris-style melody - faster and more energetic
+            // Using brighter notes and faster tempo
             double[] melody = {
+                // Part 1 - Main melody (energetic and bright)
                 659, 494, 523, 587, 523, 494, 440, 440, 523, 659, 587, 523,
-                494, 523, 587, 659, 523, 440, 440, 0,  // Rest
-                587, 698, 880, 784, 698, 659, 523, 523, 659, 587, 523,
-                494, 494, 523, 587, 659, 523, 440, 440, 0   // Rest
+                494, 494, 523, 587, 659, 523, 440, 440,
+                // Part 2 - Bridge (higher and more cheerful)
+                587, 784, 880, 784, 659, 659, 523, 587, 659, 523, 440, 494,
+                440, 440, 523, 587, 659, 784, 880, 1047,
+                // Part 3 - Variation (uplifting)
+                1047, 880, 784, 659, 784, 659, 523, 659, 587, 523, 494, 440,
+                523, 659, 784, 880, 784, 659, 523, 494,
+                // Part 4 - Return to main theme
+                659, 494, 523, 587, 523, 494, 440, 523, 659, 784, 880, 784,
+                659, 523, 587, 659, 523, 440, 494, 440
             };
 
+            // Faster tempo for more energetic feel
             int[] durations = new int[melody.length];
             for (int i = 0; i < melody.length; i++) {
-                durations[i] = melody[i] == 0 ? 200 : 250;  // Notes are 250ms, rests are 200ms
+                // Shorter notes (180ms) for faster, more upbeat tempo
+                durations[i] = 180;
             }
 
             try {
                 while (isPlayingMusic && !Thread.currentThread().isInterrupted()) {
                     for (int i = 0; i < melody.length && isPlayingMusic; i++) {
-                        if (melody[i] > 0) {
-                            playMusicTone(melody[i], durations[i]);
-                        } else {
-                            Thread.sleep(durations[i]);
-                        }
-                        Thread.sleep(10); // Small gap between notes
+                        playMusicTone(melody[i], durations[i]);
+                        Thread.sleep(5); // Very small gap for smooth flow
                     }
                 }
             } catch (InterruptedException e) {

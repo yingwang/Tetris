@@ -72,7 +72,7 @@ public class HighScoresActivity extends AppCompatActivity {
             rankView.setTextSize(28);
             rankView.setTypeface(null, android.graphics.Typeface.BOLD);
             rankView.setShadowLayer(3, 2, 2, 0xFF000000);
-            LinearLayout.LayoutParams rankParams = new LinearLayout.LayoutParams(100, LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams rankParams = new LinearLayout.LayoutParams(120, LinearLayout.LayoutParams.WRAP_CONTENT);
             rankParams.gravity = android.view.Gravity.CENTER_VERTICAL;
             rankView.setLayoutParams(rankParams);
             rankView.setGravity(android.view.Gravity.CENTER);
