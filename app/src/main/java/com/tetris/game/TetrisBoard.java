@@ -1,0 +1,124 @@
+package com.tetris.game;
+
+import android.graphics.Color;
+
+public class TetrisBoard {
+    private static final int ROWS = 20;
+    private static final int COLS = 10;
+
+    private int[][] board;
+    private int[][] colors;
+
+    public TetrisBoard() {
+        board = new int[ROWS][COLS];
+        colors = new int[ROWS][COLS];
+        clear();
+    }
+
+    public void clear() {
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLS; j++) {
+                board[i][j] = 0;
+                colors[i][j] = Color.TRANSPARENT;
+            }
+        }
+    }
+
+    public int getRows() {
+        return ROWS;
+    }
+
+    public int getCols() {
+        return COLS;
+    }
+
+    public int[][] getBoard() {
+        return board;
+    }
+
+    public int[][] getColors() {
+        return colors;
+    }
+
+    public boolean isValidPosition(TetrisPiece piece) {
+        int[][] shape = piece.getShape();
+        int pieceX = piece.getX();
+        int pieceY = piece.getY();
+
+        for (int i = 0; i < shape.length; i++) {
+            for (int j = 0; j < shape[i].length; j++) {
+                if (shape[i][j] != 0) {
+                    int boardX = pieceX + j;
+                    int boardY = pieceY + i;
+
+                    // Check boundaries
+                    if (boardX < 0 || boardX >= COLS || boardY >= ROWS) {
+                        return false;
+                    }
+
+                    // Check if position is occupied (only if not above the board)
+                    if (boardY >= 0 && board[boardY][boardX] != 0) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public void placePiece(TetrisPiece piece) {
+        int[][] shape = piece.getShape();
+        int pieceX = piece.getX();
+        int pieceY = piece.getY();
+        int pieceColor = piece.getColor();
+
+        for (int i = 0; i < shape.length; i++) {
+            for (int j = 0; j < shape[i].length; j++) {
+                if (shape[i][j] != 0) {
+                    int boardX = pieceX + j;
+                    int boardY = pieceY + i;
+                    if (boardY >= 0 && boardY < ROWS && boardX >= 0 && boardX < COLS) {
+                        board[boardY][boardX] = 1;
+                        colors[boardY][boardX] = pieceColor;
+                    }
+                }
+            }
+        }
+    }
+
+    public int clearLines() {
+        int linesCleared = 0;
+        for (int i = ROWS - 1; i >= 0; i--) {
+            if (isLineFull(i)) {
+                removeLine(i);
+                linesCleared++;
+                i++; // Check the same row again since rows shifted down
+            }
+        }
+        return linesCleared;
+    }
+
+    private boolean isLineFull(int row) {
+        for (int j = 0; j < COLS; j++) {
+            if (board[row][j] == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void removeLine(int row) {
+        // Shift all rows above down
+        for (int i = row; i > 0; i--) {
+            for (int j = 0; j < COLS; j++) {
+                board[i][j] = board[i - 1][j];
+                colors[i][j] = colors[i - 1][j];
+            }
+        }
+        // Clear top row
+        for (int j = 0; j < COLS; j++) {
+            board[0][j] = 0;
+            colors[0][j] = Color.TRANSPARENT;
+        }
+    }
+}

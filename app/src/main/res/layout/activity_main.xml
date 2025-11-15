@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#222222"
+    android:padding="16dp">
+
+    <!-- Speed Selection (visible before game starts) -->
+    <LinearLayout
+        android:id="@+id/speedSelectionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="100dp"
+        android:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_speed"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:layout_marginBottom="20dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnSpeed1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="1"
+                android:layout_margin="4dp"/>
+
+            <Button
+                android:id="@+id/btnSpeed2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="2"
+                android:layout_margin="4dp"/>
+
+            <Button
+                android:id="@+id/btnSpeed3"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="3"
+                android:layout_margin="4dp"/>
+
+            <Button
+                android:id="@+id/btnSpeed4"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="4"
+                android:layout_margin="4dp"/>
+
+            <Button
+                android:id="@+id/btnSpeed5"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="5"
+                android:layout_margin="4dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnSpeed6"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="6"
+                android:layout_margin="4dp"/>
+
+            <Button
+                android:id="@+id/btnSpeed7"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="7"
+                android:layout_margin="4dp"/>
+
+            <Button
+                android:id="@+id/btnSpeed8"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="8"
+                android:layout_margin="4dp"/>
+
+            <Button
+                android:id="@+id/btnSpeed9"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="9"
+                android:layout_margin="4dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Game Layout (visible during game) -->
+    <LinearLayout
+        android:id="@+id/gameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <!-- Score and Level Display -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/tvScore"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/score"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/tvLevel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/level"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <!-- Game View -->
+        <com.tetris.game.TetrisView
+            android:id="@+id/tetrisView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <!-- Control Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginTop="10dp">
+
+            <!-- Top Row: Rotate and Drop -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp">
+
+                <Button
+                    android:id="@+id/btnRotate"
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    android:text="@string/rotate"
+                    android:layout_margin="4dp"/>
+
+                <Button
+                    android:id="@+id/btnDrop"
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    android:text="@string/drop"
+                    android:layout_margin="4dp"/>
+            </LinearLayout>
+
+            <!-- Bottom Row: Left and Right -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnLeft"
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    android:text="@string/left"
+                    android:layout_margin="4dp"/>
+
+                <Button
+                    android:id="@+id/btnRight"
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    android:text="@string/right"
+                    android:layout_margin="4dp"/>
+            </LinearLayout>
+
+            <!-- Game Control Buttons -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <Button
+                    android:id="@+id/btnPause"
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    android:text="@string/pause"
+                    android:layout_margin="4dp"/>
+
+                <Button
+                    android:id="@+id/btnNewGame"
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    android:text="@string/new_game"
+                    android:layout_margin="4dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
