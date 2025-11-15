@@ -199,17 +199,21 @@ public class SoundManager {
     }
 
     private void playMusicLoop() {
-        // 简单清爽的俄罗斯方块旋律 - Simple, clear, upbeat Tetris melody
-        // 只保留最经典的主旋律片段
+        // 轻快欢乐的游戏旋律 - Cheerful, upbeat game melody
+        // C大调，简单易记
         double[] notes = {
-            659, 494, 523, 587,     // E, B, C, D
-            523, 494, 440,          // C, B, A
-            440, 523, 659,          // A, C, E
-            587, 523, 494           // D, C, B
+            523, 523, 392, 392,     // C C G G
+            440, 440, 392,          // A A G
+            349, 349, 330, 330,     // F F E E
+            294, 294, 262,          // D D C
+            392, 392, 349, 349,     // G G F F
+            330, 330, 294,          // E E D
+            392, 392, 349, 349,     // G G F F
+            330, 330, 294           // E E D
         };
 
-        // 更快的节奏，稍微欢快 - faster, more upbeat rhythm
-        int noteDuration = 380; // 每个音符380ms，更欢快的节奏
+        // 欢快的节奏 - upbeat rhythm
+        int noteDuration = 380; // 每个音符380ms
 
         try {
             for (int i = 0; i < notes.length && isPlayingMusic && !isMusicPaused; i++) {
