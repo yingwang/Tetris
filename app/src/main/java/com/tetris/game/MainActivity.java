@@ -98,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         ImageButton btnRight = findViewById(R.id.btnRight);
         ImageButton btnRotate = findViewById(R.id.btnRotate);
         ImageButton btnDrop = findViewById(R.id.btnDrop);
-        ImageButton btnPause = findViewById(R.id.btnPause);
 
         btnLeft.setOnClickListener(v -> {
             if (game != null) game.moveLeft();
@@ -115,13 +114,6 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         btnDrop.setOnClickListener(v -> {
             if (game != null) game.drop();
         });
-
-        btnPause.setOnClickListener(v -> {
-            if (game != null) {
-                togglePause();
-                updatePauseButton();
-            }
-        });
     }
 
     @Override
@@ -135,8 +127,10 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         MenuItem pauseItem = menu.findItem(R.id.menu_pause);
         if (game != null && game.isPaused()) {
             pauseItem.setTitle(R.string.resume);
+            pauseItem.setIcon(android.R.drawable.ic_media_play);
         } else {
             pauseItem.setTitle(R.string.pause);
+            pauseItem.setIcon(android.R.drawable.ic_media_pause);
         }
 
         MenuItem muteItem = menu.findItem(R.id.menu_mute);
@@ -199,9 +193,6 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
             soundManager.startBackgroundMusic();
         }
 
-        // Initialize pause button to show pause icon (game is playing)
-        updatePauseButton();
-
         startGameLoop();
 
         // Start background music
@@ -254,19 +245,6 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
                 if (soundManager != null) {
                     soundManager.resumeMusic();
                 }
-            }
-        }
-    }
-
-    private void updatePauseButton() {
-        ImageButton btnPause = findViewById(R.id.btnPause);
-        if (game != null && btnPause != null) {
-            if (game.isPaused()) {
-                btnPause.setImageResource(R.drawable.ic_play);
-                btnPause.setContentDescription(getString(R.string.resume));
-            } else {
-                btnPause.setImageResource(R.drawable.ic_pause);
-                btnPause.setContentDescription(getString(R.string.pause));
             }
         }
     }
@@ -336,7 +314,6 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         if (game != null && !game.isGameOver()) {
             game.setPaused(true);
             invalidateOptionsMenu();
-            updatePauseButton();
         }
         // Pause music when app goes to background
         if (soundManager != null) {

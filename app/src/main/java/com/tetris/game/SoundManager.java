@@ -190,37 +190,49 @@ public class SoundManager {
     }
 
     private void playMusicLoop() {
-        // Tetris-inspired melody (simplified A-Type theme)
-        // Notes: E, B, C, D, C, B, A, A, C, E, D, C, B, C, D, E, C, A, A
-        // Frequencies in Hz (notes from Tetris theme, slower tempo)
+        // Classic Tetris A-Type Theme (Korobeiniki) - relaxing and nostalgic
+        // Original melody with proper rhythm and pacing
+        // E5, B4, C5, D5, C5, B4, A4, A4, C5, E5, D5, C5, B4, B4, C5, D5, E5, C5, A4, A4
+        // Frequencies in Hz (proper Tetris A-Type theme)
         double[] notes = {
-            659, 988, 1047, 1175, 1047, 988, 880, 880, 1047, 659, 1175, 1047, 988,  // First phrase
-            1047, 1175, 1319, 1047, 880, 880, 0,  // Second phrase
-            1175, 1397, 1568, 1319, 1175, 1047, 1047, 1319, 659, 1175, 1047, 988,  // Third phrase
-            1047, 1175, 1319, 1047, 880, 880  // Fourth phrase
+            // Main theme - Part 1
+            659, 494, 523, 587, 523, 494, 440, 440, 523, 659, 587, 523,
+            494, 0, 494, 523, 587, 0, 659, 0, 523, 0, 440, 0, 440, 0, 0, 0,
+
+            // Main theme - Part 2 (repeated with variation)
+            587, 0, 784, 880, 784, 659, 0, 659, 523, 659, 587, 523,
+            494, 0, 494, 523, 587, 0, 659, 0, 523, 0, 440, 0, 440, 0, 0, 0
         };
 
-        // Durations in ms (slower tempo for Tetris feel, adjusted by speed)
-        int baseDuration = 300; // Slower base duration
+        // Proper rhythm - using longer, more relaxed note durations
+        // 1 = quarter note (400ms), 2 = half note (800ms), 0.5 = eighth note (200ms)
+        double[] rhythmPattern = {
+            // Part 1
+            1, 0.5, 0.5, 1, 0.5, 0.5, 1, 0.5, 0.5, 1, 0.5, 0.5,
+            1, 0.5, 0.5, 1, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1.5, 0.5, 0.5, 0.5,
+
+            // Part 2
+            1, 0.5, 0.5, 1, 0.5, 0.5, 1, 0.5, 0.5, 1, 0.5, 0.5,
+            1, 0.5, 0.5, 1, 1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1.5, 0.5, 0.5, 0.5
+        };
+
+        // Calculate durations based on rhythm pattern (slower, more relaxing tempo)
+        int baseNoteDuration = 400; // Slower base tempo for relaxation
         int[] durations = new int[notes.length];
         for (int i = 0; i < notes.length; i++) {
-            // Vary note lengths for musical rhythm
-            if (i == 6 || i == 7 || i == 18 || i == 19 || i == 35 || i == 36) {
-                durations[i] = (int) (baseDuration * 2 / musicSpeed); // Longer notes
-            } else if (i == 19) { // Rest
-                durations[i] = (int) (baseDuration / musicSpeed);
-            } else {
-                durations[i] = (int) (baseDuration / musicSpeed);
-            }
+            durations[i] = (int) (baseNoteDuration * rhythmPattern[i] / musicSpeed);
         }
 
         try {
-            for (int i = 0; i < notes.length && isPlayingMusic; i++) {
-                if (notes[i] > 0) { // Skip rests (0 frequency)
+            for (int i = 0; i < notes.length && isPlayingMusic && !isMusicPaused; i++) {
+                if (notes[i] > 0) { // Skip rests (0 frequency = silence)
                     playMusicTone(notes[i], durations[i]);
+                } else {
+                    // Rest (silence)
+                    Thread.sleep((int) (durations[i] / musicSpeed));
                 }
                 if (i < notes.length - 1) {
-                    Thread.sleep((int) (50 / musicSpeed)); // Gap between notes
+                    Thread.sleep((int) (30 / musicSpeed)); // Small gap between notes
                 }
             }
         } catch (InterruptedException e) {
