@@ -200,29 +200,45 @@ public class SoundManager {
     }
 
     private void playMusicLoop() {
-        // 轻快欢乐的游戏旋律 - Cheerful, upbeat game melody
-        // C大调，简单易记
+        // 欢快有节奏感的游戏旋律 - Energetic, rhythmic game melody
+        // 类似经典街机游戏风格
         double[] notes = {
-            523, 523, 392, 392,     // C C G G
-            440, 440, 392,          // A A G
-            349, 349, 330, 330,     // F F E E
-            294, 294, 262,          // D D C
-            392, 392, 349, 349,     // G G F F
-            330, 330, 294,          // E E D
-            392, 392, 349, 349,     // G G F F
-            330, 330, 294           // E E D
+            659, 659, 0, 659,       // E E - E  (节奏感开场)
+            523, 659, 784,          // C E G    (跳跃上行)
+            392, 0, 523, 0,         // G - C -  (停顿增加节奏)
+            392, 330, 349, 440,     // G E F A  (快速音阶)
+            523, 587, 523, 440,     // C D C A  (活泼跳跃)
+            392, 523, 659,          // G C E    (再次上行)
+            587, 659, 587, 523,     // D E D C  (下行回旋)
+            440, 392, 523           // A G C    (结束)
         };
 
-        // 根据musicSpeed调整节奏 - rhythm adjusted by music speed (faster when board fills up)
-        int baseNoteDuration = 380; // 基础音符时长
-        int noteDuration = (int) (baseNoteDuration / musicSpeed);
-        int noteGap = (int) (60 / musicSpeed);
+        // 节奏模式 - varied rhythm for more energy
+        // 1 = 正常, 0.5 = 短促, 1.5 = 长音
+        double[] rhythmPattern = {
+            0.7, 0.7, 0.4, 0.7,     // 快速节奏
+            0.7, 0.7, 1.2,          // 跳跃感
+            1.0, 0.4, 1.0, 0.4,     // 停顿节奏
+            0.6, 0.6, 0.6, 0.6,     // 快速音阶
+            0.7, 0.7, 0.7, 0.7,     // 均匀节奏
+            0.7, 0.7, 1.2,          // 再次跳跃
+            0.6, 0.6, 0.6, 0.6,     // 快速下行
+            0.7, 0.7, 1.5           // 结束长音
+        };
+
+        // 根据musicSpeed调整节奏 - rhythm adjusted by music speed
+        int baseNoteDuration = 320; // 更短的基础时长，更快节奏
 
         try {
             for (int i = 0; i < notes.length && isPlayingMusic && !isMusicPaused; i++) {
-                playMusicTone(notes[i], noteDuration);
-                // 音符之间停顿，根据速度调整
-                Thread.sleep(noteGap);
+                if (notes[i] > 0) {
+                    int noteDuration = (int) (baseNoteDuration * rhythmPattern[i] / musicSpeed);
+                    playMusicTone(notes[i], noteDuration);
+                    Thread.sleep((int) (40 / musicSpeed)); // 短暂间隔
+                } else {
+                    // 休止符
+                    Thread.sleep((int) (baseNoteDuration * rhythmPattern[i] / musicSpeed));
+                }
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
