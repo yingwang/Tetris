@@ -32,8 +32,8 @@ public class TetrisView extends View {
 
         gridPaint = new Paint();
         gridPaint.setStyle(Paint.Style.STROKE);
-        gridPaint.setColor(Color.parseColor("#666666"));
-        gridPaint.setStrokeWidth(2);
+        gridPaint.setColor(Color.parseColor("#999999"));
+        gridPaint.setStrokeWidth(3);
 
         textPaint = new Paint();
         textPaint.setColor(Color.WHITE);
