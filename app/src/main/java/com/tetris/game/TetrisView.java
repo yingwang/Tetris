@@ -70,7 +70,7 @@ public class TetrisView extends View {
         if (game == null) return;
 
         // Draw background
-        canvas.drawColor(Color.parseColor("#222222"));
+        canvas.drawColor(Color.parseColor("#0F1419"));
 
         TetrisBoard board = game.getBoard();
         int[][] boardState = board.getBoard();
