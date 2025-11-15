@@ -18,6 +18,7 @@
     <string name="rotate">Rotate</string>
     <string name="drop">Drop</string>
     <string name="high_scores">High Scores</string>
+    <string name="high_scores_title">HIGH SCORES</string>
     <string name="no_scores">No high scores yet. Start playing!</string>
     <string name="new_high_score">New High Score!</string>
     <string name="game_over_message">Game Over! Score: %1$d\nRank: #%2$d</string>

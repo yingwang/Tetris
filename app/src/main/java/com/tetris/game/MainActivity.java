@@ -187,6 +187,11 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         updateLevel(game.getLevel());
 
         startGameLoop();
+
+        // Start background music
+        if (soundManager != null) {
+            soundManager.startBackgroundMusic();
+        }
     }
 
     private void startGameLoop() {
@@ -229,6 +234,9 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
 
     private void showSpeedSelection() {
         stopGame();
+        if (soundManager != null) {
+            soundManager.stopBackgroundMusic();
+        }
         gameLayout.setVisibility(View.GONE);
         speedSelectionLayout.setVisibility(View.VISIBLE);
     }

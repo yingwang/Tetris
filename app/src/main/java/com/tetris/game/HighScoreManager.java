@@ -69,6 +69,14 @@ public class HighScoreManager {
             }
         }
 
+        // Always sort scores in descending order
+        Collections.sort(scores);
+
+        // Ensure we only return top 10
+        if (scores.size() > MAX_SCORES) {
+            scores = scores.subList(0, MAX_SCORES);
+        }
+
         return scores;
     }
 
