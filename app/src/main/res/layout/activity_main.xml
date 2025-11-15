@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#222222"
+    android:background="@drawable/game_background"
     android:padding="16dp">
 
     <!-- Speed Selection (visible before game starts) -->
@@ -114,27 +114,46 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="8dp"
+            android:padding="8dp">
 
             <TextView
                 android:id="@+id/tvScore"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp"
                 android:text="@string/score"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:gravity="center"/>
+                android:textColor="#FFD700"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:padding="12dp"
+                android:background="@drawable/score_background"
+                android:shadowColor="#000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="3"/>
 
             <TextView
                 android:id="@+id/tvLevel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
                 android:text="@string/level"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:gravity="center"/>
+                android:textColor="#FFD700"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:padding="12dp"
+                android:background="@drawable/score_background"
+                android:shadowColor="#000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="3"/>
         </LinearLayout>
 
         <!-- Game View -->
@@ -142,80 +161,74 @@
             android:id="@+id/tetrisView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:layout_marginBottom="56dp"/>
 
         <!-- Control Buttons -->
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_marginTop="10dp">
+            android:paddingBottom="8dp">
 
-            <!-- Top Row: Rotate and Drop -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="10dp">
+            <!-- Left button - far left -->
+            <ImageButton
+                android:id="@+id/btnLeft"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
+                android:src="@drawable/ic_arrow_left"
+                android:contentDescription="@string/left"
+                android:scaleType="centerInside"
+                android:padding="18dp"
+                android:background="@drawable/button_background_enhanced"/>
 
-                <Button
-                    android:id="@+id/btnRotate"
-                    android:layout_width="120dp"
-                    android:layout_height="60dp"
-                    android:text="@string/rotate"
-                    android:layout_margin="4dp"/>
+            <!-- Rotate button - left of center -->
+            <ImageButton
+                android:id="@+id/btnRotate"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_toEndOf="@id/btnLeft"
+                android:layout_toRightOf="@id/btnLeft"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:src="@drawable/ic_rotate"
+                android:contentDescription="@string/rotate"
+                android:scaleType="centerInside"
+                android:padding="18dp"
+                android:background="@drawable/button_background_enhanced"/>
 
-                <Button
-                    android:id="@+id/btnDrop"
-                    android:layout_width="120dp"
-                    android:layout_height="60dp"
-                    android:text="@string/drop"
-                    android:layout_margin="4dp"/>
-            </LinearLayout>
+            <!-- Right button - far right -->
+            <ImageButton
+                android:id="@+id/btnRight"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp"
+                android:src="@drawable/ic_arrow_right"
+                android:contentDescription="@string/right"
+                android:scaleType="centerInside"
+                android:padding="18dp"
+                android:background="@drawable/button_background_enhanced"/>
 
-            <!-- Bottom Row: Left and Right -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btnLeft"
-                    android:layout_width="120dp"
-                    android:layout_height="60dp"
-                    android:text="@string/left"
-                    android:layout_margin="4dp"/>
-
-                <Button
-                    android:id="@+id/btnRight"
-                    android:layout_width="120dp"
-                    android:layout_height="60dp"
-                    android:text="@string/right"
-                    android:layout_margin="4dp"/>
-            </LinearLayout>
-
-            <!-- Game Control Buttons -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp">
-
-                <Button
-                    android:id="@+id/btnPause"
-                    android:layout_width="120dp"
-                    android:layout_height="60dp"
-                    android:text="@string/pause"
-                    android:layout_margin="4dp"/>
-
-                <Button
-                    android:id="@+id/btnNewGame"
-                    android:layout_width="120dp"
-                    android:layout_height="60dp"
-                    android:text="@string/new_game"
-                    android:layout_margin="4dp"/>
-            </LinearLayout>
-        </LinearLayout>
+            <!-- Drop button - before Right button -->
+            <ImageButton
+                android:id="@+id/btnDrop"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_toStartOf="@id/btnRight"
+                android:layout_toLeftOf="@id/btnRight"
+                android:layout_marginEnd="12dp"
+                android:layout_marginRight="12dp"
+                android:src="@drawable/ic_drop"
+                android:contentDescription="@string/drop"
+                android:scaleType="centerInside"
+                android:padding="18dp"
+                android:background="@drawable/button_background_enhanced"/>
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

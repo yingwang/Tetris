@@ -3,7 +3,10 @@ package com.tetris.game;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -12,6 +15,9 @@ public class TetrisView extends View {
     private Paint paint;
     private Paint gridPaint;
     private Paint textPaint;
+    private Paint highlightPaint;
+    private Paint shadowPaint;
+    private Paint borderPaint;
     private float blockSize;
     private float offsetX;
     private float offsetY;
@@ -29,16 +35,34 @@ public class TetrisView extends View {
     private void init() {
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
+        paint.setAntiAlias(true);
 
         gridPaint = new Paint();
         gridPaint.setStyle(Paint.Style.STROKE);
-        gridPaint.setColor(Color.parseColor("#444444"));
-        gridPaint.setStrokeWidth(1);
+        gridPaint.setColor(Color.parseColor("#333333"));
+        gridPaint.setStrokeWidth(2);
+        gridPaint.setAntiAlias(true);
+
+        highlightPaint = new Paint();
+        highlightPaint.setStyle(Paint.Style.FILL);
+        highlightPaint.setAntiAlias(true);
+
+        shadowPaint = new Paint();
+        shadowPaint.setStyle(Paint.Style.FILL);
+        shadowPaint.setColor(Color.parseColor("#20000000"));
+        shadowPaint.setAntiAlias(true);
+
+        borderPaint = new Paint();
+        borderPaint.setStyle(Paint.Style.STROKE);
+        borderPaint.setColor(Color.parseColor("#4CAF50"));
+        borderPaint.setStrokeWidth(4);
+        borderPaint.setAntiAlias(true);
 
         textPaint = new Paint();
         textPaint.setColor(Color.WHITE);
         textPaint.setTextSize(40);
         textPaint.setAntiAlias(true);
+        textPaint.setShadowLayer(5, 2, 2, Color.BLACK);
     }
 
     public void setGame(TetrisGame game) {
@@ -70,11 +94,18 @@ public class TetrisView extends View {
         if (game == null) return;
 
         // Draw background
-        canvas.drawColor(Color.parseColor("#222222"));
+        canvas.drawColor(Color.parseColor("#0F1419"));
 
         TetrisBoard board = game.getBoard();
         int[][] boardState = board.getBoard();
         int[][] colors = board.getColors();
+
+        // Draw board border
+        float borderLeft = offsetX - 4;
+        float borderTop = offsetY - 4;
+        float borderRight = offsetX + blockSize * board.getCols() + 4;
+        float borderBottom = offsetY + blockSize * board.getRows() + 4;
+        canvas.drawRect(borderLeft, borderTop, borderRight, borderBottom, borderPaint);
 
         // Draw the board
         for (int i = 0; i < board.getRows(); i++) {
@@ -83,22 +114,19 @@ public class TetrisView extends View {
                 float y = offsetY + i * blockSize;
 
                 // Draw grid
-                gridPaint.setColor(Color.parseColor("#444444"));
                 canvas.drawRect(x, y, x + blockSize, y + blockSize, gridPaint);
 
-                // Draw placed blocks
+                // Draw placed blocks with 3D effect
                 if (boardState[i][j] != 0) {
-                    paint.setColor(colors[i][j]);
-                    canvas.drawRect(x + 2, y + 2, x + blockSize - 2, y + blockSize - 2, paint);
+                    draw3DBlock(canvas, x, y, blockSize, colors[i][j]);
                 }
             }
         }
 
-        // Draw current piece
+        // Draw current piece with 3D effect
         if (!game.isGameOver()) {
             TetrisPiece currentPiece = game.getCurrentPiece();
             int[][] shape = currentPiece.getShape();
-            paint.setColor(currentPiece.getColor());
 
             for (int i = 0; i < shape.length; i++) {
                 for (int j = 0; j < shape[i].length; j++) {
@@ -109,7 +137,7 @@ public class TetrisView extends View {
                         if (boardY >= 0) {
                             float x = offsetX + boardX * blockSize;
                             float y = offsetY + boardY * blockSize;
-                            canvas.drawRect(x + 2, y + 2, x + blockSize - 2, y + blockSize - 2, paint);
+                            draw3DBlock(canvas, x, y, blockSize, currentPiece.getColor());
                         }
                     }
                 }
@@ -123,8 +151,90 @@ public class TetrisView extends View {
         if (game.isGameOver()) {
             textPaint.setTextSize(80);
             textPaint.setTextAlign(Paint.Align.CENTER);
+            textPaint.setColor(Color.parseColor("#FF5252"));
             canvas.drawText("GAME OVER", getWidth() / 2f, getHeight() / 2f, textPaint);
         }
+    }
+
+    private void draw3DBlock(Canvas canvas, float x, float y, float size, int color) {
+        float inset = 3;
+        float highlightInset = 5;
+
+        // Draw shadow (bottom-right)
+        canvas.drawRect(x + size - 4, y + 4, x + size, y + size, shadowPaint);
+        canvas.drawRect(x + 4, y + size - 4, x + size, y + size, shadowPaint);
+
+        // Main block with gradient
+        int baseColor = color;
+        int lightColor = lightenColor(baseColor, 0.3f);
+        int darkColor = darkenColor(baseColor, 0.2f);
+
+        LinearGradient gradient = new LinearGradient(
+            x, y, x, y + size,
+            lightColor, darkColor,
+            Shader.TileMode.CLAMP
+        );
+        paint.setShader(gradient);
+        canvas.drawRect(x + inset, y + inset, x + size - inset, y + size - inset, paint);
+        paint.setShader(null);
+
+        // Highlight (top-left)
+        highlightPaint.setColor(lightenColor(baseColor, 0.5f));
+        canvas.drawRect(
+            x + highlightInset,
+            y + highlightInset,
+            x + size - highlightInset,
+            y + highlightInset + 2,
+            highlightPaint
+        );
+        canvas.drawRect(
+            x + highlightInset,
+            y + highlightInset,
+            x + highlightInset + 2,
+            y + size - highlightInset,
+            highlightPaint
+        );
+
+        // Dark edge (bottom-right)
+        highlightPaint.setColor(darkenColor(baseColor, 0.4f));
+        canvas.drawRect(
+            x + highlightInset,
+            y + size - highlightInset - 2,
+            x + size - highlightInset,
+            y + size - highlightInset,
+            highlightPaint
+        );
+        canvas.drawRect(
+            x + size - highlightInset - 2,
+            y + highlightInset,
+            x + size - highlightInset,
+            y + size - highlightInset,
+            highlightPaint
+        );
+    }
+
+    private int lightenColor(int color, float factor) {
+        int r = Color.red(color);
+        int g = Color.green(color);
+        int b = Color.blue(color);
+
+        r = Math.min(255, (int) (r + (255 - r) * factor));
+        g = Math.min(255, (int) (g + (255 - g) * factor));
+        b = Math.min(255, (int) (b + (255 - b) * factor));
+
+        return Color.rgb(r, g, b);
+    }
+
+    private int darkenColor(int color, float factor) {
+        int r = Color.red(color);
+        int g = Color.green(color);
+        int b = Color.blue(color);
+
+        r = Math.max(0, (int) (r * (1 - factor)));
+        g = Math.max(0, (int) (g * (1 - factor)));
+        b = Math.max(0, (int) (b * (1 - factor)));
+
+        return Color.rgb(r, g, b);
     }
 
     private void drawNextPiece(Canvas canvas) {
@@ -132,21 +242,23 @@ public class TetrisView extends View {
         if (nextPiece == null) return;
 
         int[][] shape = nextPiece.getShape();
-        float previewBlockSize = blockSize * 0.6f;
-        float previewX = offsetX + (game.getBoard().getCols() * blockSize) + 20;
-        float previewY = offsetY + 20;
+        float previewBlockSize = blockSize * 0.55f;
+        float previewX = offsetX + (game.getBoard().getCols() * blockSize) + 15;
+        float previewY = offsetY + 10;
 
-        textPaint.setTextSize(30);
+        // Draw "Next:" label with background
+        textPaint.setTextSize(24);
         textPaint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText("Next:", previewX, previewY, textPaint);
+        textPaint.setColor(Color.parseColor("#FFD700"));
+        canvas.drawText("NEXT", previewX, previewY + 20, textPaint);
 
-        paint.setColor(nextPiece.getColor());
+        // Draw next piece with 3D effect
         for (int i = 0; i < shape.length; i++) {
             for (int j = 0; j < shape[i].length; j++) {
                 if (shape[i][j] != 0) {
                     float x = previewX + j * previewBlockSize;
-                    float y = previewY + 20 + i * previewBlockSize;
-                    canvas.drawRect(x + 1, y + 1, x + previewBlockSize - 1, y + previewBlockSize - 1, paint);
+                    float y = previewY + 30 + i * previewBlockSize;
+                    draw3DBlock(canvas, x, y, previewBlockSize, nextPiece.getColor());
                 }
             }
         }
