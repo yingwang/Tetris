@@ -188,11 +188,6 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         updateScore(game.getScore());
         updateLevel(game.getLevel());
 
-        // Start background music
-        if (soundManager != null) {
-            soundManager.startBackgroundMusic();
-        }
-
         startGameLoop();
 
         // Start background music
