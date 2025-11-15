@@ -86,6 +86,19 @@ public class TetrisBoard {
         }
     }
 
+    public int[] getFullLines() {
+        int[] fullLines = new int[ROWS];
+        int count = 0;
+        for (int i = 0; i < ROWS; i++) {
+            if (isLineFull(i)) {
+                fullLines[count++] = i;
+            }
+        }
+        int[] result = new int[count];
+        System.arraycopy(fullLines, 0, result, 0, count);
+        return result;
+    }
+
     public int clearLines() {
         int linesCleared = 0;
         for (int i = ROWS - 1; i >= 0; i--) {
@@ -96,6 +109,49 @@ public class TetrisBoard {
             }
         }
         return linesCleared;
+    }
+
+    public void addStartingLines(int numLines) {
+        if (numLines <= 0 || numLines >= ROWS) return;
+
+        // Shift existing content up
+        for (int i = 0; i < ROWS - numLines; i++) {
+            for (int j = 0; j < COLS; j++) {
+                board[i][j] = board[i + numLines][j];
+                colors[i][j] = colors[i + numLines][j];
+            }
+        }
+
+        // Use actual tetromino colors to make it look like accumulated blocks
+        int[] tetrominoColors = {
+            Color.CYAN,      // I piece
+            Color.YELLOW,    // O piece
+            Color.MAGENTA,   // T piece
+            Color.GREEN,     // S piece
+            Color.RED,       // Z piece
+            Color.BLUE,      // J piece
+            Color.rgb(255, 165, 0)  // L piece (Orange)
+        };
+
+        for (int i = ROWS - numLines; i < ROWS; i++) {
+            // Random gap position (1-2 gaps per line)
+            int gapPos1 = (int) (Math.random() * COLS);
+            int gapPos2 = (int) (Math.random() * COLS);
+            while (gapPos2 == gapPos1) {
+                gapPos2 = (int) (Math.random() * COLS);
+            }
+
+            for (int j = 0; j < COLS; j++) {
+                if (j == gapPos1 || (numLines > 3 && j == gapPos2)) {
+                    board[i][j] = 0;
+                    colors[i][j] = Color.TRANSPARENT;
+                } else {
+                    board[i][j] = 1;
+                    // Randomly select a tetromino color
+                    colors[i][j] = tetrominoColors[(int) (Math.random() * tetrominoColors.length)];
+                }
+            }
+        }
     }
 
     private boolean isLineFull(int row) {

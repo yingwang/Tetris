@@ -19,11 +19,16 @@ public class TetrisGame {
         void onLevelChanged(int level);
         void onGameOver();
         void onBoardChanged();
+        void onLinesClearing(int[] lines);
     }
 
     private GameListener listener;
 
     public TetrisGame(int speed, SoundManager soundManager) {
+        this(speed, soundManager, 0);
+    }
+
+    public TetrisGame(int speed, SoundManager soundManager, int startingLines) {
         this.speed = speed;
         this.soundManager = soundManager;
         this.random = new Random();
@@ -34,6 +39,10 @@ public class TetrisGame {
         this.paused = false;
         this.currentPiece = createRandomPiece();
         this.nextPiece = createRandomPiece();
+
+        if (startingLines > 0) {
+            board.addStartingLines(startingLines);
+        }
     }
 
     public void setGameListener(GameListener listener) {
@@ -70,13 +79,25 @@ public class TetrisGame {
 
     public void rotate() {
         if (gameOver || paused) return;
-        TetrisPiece temp = currentPiece.copy();
-        temp.rotate();
-        if (board.isValidPosition(temp)) {
-            currentPiece.rotate();
-            if (soundManager != null) soundManager.playRotate();
-            notifyBoardChanged();
+
+        // Try wall kicks: attempt rotation with different horizontal offsets
+        int[] wallKickOffsets = {0, -1, 1, -2, 2};
+
+        for (int offset : wallKickOffsets) {
+            TetrisPiece temp = currentPiece.copy();
+            temp.rotate();
+            temp.setX(temp.getX() + offset);
+
+            if (board.isValidPosition(temp)) {
+                currentPiece.rotate();
+                currentPiece.setX(currentPiece.getX() + offset);
+                if (soundManager != null) soundManager.playRotate();
+                notifyBoardChanged();
+                return; // Rotation successful
+            }
         }
+
+        // If no wall kick worked, rotation fails silently
     }
 
     public void drop() {
@@ -100,6 +121,13 @@ public class TetrisGame {
         } else {
             // Piece can't move down, place it on the board
             board.placePiece(currentPiece);
+
+            // Check for full lines first
+            int[] fullLines = board.getFullLines();
+            if (fullLines.length > 0) {
+                // Notify for animation
+                notifyLinesClearing(fullLines);
+            }
 
             // Clear lines and update score
             int linesCleared = board.clearLines();
@@ -214,6 +242,12 @@ public class TetrisGame {
     private void notifyBoardChanged() {
         if (listener != null) {
             listener.onBoardChanged();
+        }
+    }
+
+    private void notifyLinesClearing(int[] lines) {
+        if (listener != null) {
+            listener.onLinesClearing(lines);
         }
     }
 }

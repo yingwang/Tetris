@@ -87,33 +87,33 @@ public class SoundManager {
     }
 
     public void playMove() {
-        // Short blip sound - like Mario coin
-        playSound(new double[]{1000}, new int[]{50});
+        // Very short, simple blip - classic Tetris move sound
+        playSound(new double[]{1200}, new int[]{30});
     }
 
     public void playRotate() {
-        // Two-tone up sound - like Mario jump
-        playSound(new double[]{600, 800}, new int[]{40, 60});
+        // Slightly higher pitched blip - classic Tetris rotate
+        playSound(new double[]{1400}, new int[]{35});
     }
 
     public void playDrop() {
-        // Descending sound - like Mario going down pipe
-        playSound(new double[]{800, 600, 400}, new int[]{50, 50, 80});
+        // Deep thud - piece locking sound
+        playSound(new double[]{150}, new int[]{80});
     }
 
     public void playLineClear() {
-        // Rising arpeggio - like Mario power-up
-        playSound(new double[]{523, 659, 784, 1047}, new int[]{80, 80, 80, 200});
+        // Pleasant bell-like chime - classic Tetris line clear
+        playSound(new double[]{1568, 1976, 2349}, new int[]{120, 120, 200});
     }
 
     public void playGameOver() {
-        // Descending sad sound - like Mario death
-        playSound(new double[]{784, 622, 523, 415, 330}, new int[]{100, 100, 100, 100, 300});
+        // Simple descending tones - classic game over
+        playSound(new double[]{523, 440, 349, 262}, new int[]{150, 150, 150, 400});
     }
 
     public void playLevelUp() {
-        // Victory fanfare - like Mario level complete
-        playSound(new double[]{784, 988, 1175, 1319, 1568}, new int[]{100, 100, 100, 100, 400});
+        // Bright ascending fanfare
+        playSound(new double[]{523, 659, 784, 1047, 1319}, new int[]{80, 80, 80, 80, 300});
     }
 
     public boolean isMuted() {

@@ -18,9 +18,13 @@ public class TetrisView extends View {
     private Paint highlightPaint;
     private Paint shadowPaint;
     private Paint borderPaint;
+    private Paint flashPaint;
     private float blockSize;
     private float offsetX;
     private float offsetY;
+    private int[] clearingLines;
+    private int flashAlpha = 0;
+    private boolean isFlashing = false;
 
     public TetrisView(Context context) {
         super(context);
@@ -63,6 +67,34 @@ public class TetrisView extends View {
         textPaint.setTextSize(40);
         textPaint.setAntiAlias(true);
         textPaint.setShadowLayer(5, 2, 2, Color.BLACK);
+
+        flashPaint = new Paint();
+        flashPaint.setStyle(Paint.Style.FILL);
+        flashPaint.setAntiAlias(true);
+    }
+
+    public void startLineClearAnimation(int[] lines) {
+        this.clearingLines = lines;
+        this.isFlashing = true;
+        this.flashAlpha = 0;
+        animateFlash();
+    }
+
+    private void animateFlash() {
+        if (!isFlashing) return;
+
+        flashAlpha += 40;
+        if (flashAlpha > 255) {
+            flashAlpha = 255;
+            isFlashing = false;
+            clearingLines = null;
+        }
+
+        invalidate();
+
+        if (isFlashing) {
+            postDelayed(this::animateFlash, 40);
+        }
     }
 
     public void setGame(TetrisGame game) {
@@ -146,6 +178,15 @@ public class TetrisView extends View {
 
         // Draw next piece preview
         drawNextPiece(canvas);
+
+        // Draw line clear flash animation
+        if (isFlashing && clearingLines != null) {
+            flashPaint.setColor(Color.argb(flashAlpha, 255, 255, 255));
+            for (int lineIndex : clearingLines) {
+                float y = offsetY + lineIndex * blockSize;
+                canvas.drawRect(offsetX, y, offsetX + blockSize * board.getCols(), y + blockSize, flashPaint);
+            }
+        }
 
         // Draw game over text
         if (game.isGameOver()) {

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     private SoundManager soundManager;
 
     private int selectedSpeed = 5; // Default speed
+    private int selectedStartingLines = 0; // Default starting lines
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +38,8 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         setContentView(R.layout.activity_main);
 
         initializeViews();
-        setupSpeedButtons();
+        setupSeekBars();
+        setupStartGameButton();
         setupGameControls();
     }
 
@@ -50,18 +53,44 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         soundManager = new SoundManager(this);
     }
 
-    private void setupSpeedButtons() {
-        int[] speedButtonIds = {
-            R.id.btnSpeed1, R.id.btnSpeed2, R.id.btnSpeed3,
-            R.id.btnSpeed4, R.id.btnSpeed5, R.id.btnSpeed6,
-            R.id.btnSpeed7, R.id.btnSpeed8, R.id.btnSpeed9
-        };
+    private void setupSeekBars() {
+        SeekBar seekBarSpeed = findViewById(R.id.seekBarSpeed);
+        SeekBar seekBarLines = findViewById(R.id.seekBarLines);
+        TextView tvSpeedValue = findViewById(R.id.tvSpeedValue);
+        TextView tvLinesValue = findViewById(R.id.tvLinesValue);
 
-        for (int i = 0; i < speedButtonIds.length; i++) {
-            final int speed = i + 1;
-            Button btn = findViewById(speedButtonIds[i]);
-            btn.setOnClickListener(v -> startGameWithSpeed(speed));
-        }
+        seekBarSpeed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                selectedSpeed = progress + 1; // 0-8 becomes 1-9
+                tvSpeedValue.setText(String.valueOf(selectedSpeed));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        seekBarLines.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                selectedStartingLines = progress; // 0-9
+                tvLinesValue.setText(String.valueOf(selectedStartingLines));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+    }
+
+    private void setupStartGameButton() {
+        Button btnStartGame = findViewById(R.id.btnStartGame);
+        btnStartGame.setOnClickListener(v -> startGame());
     }
 
     private void setupGameControls() {
@@ -139,8 +168,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         return super.onOptionsItemSelected(item);
     }
 
-    private void startGameWithSpeed(int speed) {
-        selectedSpeed = speed;
+    private void startGame() {
         speedSelectionLayout.setVisibility(View.GONE);
         gameLayout.setVisibility(View.VISIBLE);
         startNewGame();
@@ -151,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
             stopGame();
         }
 
-        game = new TetrisGame(selectedSpeed, soundManager);
+        game = new TetrisGame(selectedSpeed, soundManager, selectedStartingLines);
         game.setGameListener(this);
         tetrisView.setGame(game);
 
@@ -240,6 +268,11 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     @Override
     public void onBoardChanged() {
         runOnUiThread(() -> tetrisView.refresh());
+    }
+
+    @Override
+    public void onLinesClearing(int[] lines) {
+        runOnUiThread(() -> tetrisView.startLineClearAnimation(lines));
     }
 
     private void updateScore(int score) {
