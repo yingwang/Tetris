@@ -6,199 +6,105 @@
     android:background="@drawable/game_background"
     android:padding="16dp">
 
-    <!-- Speed Selection (visible before game starts) -->
+    <!-- Game Configuration (visible before game starts) -->
     <LinearLayout
         android:id="@+id/speedSelectionLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="100dp"
+        android:paddingHorizontal="32dp"
         android:visibility="visible">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/select_speed"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:layout_marginBottom="12dp"/>
+            android:text="@string/game_settings"
+            android:textColor="#FFD700"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="40dp"
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="4"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnSpeed1"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="1"
-                android:layout_margin="4dp"/>
-
-            <Button
-                android:id="@+id/btnSpeed2"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="2"
-                android:layout_margin="4dp"/>
-
-            <Button
-                android:id="@+id/btnSpeed3"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="3"
-                android:layout_margin="4dp"/>
-
-            <Button
-                android:id="@+id/btnSpeed4"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="4"
-                android:layout_margin="4dp"/>
-
-            <Button
-                android:id="@+id/btnSpeed5"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="5"
-                android:layout_margin="4dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnSpeed6"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="6"
-                android:layout_margin="4dp"/>
-
-            <Button
-                android:id="@+id/btnSpeed7"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="7"
-                android:layout_margin="4dp"/>
-
-            <Button
-                android:id="@+id/btnSpeed8"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="8"
-                android:layout_margin="4dp"/>
-
-            <Button
-                android:id="@+id/btnSpeed9"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="9"
-                android:layout_margin="4dp"/>
-        </LinearLayout>
-
+        <!-- Speed Setting -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/starting_lines"
+            android:text="@string/speed_label"
             android:textColor="@color/white"
-            android:textSize="20sp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="12dp"/>
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp"/>
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tvSpeedValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:text="5"
+            android:textColor="#4CAF50"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="3"/>
 
-            <Button
-                android:id="@+id/btnLines0"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="0"
-                android:layout_margin="4dp"/>
+        <SeekBar
+            android:id="@+id/seekBarSpeed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="8"
+            android:progress="4"
+            android:progressTint="#4CAF50"
+            android:thumbTint="#4CAF50"
+            android:layout_marginBottom="40dp"/>
 
-            <Button
-                android:id="@+id/btnLines1"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="1"
-                android:layout_margin="4dp"/>
-
-            <Button
-                android:id="@+id/btnLines2"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="2"
-                android:layout_margin="4dp"/>
-
-            <Button
-                android:id="@+id/btnLines3"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="3"
-                android:layout_margin="4dp"/>
-
-            <Button
-                android:id="@+id/btnLines4"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="4"
-                android:layout_margin="4dp"/>
-        </LinearLayout>
-
-        <LinearLayout
+        <!-- Starting Lines Setting -->
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:text="@string/starting_lines_label"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp"/>
 
-            <Button
-                android:id="@+id/btnLines5"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="5"
-                android:layout_margin="4dp"/>
+        <TextView
+            android:id="@+id/tvLinesValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="#4CAF50"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="3"/>
 
-            <Button
-                android:id="@+id/btnLines6"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="6"
-                android:layout_margin="4dp"/>
-
-            <Button
-                android:id="@+id/btnLines7"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="7"
-                android:layout_margin="4dp"/>
-
-            <Button
-                android:id="@+id/btnLines8"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="8"
-                android:layout_margin="4dp"/>
-
-            <Button
-                android:id="@+id/btnLines9"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="9"
-                android:layout_margin="4dp"/>
-        </LinearLayout>
+        <SeekBar
+            android:id="@+id/seekBarLines"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="9"
+            android:progress="0"
+            android:progressTint="#4CAF50"
+            android:thumbTint="#4CAF50"
+            android:layout_marginBottom="50dp"/>
 
         <Button
             android:id="@+id/btnStartGame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/start_game"
-            android:textSize="18sp"
-            android:paddingHorizontal="40dp"
-            android:paddingVertical="12dp"
-            android:layout_marginTop="24dp"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:paddingHorizontal="60dp"
+            android:paddingVertical="16dp"
             android:background="@drawable/button_background_enhanced"/>
     </LinearLayout>
 

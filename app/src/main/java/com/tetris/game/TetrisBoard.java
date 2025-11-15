@@ -122,11 +122,15 @@ public class TetrisBoard {
             }
         }
 
-        // Add random filled lines at bottom with gaps
-        int[] garbageColors = {
-            Color.parseColor("#757575"), // Gray
-            Color.parseColor("#616161"),
-            Color.parseColor("#424242")
+        // Use actual tetromino colors to make it look like accumulated blocks
+        int[] tetrominoColors = {
+            Color.CYAN,      // I piece
+            Color.YELLOW,    // O piece
+            Color.MAGENTA,   // T piece
+            Color.GREEN,     // S piece
+            Color.RED,       // Z piece
+            Color.BLUE,      // J piece
+            Color.rgb(255, 165, 0)  // L piece (Orange)
         };
 
         for (int i = ROWS - numLines; i < ROWS; i++) {
@@ -143,7 +147,8 @@ public class TetrisBoard {
                     colors[i][j] = Color.TRANSPARENT;
                 } else {
                     board[i][j] = 1;
-                    colors[i][j] = garbageColors[(int) (Math.random() * garbageColors.length)];
+                    // Randomly select a tetromino color
+                    colors[i][j] = tetrominoColors[(int) (Math.random() * tetrominoColors.length)];
                 }
             }
         }

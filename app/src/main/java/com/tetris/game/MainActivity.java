@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,8 +38,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         setContentView(R.layout.activity_main);
 
         initializeViews();
-        setupSpeedButtons();
-        setupStartingLinesButtons();
+        setupSeekBars();
         setupStartGameButton();
         setupGameControls();
     }
@@ -53,39 +53,39 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         soundManager = new SoundManager(this);
     }
 
-    private void setupSpeedButtons() {
-        int[] speedButtonIds = {
-            R.id.btnSpeed1, R.id.btnSpeed2, R.id.btnSpeed3,
-            R.id.btnSpeed4, R.id.btnSpeed5, R.id.btnSpeed6,
-            R.id.btnSpeed7, R.id.btnSpeed8, R.id.btnSpeed9
-        };
+    private void setupSeekBars() {
+        SeekBar seekBarSpeed = findViewById(R.id.seekBarSpeed);
+        SeekBar seekBarLines = findViewById(R.id.seekBarLines);
+        TextView tvSpeedValue = findViewById(R.id.tvSpeedValue);
+        TextView tvLinesValue = findViewById(R.id.tvLinesValue);
 
-        for (int i = 0; i < speedButtonIds.length; i++) {
-            final int speed = i + 1;
-            Button btn = findViewById(speedButtonIds[i]);
-            btn.setOnClickListener(v -> {
-                selectedSpeed = speed;
-                Toast.makeText(this, "Speed: " + speed, Toast.LENGTH_SHORT).show();
-            });
-        }
-    }
+        seekBarSpeed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                selectedSpeed = progress + 1; // 0-8 becomes 1-9
+                tvSpeedValue.setText(String.valueOf(selectedSpeed));
+            }
 
-    private void setupStartingLinesButtons() {
-        int[] linesButtonIds = {
-            R.id.btnLines0, R.id.btnLines1, R.id.btnLines2,
-            R.id.btnLines3, R.id.btnLines4, R.id.btnLines5,
-            R.id.btnLines6, R.id.btnLines7, R.id.btnLines8,
-            R.id.btnLines9
-        };
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
 
-        for (int i = 0; i < linesButtonIds.length; i++) {
-            final int lines = i;
-            Button btn = findViewById(linesButtonIds[i]);
-            btn.setOnClickListener(v -> {
-                selectedStartingLines = lines;
-                Toast.makeText(this, "Starting Lines: " + lines, Toast.LENGTH_SHORT).show();
-            });
-        }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        seekBarLines.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                selectedStartingLines = progress; // 0-9
+                tvLinesValue.setText(String.valueOf(selectedStartingLines));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
     }
 
     private void setupStartGameButton() {

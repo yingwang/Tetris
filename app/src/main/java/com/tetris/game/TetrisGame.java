@@ -79,13 +79,25 @@ public class TetrisGame {
 
     public void rotate() {
         if (gameOver || paused) return;
-        TetrisPiece temp = currentPiece.copy();
-        temp.rotate();
-        if (board.isValidPosition(temp)) {
-            currentPiece.rotate();
-            if (soundManager != null) soundManager.playRotate();
-            notifyBoardChanged();
+
+        // Try wall kicks: attempt rotation with different horizontal offsets
+        int[] wallKickOffsets = {0, -1, 1, -2, 2};
+
+        for (int offset : wallKickOffsets) {
+            TetrisPiece temp = currentPiece.copy();
+            temp.rotate();
+            temp.setX(temp.getX() + offset);
+
+            if (board.isValidPosition(temp)) {
+                currentPiece.rotate();
+                currentPiece.setX(currentPiece.getX() + offset);
+                if (soundManager != null) soundManager.playRotate();
+                notifyBoardChanged();
+                return; // Rotation successful
+            }
         }
+
+        // If no wall kick worked, rotation fails silently
     }
 
     public void drop() {
