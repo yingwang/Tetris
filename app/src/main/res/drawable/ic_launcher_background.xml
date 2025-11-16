@@ -5,12 +5,23 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Gradient background - gaming style -->
+    <!-- Vibrant gradient background - purple to blue gaming style -->
     <path
-        android:pathData="M0,0 L108,0 L108,108 L0,108 Z"
-        android:fillColor="#0F0F1E"/>
+        android:pathData="M0,0 L108,0 L108,108 L0,108 Z">
+        <aapt:attr xmlns:aapt="http://schemas.android.com/aapt" name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="0"
+                android:startY="0"
+                android:endX="108"
+                android:endY="108"
+                android:startColor="#667EEA"
+                android:centerColor="#764BA2"
+                android:endColor="#F093FB"/>
+        </aapt:attr>
+    </path>
 
-    <!-- Radial gradient effect -->
+    <!-- Overlay radial gradient for depth -->
     <path
         android:pathData="M0,0 L108,0 L108,108 L0,108 Z">
         <aapt:attr xmlns:aapt="http://schemas.android.com/aapt" name="android:fillColor">
@@ -18,9 +29,10 @@
                 android:type="radial"
                 android:centerX="54"
                 android:centerY="54"
-                android:gradientRadius="70"
-                android:startColor="#2A2A4E"
-                android:endColor="#0F0F1E"/>
+                android:gradientRadius="80"
+                android:startColor="#55FFFFFF"
+                android:centerColor="#11FFFFFF"
+                android:endColor="#00FFFFFF"/>
         </aapt:attr>
     </path>
 </vector>
