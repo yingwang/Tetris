@@ -15,7 +15,7 @@ public class TetrisPiece {
     public TetrisPiece(PieceType type) {
         this.type = type;
         this.x = 3;
-        this.y = 0;
+        this.y = -2;  // Start above the board for smoother gameplay
         initializeShape();
         initializeColor();
     }
