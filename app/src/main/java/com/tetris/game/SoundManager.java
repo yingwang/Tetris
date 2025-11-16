@@ -135,6 +135,9 @@ public class SoundManager {
         setMuted(!isMuted);
         if (isMuted) {
             stopBackgroundMusic();
+        } else {
+            // 取消静音时恢复背景音乐
+            startBackgroundMusic();
         }
     }
 
