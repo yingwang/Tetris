@@ -143,11 +143,28 @@ public class TetrisGame {
             currentPiece = nextPiece;
             nextPiece = createRandomPiece();
 
-            // Check if game over
+            // Check if game over - only after piece tries to enter the board
+            // New piece starts above the board (y < 0), so we check if it can move down at all
             if (!board.isValidPosition(currentPiece)) {
+                // Piece can't even exist at spawn point - immediate game over
                 gameOver = true;
                 if (soundManager != null) soundManager.playGameOver();
                 notifyGameOver();
+            } else {
+                // Try to move the piece down to enter the board
+                TetrisPiece nextTemp = currentPiece.copy();
+                nextTemp.moveDown();
+
+                // If piece can't move down even once from spawn, it means board is full
+                if (!board.isValidPosition(nextTemp)) {
+                    // Only trigger game over if we're also unable to place at current position
+                    // This ensures the piece visually appears to "stack up" to the top
+                    if (currentPiece.getY() >= 0) {
+                        gameOver = true;
+                        if (soundManager != null) soundManager.playGameOver();
+                        notifyGameOver();
+                    }
+                }
             }
 
             notifyBoardChanged();
