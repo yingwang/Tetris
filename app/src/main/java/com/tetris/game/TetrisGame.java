@@ -152,11 +152,11 @@ public class TetrisGame {
                 notifyGameOver();
             } else {
                 // Try to move the piece down to enter the board
-                TetrisPiece temp = currentPiece.copy();
-                temp.moveDown();
+                TetrisPiece nextTemp = currentPiece.copy();
+                nextTemp.moveDown();
 
                 // If piece can't move down even once from spawn, it means board is full
-                if (!board.isValidPosition(temp)) {
+                if (!board.isValidPosition(nextTemp)) {
                     // Only trigger game over if we're also unable to place at current position
                     // This ensures the piece visually appears to "stack up" to the top
                     if (currentPiece.getY() >= 0) {
