@@ -5,47 +5,172 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Tetris T-piece design -->
+    <!-- Modern Tetris icon with multiple colorful blocks and 3D effect -->
     <group
-        android:translateX="27"
-        android:translateY="27">
+        android:translateX="30"
+        android:translateY="24">
 
-        <!-- Top row - 3 blocks -->
+        <!-- Row 1: Orange L-piece (partial) -->
+        <!-- Shadows for 3D effect -->
+        <path
+            android:fillColor="#BF6000"
+            android:pathData="M1,11 L13,11 L13,23 L1,23 Z"/>
+        <path
+            android:fillColor="#BF6000"
+            android:pathData="M13,11 L25,11 L25,23 L13,23 Z"/>
+
+        <!-- Main blocks with gradient effect -->
+        <path
+            android:fillColor="#FF8C00"
+            android:pathData="M0,10 L12,10 L12,22 L0,22 Z"/>
+        <path
+            android:fillColor="#FFA500"
+            android:pathData="M12,10 L24,10 L24,22 L12,22 Z"/>
+
+        <!-- Highlights -->
+        <path
+            android:fillColor="#FFBB33"
+            android:pathData="M1,11 L11,11 L11,13 L1,13 Z"/>
+        <path
+            android:fillColor="#FFBB33"
+            android:pathData="M13,11 L23,11 L23,13 L13,13 Z"/>
+
+        <!-- Row 2: Cyan I-piece -->
+        <path
+            android:fillColor="#007A7A"
+            android:pathData="M25,11 L37,11 L37,23 L25,23 Z"/>
+        <path
+            android:fillColor="#00CED1"
+            android:pathData="M24,10 L36,10 L36,22 L24,22 Z"/>
+        <path
+            android:fillColor="#33E0E3"
+            android:pathData="M25,11 L35,11 L35,13 L25,13 Z"/>
+
+        <!-- Row 2: Purple T-piece (center) -->
+        <path
+            android:fillColor="#6B2B8E"
+            android:pathData="M37,11 L49,11 L49,23 L37,23 Z"/>
         <path
             android:fillColor="#9B59B6"
-            android:pathData="M12,12 L30,12 L30,30 L12,30 Z"/>
+            android:pathData="M36,10 L48,10 L48,22 L36,22 Z"/>
         <path
-            android:fillColor="#8E44AD"
-            android:pathData="M30,12 L48,12 L48,30 L30,30 Z"/>
-        <path
-            android:fillColor="#9B59B6"
-            android:pathData="M48,12 L66,12 L66,30 L48,30 Z"/>
+            android:fillColor="#C084FC"
+            android:pathData="M37,11 L47,11 L47,13 L37,13 Z"/>
 
-        <!-- Bottom middle block -->
+        <!-- Row 3: Green S-piece -->
         <path
-            android:fillColor="#8E44AD"
-            android:pathData="M30,30 L48,30 L48,48 L30,48 Z"/>
+            android:fillColor="#1A661A"
+            android:pathData="M1,23 L13,23 L13,35 L1,35 Z"/>
+        <path
+            android:fillColor="#00CC00"
+            android:pathData="M0,22 L12,22 L12,34 L0,34 Z"/>
+        <path
+            android:fillColor="#33FF33"
+            android:pathData="M1,23 L11,23 L11,25 L1,25 Z"/>
 
-        <!-- Block borders -->
+        <path
+            android:fillColor="#1A661A"
+            android:pathData="M13,23 L25,23 L25,35 L13,35 Z"/>
+        <path
+            android:fillColor="#00CC00"
+            android:pathData="M12,22 L24,22 L24,34 L12,34 Z"/>
+        <path
+            android:fillColor="#33FF33"
+            android:pathData="M13,23 L23,23 L23,25 L13,25 Z"/>
+
+        <!-- Row 3: Blue J-piece -->
+        <path
+            android:fillColor="#003D99"
+            android:pathData="M25,23 L37,23 L37,35 L25,35 Z"/>
+        <path
+            android:fillColor="#0066FF"
+            android:pathData="M24,22 L36,22 L36,34 L24,34 Z"/>
+        <path
+            android:fillColor="#3399FF"
+            android:pathData="M25,23 L35,23 L35,25 L25,25 Z"/>
+
+        <!-- Row 4: Yellow O-piece (square) -->
+        <path
+            android:fillColor="#B8860B"
+            android:pathData="M13,35 L25,35 L25,47 L13,47 Z"/>
+        <path
+            android:fillColor="#FFD700"
+            android:pathData="M12,34 L24,34 L24,46 L12,46 Z"/>
+        <path
+            android:fillColor="#FFED4E"
+            android:pathData="M13,35 L23,35 L23,37 L13,37 Z"/>
+
+        <path
+            android:fillColor="#B8860B"
+            android:pathData="M25,35 L37,35 L37,47 L25,47 Z"/>
+        <path
+            android:fillColor="#FFD700"
+            android:pathData="M24,34 L36,34 L36,46 L24,46 Z"/>
+        <path
+            android:fillColor="#FFED4E"
+            android:pathData="M25,35 L35,35 L35,37 L25,37 Z"/>
+
+        <!-- Row 4: Red Z-piece -->
+        <path
+            android:fillColor="#8B0000"
+            android:pathData="M37,35 L49,35 L49,47 L37,47 Z"/>
+        <path
+            android:fillColor="#FF0000"
+            android:pathData="M36,34 L48,34 L48,46 L36,46 Z"/>
+        <path
+            android:fillColor="#FF4D4D"
+            android:pathData="M37,35 L47,35 L47,37 L37,37 Z"/>
+
+        <!-- White borders for all blocks (crisp look) -->
         <path
             android:strokeColor="#FFFFFF"
-            android:strokeWidth="2"
+            android:strokeWidth="1.5"
             android:fillColor="@android:color/transparent"
-            android:pathData="M12,12 L30,12 L30,30 L12,30 Z"/>
+            android:pathData="M0,10 L12,10 L12,22 L0,22 Z"/>
         <path
             android:strokeColor="#FFFFFF"
-            android:strokeWidth="2"
+            android:strokeWidth="1.5"
             android:fillColor="@android:color/transparent"
-            android:pathData="M30,12 L48,12 L48,30 L30,30 Z"/>
+            android:pathData="M12,10 L24,10 L24,22 L12,22 Z"/>
         <path
             android:strokeColor="#FFFFFF"
-            android:strokeWidth="2"
+            android:strokeWidth="1.5"
             android:fillColor="@android:color/transparent"
-            android:pathData="M48,12 L66,12 L66,30 L48,30 Z"/>
+            android:pathData="M24,10 L36,10 L36,22 L24,22 Z"/>
         <path
             android:strokeColor="#FFFFFF"
-            android:strokeWidth="2"
+            android:strokeWidth="1.5"
             android:fillColor="@android:color/transparent"
-            android:pathData="M30,30 L48,30 L48,48 L30,48 Z"/>
+            android:pathData="M36,10 L48,10 L48,22 L36,22 Z"/>
+        <path
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="1.5"
+            android:fillColor="@android:color/transparent"
+            android:pathData="M0,22 L12,22 L12,34 L0,34 Z"/>
+        <path
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="1.5"
+            android:fillColor="@android:color/transparent"
+            android:pathData="M12,22 L24,22 L24,34 L12,34 Z"/>
+        <path
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="1.5"
+            android:fillColor="@android:color/transparent"
+            android:pathData="M24,22 L36,22 L36,34 L24,34 Z"/>
+        <path
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="1.5"
+            android:fillColor="@android:color/transparent"
+            android:pathData="M12,34 L24,34 L24,46 L12,46 Z"/>
+        <path
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="1.5"
+            android:fillColor="@android:color/transparent"
+            android:pathData="M24,34 L36,34 L36,46 L24,46 Z"/>
+        <path
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="1.5"
+            android:fillColor="@android:color/transparent"
+            android:pathData="M36,34 L48,34 L48,46 L36,46 Z"/>
     </group>
 </vector>
