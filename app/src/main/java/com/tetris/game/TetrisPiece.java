@@ -69,25 +69,25 @@ public class TetrisPiece {
     private void initializeColor() {
         switch (type) {
             case I:
-                color = Color.parseColor("#22D3EE"); // Bright cyan
+                color = Color.parseColor("#00F5FF"); // Neon cyan
                 break;
             case O:
-                color = Color.parseColor("#FCD34D"); // Bright yellow
+                color = Color.parseColor("#FFEA00"); // Bright yellow
                 break;
             case T:
-                color = Color.parseColor("#E879F9"); // Bright magenta
+                color = Color.parseColor("#FF00FF"); // Neon magenta
                 break;
             case S:
-                color = Color.parseColor("#34D399"); // Bright green
+                color = Color.parseColor("#39FF14"); // Neon green
                 break;
             case Z:
-                color = Color.parseColor("#F87171"); // Bright red
+                color = Color.parseColor("#FF073A"); // Bright red
                 break;
             case J:
-                color = Color.parseColor("#60A5FA"); // Bright blue
+                color = Color.parseColor("#3D5AFE"); // Vibrant blue
                 break;
             case L:
-                color = Color.parseColor("#FB923C"); // Bright orange
+                color = Color.parseColor("#FF9500"); // Bright orange
                 break;
         }
     }
