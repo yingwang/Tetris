@@ -122,8 +122,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginBottom="8dp"
-            android:padding="8dp">
+            android:layout_marginBottom="4dp"
+            android:paddingHorizontal="4dp">
 
             <TextView
                 android:id="@+id/tvScore"
@@ -134,10 +134,10 @@
                 android:layout_marginRight="4dp"
                 android:text="@string/score"
                 android:textColor="@color/text_accent"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:gravity="center"
-                android:padding="12dp"
+                android:padding="10dp"
                 android:background="@drawable/score_background"
                 android:shadowColor="@color/shadow_color"
                 android:shadowDx="0"
@@ -153,15 +153,75 @@
                 android:layout_marginLeft="4dp"
                 android:text="@string/level"
                 android:textColor="@color/text_accent"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:gravity="center"
-                android:padding="12dp"
+                android:padding="10dp"
                 android:background="@drawable/score_background"
                 android:shadowColor="@color/shadow_color"
                 android:shadowDx="0"
                 android:shadowDy="1"
                 android:shadowRadius="1"/>
+        </LinearLayout>
+
+        <!-- Menu Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="8dp"
+            android:paddingHorizontal="4dp">
+
+            <Button
+                android:id="@+id/btnNewGame"
+                android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="2dp"
+                android:text="New"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:background="@drawable/button_background_selector"/>
+
+            <Button
+                android:id="@+id/btnPause"
+                android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:layout_weight="1"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:text="Pause"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:background="@drawable/button_background_selector"/>
+
+            <Button
+                android:id="@+id/btnMute"
+                android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:layout_weight="1"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:text="Mute"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:background="@drawable/button_background_selector"/>
+
+            <Button
+                android:id="@+id/btnHighScores"
+                android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:layout_weight="1"
+                android:layout_marginStart="2dp"
+                android:text="Scores"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:background="@drawable/button_background_selector"/>
         </LinearLayout>
 
         <!-- Game View -->
@@ -170,7 +230,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginBottom="56dp"/>
+            android:layout_marginBottom="8dp"/>
 
         <!-- Control Buttons -->
         <RelativeLayout

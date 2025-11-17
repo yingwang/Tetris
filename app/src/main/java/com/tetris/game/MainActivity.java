@@ -3,8 +3,6 @@ package com.tetris.game;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -26,6 +24,8 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     private LinearLayout gameLayout;
     private TextView tvScore;
     private TextView tvLevel;
+    private Button btnPause;
+    private Button btnMute;
     private HighScoreManager scoreManager;
     private SoundManager soundManager;
 
@@ -35,12 +35,19 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Hide action bar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         setContentView(R.layout.activity_main);
 
         initializeViews();
         setupSeekBars();
         setupStartGameButton();
         setupGameControls();
+        setupMenuButtons();
     }
 
     private void initializeViews() {
@@ -49,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         tetrisView = findViewById(R.id.tetrisView);
         tvScore = findViewById(R.id.tvScore);
         tvLevel = findViewById(R.id.tvLevel);
+        btnPause = findViewById(R.id.btnPause);
+        btnMute = findViewById(R.id.btnMute);
         scoreManager = new HighScoreManager(this);
         soundManager = new SoundManager(this);
     }
@@ -116,58 +125,43 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.game_menu, menu);
-        return true;
-    }
+    private void setupMenuButtons() {
+        Button btnNewGame = findViewById(R.id.btnNewGame);
+        Button btnHighScores = findViewById(R.id.btnHighScores);
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem pauseItem = menu.findItem(R.id.menu_pause);
-        if (game != null && game.isPaused()) {
-            pauseItem.setTitle(R.string.resume);
-            pauseItem.setIcon(android.R.drawable.ic_media_play);
-        } else {
-            pauseItem.setTitle(R.string.pause);
-            pauseItem.setIcon(android.R.drawable.ic_media_pause);
-        }
+        btnNewGame.setOnClickListener(v -> showSpeedSelection());
 
-        MenuItem muteItem = menu.findItem(R.id.menu_mute);
-        if (soundManager != null && soundManager.isMuted()) {
-            muteItem.setTitle(R.string.unmute);
-        } else {
-            muteItem.setTitle(R.string.mute);
-        }
+        btnPause.setOnClickListener(v -> togglePause());
 
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.menu_new_game) {
-            showSpeedSelection();
-            return true;
-        } else if (id == R.id.menu_pause) {
-            togglePause();
-            return true;
-        } else if (id == R.id.menu_high_scores) {
-            Intent intent = new Intent(this, HighScoresActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (id == R.id.menu_mute) {
+        btnMute.setOnClickListener(v -> {
             if (soundManager != null) {
                 soundManager.toggleMute();
-                invalidateOptionsMenu();
+                updateMuteButton();
                 String message = soundManager.isMuted() ? "Sound Muted" : "Sound Enabled";
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             }
-            return true;
-        }
+        });
 
-        return super.onOptionsItemSelected(item);
+        btnHighScores.setOnClickListener(v -> {
+            Intent intent = new Intent(this, HighScoresActivity.class);
+            startActivity(intent);
+        });
+
+        // Initialize button states
+        updatePauseButton();
+        updateMuteButton();
+    }
+
+    private void updatePauseButton() {
+        if (btnPause != null && game != null) {
+            btnPause.setText(game.isPaused() ? "Resume" : "Pause");
+        }
+    }
+
+    private void updateMuteButton() {
+        if (btnMute != null && soundManager != null) {
+            btnMute.setText(soundManager.isMuted() ? "Unmute" : "Mute");
+        }
     }
 
     private void startGame() {
@@ -187,6 +181,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
 
         updateScore(game.getScore());
         updateLevel(game.getLevel());
+        updatePauseButton();
 
         startGameLoop();
 
@@ -229,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     private void togglePause() {
         if (game != null) {
             game.togglePause();
-            invalidateOptionsMenu(); // Update menu to change Pause/Resume text
+            updatePauseButton(); // Update button text
             if (game.isPaused()) {
                 Toast.makeText(this, "Game Paused", Toast.LENGTH_SHORT).show();
                 if (soundManager != null) {
@@ -308,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         super.onPause();
         if (game != null && !game.isGameOver()) {
             game.setPaused(true);
-            invalidateOptionsMenu();
+            updatePauseButton();
         }
         // Pause music when app goes to background
         if (soundManager != null) {
