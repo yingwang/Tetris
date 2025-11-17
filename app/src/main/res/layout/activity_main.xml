@@ -114,6 +114,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:layout_marginTop="24dp"
         android:visibility="gone">
 
         <!-- Score and Level Display -->
@@ -236,7 +237,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="8dp">
+            android:paddingBottom="24dp">
 
             <!-- Left button - far left -->
             <ImageButton
