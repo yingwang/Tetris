@@ -11,15 +11,15 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/high_scores_title"
-        android:textColor="#FFD700"
+        android:textColor="@color/text_accent"
         android:textSize="36sp"
         android:textStyle="bold"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="16dp"
-        android:shadowColor="#000000"
-        android:shadowDx="3"
-        android:shadowDy="3"
-        android:shadowRadius="5"/>
+        android:shadowColor="@color/shadow_color"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"/>
 
     <ScrollView
         android:layout_width="match_parent"

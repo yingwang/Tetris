@@ -21,21 +21,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/game_settings"
-            android:textColor="#FFD700"
+            android:textColor="@color/text_accent"
             android:textSize="32sp"
             android:textStyle="bold"
             android:layout_marginBottom="40dp"
-            android:shadowColor="#000000"
-            android:shadowDx="2"
-            android:shadowDy="2"
-            android:shadowRadius="4"/>
+            android:shadowColor="@color/shadow_color"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"/>
 
         <!-- Speed Setting -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/speed_label"
-            android:textColor="@color/white"
+            android:textColor="@color/text_primary"
             android:textSize="18sp"
             android:layout_marginBottom="8dp"/>
 
@@ -44,14 +44,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="5"
-            android:textColor="#4CAF50"
+            android:textColor="@color/accent_primary"
             android:textSize="48sp"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"
-            android:shadowColor="#000000"
-            android:shadowDx="2"
-            android:shadowDy="2"
-            android:shadowRadius="3"/>
+            android:shadowColor="@color/shadow_color"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"/>
 
         <SeekBar
             android:id="@+id/seekBarSpeed"
@@ -59,8 +59,8 @@
             android:layout_height="wrap_content"
             android:max="8"
             android:progress="4"
-            android:progressTint="#4CAF50"
-            android:thumbTint="#4CAF50"
+            android:progressTint="@color/accent_primary"
+            android:thumbTint="@color/accent_primary"
             android:layout_marginBottom="40dp"/>
 
         <!-- Starting Lines Setting -->
@@ -68,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/starting_lines_label"
-            android:textColor="@color/white"
+            android:textColor="@color/text_primary"
             android:textSize="18sp"
             android:layout_marginBottom="8dp"/>
 
@@ -77,14 +77,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
-            android:textColor="#4CAF50"
+            android:textColor="@color/accent_primary"
             android:textSize="48sp"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"
-            android:shadowColor="#000000"
-            android:shadowDx="2"
-            android:shadowDy="2"
-            android:shadowRadius="3"/>
+            android:shadowColor="@color/shadow_color"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"/>
 
         <SeekBar
             android:id="@+id/seekBarLines"
@@ -92,8 +92,8 @@
             android:layout_height="wrap_content"
             android:max="9"
             android:progress="0"
-            android:progressTint="#4CAF50"
-            android:thumbTint="#4CAF50"
+            android:progressTint="@color/accent_primary"
+            android:thumbTint="@color/accent_primary"
             android:layout_marginBottom="50dp"/>
 
         <Button
@@ -133,16 +133,16 @@
                 android:layout_marginEnd="4dp"
                 android:layout_marginRight="4dp"
                 android:text="@string/score"
-                android:textColor="#FFD700"
+                android:textColor="@color/text_accent"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:padding="12dp"
                 android:background="@drawable/score_background"
-                android:shadowColor="#000000"
-                android:shadowDx="2"
-                android:shadowDy="2"
-                android:shadowRadius="3"/>
+                android:shadowColor="@color/shadow_color"
+                android:shadowDx="0"
+                android:shadowDy="1"
+                android:shadowRadius="1"/>
 
             <TextView
                 android:id="@+id/tvLevel"
@@ -152,16 +152,16 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginLeft="4dp"
                 android:text="@string/level"
-                android:textColor="#FFD700"
+                android:textColor="@color/text_accent"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:padding="12dp"
                 android:background="@drawable/score_background"
-                android:shadowColor="#000000"
-                android:shadowDx="2"
-                android:shadowDy="2"
-                android:shadowRadius="3"/>
+                android:shadowColor="@color/shadow_color"
+                android:shadowDx="0"
+                android:shadowDy="1"
+                android:shadowRadius="1"/>
         </LinearLayout>
 
         <!-- Game View -->

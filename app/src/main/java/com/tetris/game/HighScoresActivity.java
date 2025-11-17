@@ -39,7 +39,7 @@ public class HighScoresActivity extends AppCompatActivity {
         if (scores.isEmpty()) {
             TextView emptyView = new TextView(this);
             emptyView.setText(R.string.no_scores);
-            emptyView.setTextColor(getResources().getColor(android.R.color.white));
+            emptyView.setTextColor(getResources().getColor(R.color.text_secondary));
             emptyView.setTextSize(18);
             emptyView.setPadding(16, 16, 16, 16);
             scoresContainer.addView(emptyView);
@@ -68,10 +68,10 @@ public class HighScoresActivity extends AppCompatActivity {
             // Rank
             TextView rankView = new TextView(this);
             rankView.setText(String.format(Locale.getDefault(), "#%d", i + 1));
-            rankView.setTextColor(isTopThree ? 0xFFFFD700 : 0xFF4CAF50);
+            rankView.setTextColor(getResources().getColor(isTopThree ? R.color.rank_gold : R.color.text_accent));
             rankView.setTextSize(28);
             rankView.setTypeface(null, android.graphics.Typeface.BOLD);
-            rankView.setShadowLayer(3, 2, 2, 0xFF000000);
+            rankView.setShadowLayer(2, 1, 1, getResources().getColor(R.color.shadow_color));
             LinearLayout.LayoutParams rankParams = new LinearLayout.LayoutParams(120, LinearLayout.LayoutParams.WRAP_CONTENT);
             rankParams.gravity = android.view.Gravity.CENTER_VERTICAL;
             rankView.setLayoutParams(rankParams);
@@ -88,16 +88,16 @@ public class HighScoresActivity extends AppCompatActivity {
 
             TextView scoreView = new TextView(this);
             scoreView.setText(String.format(Locale.getDefault(), "%,d", entry.score));
-            scoreView.setTextColor(isTopThree ? 0xFFFFD700 : 0xFFFFFFFF);
+            scoreView.setTextColor(getResources().getColor(isTopThree ? R.color.rank_gold : R.color.text_primary));
             scoreView.setTextSize(22);
             scoreView.setTypeface(null, android.graphics.Typeface.BOLD);
-            scoreView.setShadowLayer(2, 1, 1, 0xFF000000);
+            scoreView.setShadowLayer(2, 1, 1, getResources().getColor(R.color.shadow_color));
             detailsLayout.addView(scoreView);
 
             TextView levelView = new TextView(this);
             levelView.setText(String.format(Locale.getDefault(), "Level %d  •  %s",
                 entry.level, dateFormat.format(new Date(entry.timestamp))));
-            levelView.setTextColor(0xFF999999);
+            levelView.setTextColor(getResources().getColor(R.color.text_secondary));
             levelView.setTextSize(14);
             LinearLayout.LayoutParams levelParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,

@@ -1,12 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Modern Light Tech Theme -->
+
+    <!-- Primary Colors -->
+    <color name="primary_light">#F5F7FA</color>          <!-- Very light gray-blue -->
+    <color name="primary_background">#FFFFFF</color>      <!-- Pure white -->
+    <color name="secondary_background">#F0F4F8</color>   <!-- Light blue-gray -->
+
+    <!-- Accent Colors - Tech Blue/Cyan -->
+    <color name="accent_primary">#0EA5E9</color>         <!-- Sky blue -->
+    <color name="accent_secondary">#06B6D4</color>       <!-- Cyan -->
+    <color name="accent_dark">#0284C7</color>            <!-- Darker sky blue -->
+    <color name="accent_neon">#22D3EE</color>            <!-- Bright cyan -->
+
+    <!-- UI Elements -->
+    <color name="game_background">#FAFBFC</color>        <!-- Very light gray -->
+    <color name="grid_line">#E2E8F0</color>              <!-- Light gray-blue grid -->
+    <color name="border_color">#CBD5E1</color>           <!-- Medium light gray -->
+    <color name="shadow_color">#94A3B8</color>           <!-- Shadow gray -->
+
+    <!-- Text Colors -->
+    <color name="text_primary">#1E293B</color>           <!-- Dark slate -->
+    <color name="text_secondary">#475569</color>         <!-- Medium slate -->
+    <color name="text_accent">#0EA5E9</color>            <!-- Sky blue -->
+    <color name="text_gold">#F59E0B</color>              <!-- Amber/gold -->
+
+    <!-- Score & Status -->
+    <color name="score_background">#F0F9FF</color>       <!-- Light blue tint -->
+    <color name="score_border">#0EA5E9</color>           <!-- Sky blue border -->
+    <color name="level_background">#ECFDF5</color>       <!-- Light green tint -->
+    <color name="level_border">#10B981</color>           <!-- Green border -->
+
+    <!-- Button States -->
+    <color name="button_normal">#0EA5E9</color>          <!-- Sky blue -->
+    <color name="button_pressed">#0284C7</color>         <!-- Darker blue -->
+    <color name="button_gradient_start">#06B6D4</color>  <!-- Cyan -->
+    <color name="button_gradient_end">#0EA5E9</color>    <!-- Sky blue -->
+
+    <!-- High Scores -->
+    <color name="rank_gold">#F59E0B</color>              <!-- Gold -->
+    <color name="rank_silver">#94A3B8</color>            <!-- Silver -->
+    <color name="rank_bronze">#F97316</color>            <!-- Bronze -->
+    <color name="high_score_bg">#F8FAFC</color>          <!-- Very light gray -->
+
+    <!-- Tetris Piece Colors - Modern Bright Versions -->
+    <color name="piece_cyan">#22D3EE</color>             <!-- I-piece: Bright cyan -->
+    <color name="piece_yellow">#FCD34D</color>           <!-- O-piece: Bright yellow -->
+    <color name="piece_magenta">#E879F9</color>          <!-- T-piece: Bright magenta -->
+    <color name="piece_green">#34D399</color>            <!-- S-piece: Bright green -->
+    <color name="piece_red">#F87171</color>              <!-- Z-piece: Bright red -->
+    <color name="piece_blue">#60A5FA</color>             <!-- J-piece: Bright blue -->
+    <color name="piece_orange">#FB923C</color>           <!-- L-piece: Bright orange -->
+
+    <!-- Ghost Piece -->
+    <color name="ghost_piece">#CBD5E1</color>            <!-- Light gray -->
+
+    <!-- System Colors -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+
+    <!-- Legacy Material Colors -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="game_background">#FF222222</color>
-    <color name="grid_line">#FF444444</color>
 </resources>
