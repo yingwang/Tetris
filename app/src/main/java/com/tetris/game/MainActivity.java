@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     private HighScoreManager scoreManager;
     private SoundManager soundManager;
 
-    private int selectedSpeed = 5; // Default speed
+    private int selectedSpeed = 1; // Default speed
     private int selectedStartingLines = 0; // Default starting lines
 
     @Override
@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         setContentView(R.layout.activity_main);
 
         initializeViews();
+        loadSettings();
         setupSeekBars();
         setupStartGameButton();
         setupGameControls();
@@ -62,17 +63,40 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         soundManager = new SoundManager(this);
     }
 
+    private void loadSettings() {
+        android.content.SharedPreferences prefs = getSharedPreferences("TetrisSettings", MODE_PRIVATE);
+        selectedSpeed = prefs.getInt("speed", 1);
+        selectedStartingLines = prefs.getInt("startingLines", 0);
+    }
+
+    private void saveSettings() {
+        android.content.SharedPreferences prefs = getSharedPreferences("TetrisSettings", MODE_PRIVATE);
+        android.content.SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("speed", selectedSpeed);
+        editor.putInt("startingLines", selectedStartingLines);
+        editor.apply();
+    }
+
     private void setupSeekBars() {
         SeekBar seekBarSpeed = findViewById(R.id.seekBarSpeed);
         SeekBar seekBarLines = findViewById(R.id.seekBarLines);
         TextView tvSpeedValue = findViewById(R.id.tvSpeedValue);
         TextView tvLinesValue = findViewById(R.id.tvLinesValue);
 
+        // Set initial values from loaded settings
+        seekBarSpeed.setProgress(selectedSpeed - 1); // speed 1-9 becomes progress 0-8
+        tvSpeedValue.setText(String.valueOf(selectedSpeed));
+        seekBarLines.setProgress(selectedStartingLines);
+        tvLinesValue.setText(String.valueOf(selectedStartingLines));
+
         seekBarSpeed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 selectedSpeed = progress + 1; // 0-8 becomes 1-9
                 tvSpeedValue.setText(String.valueOf(selectedSpeed));
+                if (fromUser) {
+                    saveSettings();
+                }
             }
 
             @Override
@@ -87,6 +111,9 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 selectedStartingLines = progress; // 0-9
                 tvLinesValue.setText(String.valueOf(selectedStartingLines));
+                if (fromUser) {
+                    saveSettings();
+                }
             }
 
             @Override

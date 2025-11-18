@@ -43,7 +43,7 @@
             android:id="@+id/tvSpeedValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="5"
+            android:text="1"
             android:textColor="@color/accent_primary"
             android:textSize="48sp"
             android:textStyle="bold"
@@ -58,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:max="8"
-            android:progress="4"
+            android:progress="0"
             android:progressTint="@color/accent_primary"
             android:thumbTint="@color/accent_primary"
             android:layout_marginBottom="40dp"/>
