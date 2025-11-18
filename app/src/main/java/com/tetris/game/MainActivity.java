@@ -157,10 +157,43 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
             if (game != null) game.drop();
         });
 
-        // Soft drop / speed up - moves piece down faster
-        btnDown.setOnClickListener(v -> {
-            v.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY);
-            if (game != null) game.moveDown();
+        // Soft drop / speed up - supports long press for continuous speed up
+        setupSoftDropButton(btnDown);
+    }
+
+    private void setupSoftDropButton(ImageButton btnDown) {
+        final Handler softDropHandler = new Handler();
+        final boolean[] isPressed = {false};
+
+        final Runnable softDropRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (isPressed[0] && game != null && !game.isGameOver() && !game.isPaused()) {
+                    game.moveDown();
+                    softDropHandler.postDelayed(this, 50); // Repeat every 50ms for smooth continuous drop
+                }
+            }
+        };
+
+        btnDown.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case android.view.MotionEvent.ACTION_DOWN:
+                    v.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY);
+                    isPressed[0] = true;
+                    if (game != null) game.moveDown(); // Immediate response
+                    softDropHandler.postDelayed(softDropRunnable, 100); // Start repeating after 100ms
+                    v.setPressed(true);
+                    return true;
+
+                case android.view.MotionEvent.ACTION_UP:
+                case android.view.MotionEvent.ACTION_CANCEL:
+                    isPressed[0] = false;
+                    softDropHandler.removeCallbacks(softDropRunnable);
+                    v.setPressed(false);
+                    v.performClick();
+                    return true;
+            }
+            return false;
         });
     }
 
