@@ -29,8 +29,6 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     private Runnable gameRunnable;
     private boolean isGameRunning = false;
 
-    private LinearLayout mainMenuLayout;
-    private LinearLayout settingsLayout;
     private LinearLayout gameLayout;
     private TextView tvScore;
     private TextView tvLevel;
@@ -61,13 +59,11 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
 
         loadSettings();
         initializeViews();
-        setupSeekBars();
-        setupMenuButtons();
         setupGameControls();
         setupGameControlButtons();
 
         // Start directly in game
-        startGame();
+        startNewGame();
     }
 
     private void loadSettings() {
@@ -84,8 +80,6 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     }
 
     private void initializeViews() {
-        mainMenuLayout = findViewById(R.id.mainMenuLayout);
-        settingsLayout = findViewById(R.id.settingsLayout);
         gameLayout = findViewById(R.id.gameLayout);
         tetrisView = findViewById(R.id.tetrisView);
         tvScore = findViewById(R.id.tvScore);
@@ -94,71 +88,6 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         btnSettings = findViewById(R.id.btnSettings);
         scoreManager = new HighScoreManager(this);
         soundManager = new SoundManager(this);
-    }
-
-    private void setupSeekBars() {
-        SeekBar seekBarSpeed = findViewById(R.id.seekBarSpeed);
-        SeekBar seekBarLines = findViewById(R.id.seekBarLines);
-        TextView tvSpeedValue = findViewById(R.id.tvSpeedValue);
-        TextView tvLinesValue = findViewById(R.id.tvLinesValue);
-
-        // Set initial values from saved settings
-        seekBarSpeed.setProgress(selectedSpeed - 1); // 1-9 becomes 0-8
-        seekBarLines.setProgress(selectedStartingLines);
-        tvSpeedValue.setText(String.valueOf(selectedSpeed));
-        tvLinesValue.setText(String.valueOf(selectedStartingLines));
-
-        seekBarSpeed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                selectedSpeed = progress + 1; // 0-8 becomes 1-9
-                tvSpeedValue.setText(String.valueOf(selectedSpeed));
-                if (fromUser) {
-                    saveSettings();
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
-
-        seekBarLines.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                selectedStartingLines = progress; // 0-9
-                tvLinesValue.setText(String.valueOf(selectedStartingLines));
-                if (fromUser) {
-                    saveSettings();
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
-    }
-
-    private void setupMenuButtons() {
-        // Main menu buttons
-        Button btnStartGame = findViewById(R.id.btnStartGame);
-        Button btnSettings = findViewById(R.id.btnSettings);
-        Button btnHighScoresMenu = findViewById(R.id.btnHighScoresMenu);
-
-        btnStartGame.setOnClickListener(v -> startGame());
-        btnSettings.setOnClickListener(v -> showSettings());
-        btnHighScoresMenu.setOnClickListener(v -> {
-            Intent intent = new Intent(this, HighScoresActivity.class);
-            startActivity(intent);
-        });
-
-        // Settings screen button
-        Button btnBackToMenu = findViewById(R.id.btnBackToMenu);
-        btnBackToMenu.setOnClickListener(v -> showMainMenu());
     }
 
     private void setupGameControls() {
@@ -383,32 +312,6 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     public boolean onOptionsItemSelected(MenuItem item) {
         // No menu needed
         return super.onOptionsItemSelected(item);
-    }
-
-    private void showSettings() {
-        mainMenuLayout.setVisibility(View.GONE);
-        settingsLayout.setVisibility(View.VISIBLE);
-        gameLayout.setVisibility(View.GONE);
-    }
-
-    private void showMainMenu() {
-        // Stop game if running
-        if (isGameRunning) {
-            stopGame();
-            if (soundManager != null) {
-                soundManager.stopBackgroundMusic();
-            }
-        }
-        mainMenuLayout.setVisibility(View.VISIBLE);
-        settingsLayout.setVisibility(View.GONE);
-        gameLayout.setVisibility(View.GONE);
-    }
-
-    private void startGame() {
-        mainMenuLayout.setVisibility(View.GONE);
-        settingsLayout.setVisibility(View.GONE);
-        gameLayout.setVisibility(View.VISIBLE);
-        startNewGame();
     }
 
     private void startNewGame() {
