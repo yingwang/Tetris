@@ -114,7 +114,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:visibility="gone">
 
         <!-- Score and Level Display -->
@@ -123,8 +123,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="6dp"
             android:paddingHorizontal="4dp">
 
             <TextView
@@ -172,29 +172,16 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="6dp"
             android:paddingHorizontal="4dp">
 
             <Button
                 android:id="@+id/btnNewGame"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="38dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="3dp"
+                android:layout_marginEnd="4dp"
                 android:text="New"
-                android:textSize="11sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:background="@drawable/button_background_selector"/>
-
-            <Button
-                android:id="@+id/btnSettings"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:layout_marginStart="3dp"
-                android:layout_marginEnd="3dp"
-                android:text="Set"
                 android:textSize="11sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
@@ -203,10 +190,10 @@
             <Button
                 android:id="@+id/btnPause"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="38dp"
                 android:layout_weight="1"
-                android:layout_marginStart="3dp"
-                android:layout_marginEnd="3dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 android:text="Pause"
                 android:textSize="11sp"
                 android:textStyle="bold"
@@ -216,10 +203,10 @@
             <Button
                 android:id="@+id/btnMute"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="38dp"
                 android:layout_weight="1"
-                android:layout_marginStart="3dp"
-                android:layout_marginEnd="3dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 android:text="Mute"
                 android:textSize="11sp"
                 android:textStyle="bold"
@@ -229,9 +216,9 @@
             <Button
                 android:id="@+id/btnHighScores"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="38dp"
                 android:layout_weight="1"
-                android:layout_marginStart="3dp"
+                android:layout_marginStart="4dp"
                 android:text="Score"
                 android:textSize="11sp"
                 android:textStyle="bold"
@@ -245,79 +232,66 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="8dp"/>
 
-        <!-- Control Buttons - 2 Row Layout -->
+        <!-- Control Buttons - Single Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="48dp">
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingBottom="16dp"
+            android:paddingHorizontal="8dp">
 
-            <!-- Top Row: Rotate and Drop (centered) -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_marginBottom="12dp">
+            <ImageButton
+                android:id="@+id/btnLeft"
+                android:layout_width="0dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:src="@drawable/ic_arrow_left"
+                android:contentDescription="@string/left"
+                android:scaleType="centerInside"
+                android:padding="16dp"
+                android:background="@drawable/button_background_enhanced"/>
 
-                <ImageButton
-                    android:id="@+id/btnRotate"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
-                    android:layout_marginEnd="20dp"
-                    android:src="@drawable/ic_rotate"
-                    android:contentDescription="@string/rotate"
-                    android:scaleType="centerInside"
-                    android:padding="20dp"
-                    android:background="@drawable/button_background_enhanced"/>
+            <ImageButton
+                android:id="@+id/btnRotate"
+                android:layout_width="0dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:src="@drawable/ic_rotate"
+                android:contentDescription="@string/rotate"
+                android:scaleType="centerInside"
+                android:padding="16dp"
+                android:background="@drawable/button_background_enhanced"/>
 
-                <ImageButton
-                    android:id="@+id/btnDrop"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
-                    android:layout_marginStart="20dp"
-                    android:src="@drawable/ic_drop"
-                    android:contentDescription="@string/drop"
-                    android:scaleType="centerInside"
-                    android:padding="20dp"
-                    android:background="@drawable/button_background_enhanced"/>
-            </LinearLayout>
+            <ImageButton
+                android:id="@+id/btnDrop"
+                android:layout_width="0dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:src="@drawable/ic_drop"
+                android:contentDescription="@string/drop"
+                android:scaleType="centerInside"
+                android:padding="16dp"
+                android:background="@drawable/button_background_enhanced"/>
 
-            <!-- Bottom Row: Left and Right (spread apart) -->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageButton
-                    android:id="@+id/btnLeft"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginLeft="24dp"
-                    android:src="@drawable/ic_arrow_left"
-                    android:contentDescription="@string/left"
-                    android:scaleType="centerInside"
-                    android:padding="20dp"
-                    android:background="@drawable/button_background_enhanced"/>
-
-                <ImageButton
-                    android:id="@+id/btnRight"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginRight="24dp"
-                    android:src="@drawable/ic_arrow_right"
-                    android:contentDescription="@string/right"
-                    android:scaleType="centerInside"
-                    android:padding="20dp"
-                    android:background="@drawable/button_background_enhanced"/>
-            </RelativeLayout>
+            <ImageButton
+                android:id="@+id/btnRight"
+                android:layout_width="0dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:src="@drawable/ic_arrow_right"
+                android:contentDescription="@string/right"
+                android:scaleType="centerInside"
+                android:padding="16dp"
+                android:background="@drawable/button_background_enhanced"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -155,14 +155,10 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
 
     private void setupMenuButtons() {
         Button btnNewGame = findViewById(R.id.btnNewGame);
-        Button btnSettings = findViewById(R.id.btnSettings);
         Button btnHighScores = findViewById(R.id.btnHighScores);
 
-        // Quick restart with saved settings
-        btnNewGame.setOnClickListener(v -> startNewGame());
-
-        // Settings button - access settings during game
-        btnSettings.setOnClickListener(v -> showSpeedSelection());
+        // New button shows settings dialog to start new game
+        btnNewGame.setOnClickListener(v -> showSpeedSelection());
 
         btnPause.setOnClickListener(v -> togglePause());
 
