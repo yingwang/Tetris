@@ -134,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         ImageButton btnRight = findViewById(R.id.btnRight);
         ImageButton btnRotate = findViewById(R.id.btnRotate);
         ImageButton btnDrop = findViewById(R.id.btnDrop);
+        ImageButton btnDown = findViewById(R.id.btnDown);
 
         btnLeft.setOnClickListener(v -> {
             v.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY);
@@ -154,6 +155,12 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         btnDrop.setOnClickListener(v -> {
             v.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY);
             if (game != null) game.drop();
+        });
+
+        // Soft drop / speed up - moves piece down faster
+        btnDown.setOnClickListener(v -> {
+            v.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY);
+            if (game != null) game.moveDown();
         });
     }
 

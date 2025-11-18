@@ -114,7 +114,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:visibility="gone">
 
         <!-- Score and Level Display -->
@@ -123,8 +123,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="6dp"
             android:paddingHorizontal="4dp">
 
             <TextView
@@ -226,21 +226,40 @@
                 android:background="@drawable/button_background_selector"/>
         </LinearLayout>
 
-        <!-- Game View -->
-        <com.tetris.game.TetrisView
-            android:id="@+id/tetrisView"
+        <!-- Game View with Speed Up Button -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginBottom="4dp"/>
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
 
-        <!-- Control Buttons - Single Row -->
+            <com.tetris.game.TetrisView
+                android:id="@+id/tetrisView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <!-- Speed Up Button (Right Side) -->
+            <ImageButton
+                android:id="@+id/btnDown"
+                android:layout_width="65dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:src="@drawable/ic_arrow_down"
+                android:contentDescription="@string/down"
+                android:scaleType="centerInside"
+                android:padding="12dp"
+                android:background="@drawable/button_background_enhanced"/>
+        </LinearLayout>
+
+        <!-- Control Buttons - Bottom Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:paddingBottom="90dp"
+            android:paddingBottom="24dp"
             android:paddingHorizontal="8dp">
 
             <ImageButton
@@ -251,6 +270,19 @@
                 android:layout_marginEnd="6dp"
                 android:src="@drawable/ic_arrow_left"
                 android:contentDescription="@string/left"
+                android:scaleType="centerInside"
+                android:padding="16dp"
+                android:background="@drawable/button_background_enhanced"/>
+
+            <ImageButton
+                android:id="@+id/btnRight"
+                android:layout_width="0dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:src="@drawable/ic_arrow_right"
+                android:contentDescription="@string/right"
                 android:scaleType="centerInside"
                 android:padding="16dp"
                 android:background="@drawable/button_background_enhanced"/>
@@ -274,21 +306,8 @@
                 android:layout_height="70dp"
                 android:layout_weight="1"
                 android:layout_marginStart="6dp"
-                android:layout_marginEnd="6dp"
                 android:src="@drawable/ic_drop"
                 android:contentDescription="@string/drop"
-                android:scaleType="centerInside"
-                android:padding="16dp"
-                android:background="@drawable/button_background_enhanced"/>
-
-            <ImageButton
-                android:id="@+id/btnRight"
-                android:layout_width="0dp"
-                android:layout_height="70dp"
-                android:layout_weight="1"
-                android:layout_marginStart="6dp"
-                android:src="@drawable/ic_arrow_right"
-                android:contentDescription="@string/right"
                 android:scaleType="centerInside"
                 android:padding="16dp"
                 android:background="@drawable/button_background_enhanced"/>
