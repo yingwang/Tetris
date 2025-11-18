@@ -32,6 +32,9 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     private LinearLayout gameLayout;
     private TextView tvScore;
     private TextView tvLevel;
+    private ImageButton btnPauseGame;
+    private ImageButton btnMuteGame;
+    private ImageButton btnNewGameFromPlay;
     private HighScoreManager scoreManager;
     private SoundManager soundManager;
     private SharedPreferences preferences;
@@ -47,6 +50,12 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Hide action bar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         setContentView(R.layout.activity_main);
 
         loadSettings();
@@ -54,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         setupSeekBars();
         setupMenuButtons();
         setupGameControls();
+        setupGameControlButtons();
     }
 
     private void loadSettings() {
@@ -76,6 +86,9 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         tetrisView = findViewById(R.id.tetrisView);
         tvScore = findViewById(R.id.tvScore);
         tvLevel = findViewById(R.id.tvLevel);
+        btnPauseGame = findViewById(R.id.btnPauseGame);
+        btnMuteGame = findViewById(R.id.btnMuteGame);
+        btnNewGameFromPlay = findViewById(R.id.btnNewGameFromPlay);
         scoreManager = new HighScoreManager(this);
         soundManager = new SoundManager(this);
     }
@@ -201,57 +214,54 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         });
     }
 
+    private void setupGameControlButtons() {
+        btnPauseGame.setOnClickListener(v -> togglePauseFromButton());
+
+        btnMuteGame.setOnClickListener(v -> {
+            if (soundManager != null) {
+                soundManager.toggleMute();
+                updateMuteButton();
+            }
+        });
+
+        btnNewGameFromPlay.setOnClickListener(v -> showMainMenu());
+
+        // Initialize button states
+        updatePauseButton();
+        updateMuteButton();
+    }
+
+    private void updatePauseButton() {
+        if (game != null && game.isPaused()) {
+            btnPauseGame.setImageResource(android.R.drawable.ic_media_play);
+        } else {
+            btnPauseGame.setImageResource(android.R.drawable.ic_media_pause);
+        }
+    }
+
+    private void updateMuteButton() {
+        if (soundManager != null && soundManager.isMuted()) {
+            btnMuteGame.setImageResource(android.R.drawable.ic_lock_silent_mode);
+        } else {
+            btnMuteGame.setImageResource(android.R.drawable.ic_lock_silent_mode_off);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.game_menu, menu);
+        // No menu needed anymore
         return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem pauseItem = menu.findItem(R.id.menu_pause);
-        if (game != null && game.isPaused()) {
-            pauseItem.setTitle(R.string.resume);
-            pauseItem.setIcon(android.R.drawable.ic_media_play);
-        } else {
-            pauseItem.setTitle(R.string.pause);
-            pauseItem.setIcon(android.R.drawable.ic_media_pause);
-        }
-
-        MenuItem muteItem = menu.findItem(R.id.menu_mute);
-        if (soundManager != null && soundManager.isMuted()) {
-            muteItem.setTitle(R.string.unmute);
-        } else {
-            muteItem.setTitle(R.string.mute);
-        }
-
+        // No menu needed
         return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.menu_new_game) {
-            showMainMenu();
-            return true;
-        } else if (id == R.id.menu_pause) {
-            togglePause();
-            return true;
-        } else if (id == R.id.menu_high_scores) {
-            Intent intent = new Intent(this, HighScoresActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (id == R.id.menu_mute) {
-            if (soundManager != null) {
-                soundManager.toggleMute();
-                invalidateOptionsMenu();
-                String message = soundManager.isMuted() ? "Sound Muted" : "Sound Enabled";
-                RetroDialog.showMessage(this, message);
-            }
-            return true;
-        }
-
+        // No menu needed
         return super.onOptionsItemSelected(item);
     }
 
@@ -331,11 +341,11 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         }
     }
 
-    private void togglePause() {
+    private void togglePauseFromButton() {
         // Only allow pause if game is running and game layout is visible
         if (game != null && isGameRunning && gameLayout.getVisibility() == View.VISIBLE) {
             game.togglePause();
-            invalidateOptionsMenu(); // Update menu to change Pause/Resume text
+            updatePauseButton();
             if (game.isPaused()) {
                 if (soundManager != null) {
                     soundManager.pauseMusic();
@@ -347,7 +357,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
                         .setButton("Continue", v -> {
                             // Resume the game
                             game.setPaused(false);
-                            invalidateOptionsMenu();
+                            updatePauseButton();
                             if (soundManager != null) {
                                 soundManager.resumeMusic();
                             }

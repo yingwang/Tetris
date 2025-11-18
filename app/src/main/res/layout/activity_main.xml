@@ -171,15 +171,56 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-        <!-- Score and Level Display -->
+        <!-- Top Control Bar -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="4dp"
             android:padding="8dp">
 
+            <!-- Control Buttons -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginEnd="8dp">
+
+                <ImageButton
+                    android:id="@+id/btnPauseGame"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@android:drawable/ic_media_pause"
+                    android:contentDescription="Pause"
+                    android:scaleType="centerInside"
+                    android:padding="8dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@drawable/button_background_enhanced"/>
+
+                <ImageButton
+                    android:id="@+id/btnMuteGame"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@android:drawable/ic_lock_silent_mode_off"
+                    android:contentDescription="Mute"
+                    android:scaleType="centerInside"
+                    android:padding="8dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@drawable/button_background_enhanced"/>
+
+                <ImageButton
+                    android:id="@+id/btnNewGameFromPlay"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@android:drawable/ic_menu_revert"
+                    android:contentDescription="New Game"
+                    android:scaleType="centerInside"
+                    android:padding="8dp"
+                    android:background="@drawable/button_background_enhanced"/>
+            </LinearLayout>
+
+            <!-- Score and Level -->
             <TextView
                 android:id="@+id/tvScore"
                 android:layout_width="0dp"
@@ -189,10 +230,10 @@
                 android:layout_marginRight="4dp"
                 android:text="@string/score"
                 android:textColor="@color/text_accent"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:gravity="center"
-                android:padding="12dp"
+                android:padding="8dp"
                 android:background="@drawable/score_background"
                 android:shadowColor="#000000"
                 android:shadowDx="2"
@@ -208,10 +249,10 @@
                 android:layout_marginLeft="4dp"
                 android:text="@string/level"
                 android:textColor="@color/text_accent"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:gravity="center"
-                android:padding="12dp"
+                android:padding="8dp"
                 android:background="@drawable/score_background"
                 android:shadowColor="#000000"
                 android:shadowDx="2"
