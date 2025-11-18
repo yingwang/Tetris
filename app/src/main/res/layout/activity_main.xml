@@ -194,12 +194,21 @@
                 android:rowCount="2"
                 android:useDefaultMargins="false">
 
-                <!-- Empty top left -->
-                <Space
+                <!-- Left button (top row) -->
+                <ImageButton
+                    android:id="@+id/btnLeft"
                     android:layout_width="55dp"
                     android:layout_height="55dp"
                     android:layout_row="0"
-                    android:layout_column="0"/>
+                    android:layout_column="0"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_marginBottom="4dp"
+                    android:src="@drawable/ic_arrow_left"
+                    android:contentDescription="@string/left"
+                    android:scaleType="centerInside"
+                    android:padding="12dp"
+                    android:background="@drawable/gbc_dpad_button_selector"/>
 
                 <!-- Empty top center -->
                 <Space
@@ -208,29 +217,30 @@
                     android:layout_row="0"
                     android:layout_column="1"/>
 
-                <!-- Empty top right -->
-                <Space
+                <!-- Right button (top row) -->
+                <ImageButton
+                    android:id="@+id/btnRight"
                     android:layout_width="55dp"
                     android:layout_height="55dp"
                     android:layout_row="0"
-                    android:layout_column="2"/>
-
-                <!-- Left button -->
-                <ImageButton
-                    android:id="@+id/btnLeft"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:layout_row="1"
-                    android:layout_column="0"
-                    android:layout_marginEnd="2dp"
-                    android:layout_marginRight="2dp"
-                    android:src="@drawable/ic_arrow_left"
-                    android:contentDescription="@string/left"
+                    android:layout_column="2"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginBottom="4dp"
+                    android:src="@drawable/ic_arrow_right"
+                    android:contentDescription="@string/right"
                     android:scaleType="centerInside"
                     android:padding="12dp"
                     android:background="@drawable/gbc_dpad_button_selector"/>
 
-                <!-- Down button -->
+                <!-- Empty bottom left -->
+                <Space
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_row="1"
+                    android:layout_column="0"/>
+
+                <!-- Down button (bottom center) -->
                 <ImageButton
                     android:id="@+id/btnDown"
                     android:layout_width="55dp"
@@ -241,26 +251,19 @@
                     android:layout_marginLeft="2dp"
                     android:layout_marginEnd="2dp"
                     android:layout_marginRight="2dp"
+                    android:layout_marginTop="4dp"
                     android:src="@drawable/ic_arrow_down"
                     android:contentDescription="Speed Up"
                     android:scaleType="centerInside"
                     android:padding="12dp"
                     android:background="@drawable/gbc_dpad_button_selector"/>
 
-                <!-- Right button -->
-                <ImageButton
-                    android:id="@+id/btnRight"
+                <!-- Empty bottom right -->
+                <Space
                     android:layout_width="55dp"
                     android:layout_height="55dp"
                     android:layout_row="1"
-                    android:layout_column="2"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginLeft="2dp"
-                    android:src="@drawable/ic_arrow_right"
-                    android:contentDescription="@string/right"
-                    android:scaleType="centerInside"
-                    android:padding="12dp"
-                    android:background="@drawable/gbc_dpad_button_selector"/>
+                    android:layout_column="2"/>
             </GridLayout>
 
             <!-- Action Buttons Container (Right Side) - GBC A/B Layout -->
@@ -282,6 +285,9 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
                     android:src="@drawable/ic_drop"
                     android:contentDescription="@string/drop"
                     android:scaleType="centerInside"
@@ -296,8 +302,8 @@
                     android:layout_above="@id/btnDrop"
                     android:layout_toRightOf="@id/btnDrop"
                     android:layout_toEndOf="@id/btnDrop"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginLeft="24dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
                     android:layout_marginBottom="8dp"
                     android:src="@drawable/ic_rotate"
                     android:contentDescription="@string/rotate"

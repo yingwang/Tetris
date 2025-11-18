@@ -301,12 +301,26 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
             game.togglePause();
             invalidateOptionsMenu(); // Update menu to change Pause/Resume text
             if (game.isPaused()) {
-                RetroDialog.showMessage(this, "Game Paused");
                 if (soundManager != null) {
                     soundManager.pauseMusic();
                 }
+                // Show pause dialog with Continue and Quit options
+                new RetroDialog(this)
+                        .setTitle("GAME PAUSED")
+                        .setButton("Continue", v -> {
+                            // Resume the game
+                            game.setPaused(false);
+                            invalidateOptionsMenu();
+                            if (soundManager != null) {
+                                soundManager.resumeMusic();
+                            }
+                        })
+                        .setSecondButton("Quit", v -> {
+                            // Quit the game
+                            showSpeedSelection();
+                        })
+                        .show();
             } else {
-                RetroDialog.showMessage(this, "Game Resumed");
                 if (soundManager != null) {
                     soundManager.resumeMusic();
                 }

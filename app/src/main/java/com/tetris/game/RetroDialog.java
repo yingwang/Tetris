@@ -44,6 +44,19 @@ public class RetroDialog {
         return this;
     }
 
+    public RetroDialog setSecondButton(String buttonText, View.OnClickListener listener) {
+        Button button2 = dialog.findViewById(R.id.dialogButton2);
+        button2.setText(buttonText);
+        button2.setVisibility(View.VISIBLE);
+        button2.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onClick(v);
+            }
+            dialog.dismiss();
+        });
+        return this;
+    }
+
     public void show() {
         dialog.show();
     }
