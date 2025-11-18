@@ -26,4 +26,10 @@
     <color name="gbc_red">#FF3030</color>               <!-- Z piece -->
     <color name="gbc_blue">#4169FF</color>              <!-- J piece -->
     <color name="gbc_orange">#FF8C00</color>            <!-- L piece -->
+
+    <!-- Additional Game Boy theme colors for compatibility -->
+    <color name="gb_darkest">#0F380F</color>            <!-- Darkest GB green -->
+    <color name="gb_dark">#306230</color>               <!-- Dark GB green -->
+    <color name="text_accent">#FFD700</color>           <!-- Text accent color -->
+    <color name="shadow_color">#000000</color>          <!-- Shadow color -->
 </resources>
