@@ -118,8 +118,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="6dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="8dp"
             android:paddingHorizontal="4dp">
 
             <TextView
@@ -219,91 +219,125 @@
                 android:background="@drawable/button_background_selector"/>
         </LinearLayout>
 
-        <!-- Game View with Speed Up Button -->
-        <LinearLayout
+        <!-- Game View -->
+        <com.tetris.game.TetrisView
+            android:id="@+id/tetrisView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"/>
 
-            <com.tetris.game.TetrisView
-                android:id="@+id/tetrisView"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
-
-            <!-- Speed Up Button (Right Side) -->
-            <ImageButton
-                android:id="@+id/btnDown"
-                android:layout_width="65dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="4dp"
-                android:src="@drawable/ic_arrow_down"
-                android:contentDescription="@string/down"
-                android:scaleType="centerInside"
-                android:padding="12dp"
-                android:background="@drawable/button_background_enhanced"/>
-        </LinearLayout>
-
-        <!-- Control Buttons - Bottom Row -->
-        <LinearLayout
+        <!-- Game Boy Style Controls -->
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:paddingBottom="24dp"
-            android:paddingHorizontal="8dp">
+            android:paddingHorizontal="24dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="40dp">
 
-            <ImageButton
-                android:id="@+id/btnLeft"
-                android:layout_width="0dp"
-                android:layout_height="70dp"
-                android:layout_weight="1"
-                android:layout_marginEnd="6dp"
-                android:src="@drawable/ic_arrow_left"
-                android:contentDescription="@string/left"
-                android:scaleType="centerInside"
-                android:padding="16dp"
-                android:background="@drawable/button_background_enhanced"/>
+            <!-- D-Pad (Left Side) -->
+            <LinearLayout
+                android:id="@+id/dpadLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:orientation="vertical"
+                android:gravity="center">
 
-            <ImageButton
-                android:id="@+id/btnRight"
-                android:layout_width="0dp"
-                android:layout_height="70dp"
-                android:layout_weight="1"
-                android:layout_marginStart="6dp"
-                android:layout_marginEnd="6dp"
-                android:src="@drawable/ic_arrow_right"
-                android:contentDescription="@string/right"
-                android:scaleType="centerInside"
-                android:padding="16dp"
-                android:background="@drawable/button_background_enhanced"/>
+                <!-- D-Pad Top (Down button) -->
+                <ImageButton
+                    android:id="@+id/btnDown"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/ic_arrow_down"
+                    android:contentDescription="@string/down"
+                    android:scaleType="centerInside"
+                    android:padding="12dp"
+                    android:background="@drawable/button_dpad_gb"/>
 
-            <ImageButton
-                android:id="@+id/btnRotate"
-                android:layout_width="0dp"
-                android:layout_height="70dp"
-                android:layout_weight="1"
-                android:layout_marginStart="6dp"
-                android:layout_marginEnd="6dp"
-                android:src="@drawable/ic_rotate"
-                android:contentDescription="@string/rotate"
-                android:scaleType="centerInside"
-                android:padding="16dp"
-                android:background="@drawable/button_background_enhanced"/>
+                <!-- D-Pad Middle Row (Left and Right) -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="4dp">
 
-            <ImageButton
-                android:id="@+id/btnDrop"
-                android:layout_width="0dp"
-                android:layout_height="70dp"
-                android:layout_weight="1"
-                android:layout_marginStart="6dp"
-                android:src="@drawable/ic_drop"
-                android:contentDescription="@string/drop"
-                android:scaleType="centerInside"
-                android:padding="16dp"
-                android:background="@drawable/button_background_enhanced"/>
-        </LinearLayout>
+                    <ImageButton
+                        android:id="@+id/btnLeft"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/ic_arrow_left"
+                        android:contentDescription="@string/left"
+                        android:scaleType="centerInside"
+                        android:padding="12dp"
+                        android:background="@drawable/button_dpad_gb"/>
+
+                    <Space
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"/>
+
+                    <ImageButton
+                        android:id="@+id/btnRight"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/ic_arrow_right"
+                        android:contentDescription="@string/right"
+                        android:scaleType="centerInside"
+                        android:padding="12dp"
+                        android:background="@drawable/button_dpad_gb"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- A/B Buttons (Right Side) -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <!-- B Button (Rotate) - Upper -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="end">
+
+                    <ImageButton
+                        android:id="@+id/btnRotate"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:src="@drawable/ic_rotate"
+                        android:contentDescription="@string/rotate"
+                        android:scaleType="centerInside"
+                        android:padding="14dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/button_circular_gb"/>
+                </LinearLayout>
+
+                <!-- A Button (Hard Drop) - Lower -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp">
+
+                    <ImageButton
+                        android:id="@+id/btnDrop"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:src="@drawable/ic_drop"
+                        android:contentDescription="@string/drop"
+                        android:scaleType="centerInside"
+                        android:padding="14dp"
+                        android:background="@drawable/button_circular_gb"/>
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>
