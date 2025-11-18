@@ -240,22 +240,11 @@
                     android:background="@drawable/button_background_enhanced"/>
 
                 <ImageButton
-                    android:id="@+id/btnMuteGame"
+                    android:id="@+id/btnSettings"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@android:drawable/ic_lock_silent_mode_off"
-                    android:contentDescription="Mute"
-                    android:scaleType="centerInside"
-                    android:padding="8dp"
-                    android:layout_marginEnd="4dp"
-                    android:background="@drawable/button_background_enhanced"/>
-
-                <ImageButton
-                    android:id="@+id/btnNewGameFromPlay"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@android:drawable/ic_menu_revert"
-                    android:contentDescription="New Game"
+                    android:src="@android:drawable/ic_menu_preferences"
+                    android:contentDescription="Settings"
                     android:scaleType="centerInside"
                     android:padding="8dp"
                     android:background="@drawable/button_background_enhanced"/>

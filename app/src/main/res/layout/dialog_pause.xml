@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/dialog_background"
+    android:padding="32dp">
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GAME PAUSED"
+        android:textColor="#FE8019"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginBottom="32dp"
+        android:shadowColor="#000000"
+        android:shadowDx="3"
+        android:shadowDy="3"
+        android:shadowRadius="5"/>
+
+    <!-- Continue Button -->
+    <Button
+        android:id="@+id/pauseBtnContinue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Continue"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:paddingVertical="16dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/button_background_enhanced"/>
+
+    <!-- New Game Button -->
+    <Button
+        android:id="@+id/pauseBtnNewGame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="New Game"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:paddingVertical="16dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/button_background_enhanced"/>
+
+    <!-- Quit Button -->
+    <Button
+        android:id="@+id/pauseBtnQuit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Quit"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:paddingVertical="16dp"
+        android:background="@drawable/button_background_enhanced"/>
+</LinearLayout>
