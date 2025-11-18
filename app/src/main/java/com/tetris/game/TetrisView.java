@@ -33,7 +33,9 @@ public class TetrisView extends View {
     private float boardHeight;
     private boolean isDragging = false;
     private float dragStartX = 0;
+    private float dragStartY = 0;
     private int pieceStartX = 0;
+    private boolean isVerticalSwipe = false;
 
     public TetrisView(Context context) {
         super(context);
@@ -180,6 +182,8 @@ public class TetrisView extends View {
                     case MotionEvent.ACTION_DOWN:
                         isDragging = true;
                         dragStartX = x;
+                        dragStartY = y;
+                        isVerticalSwipe = false;
                         if (game.getCurrentPiece() != null) {
                             pieceStartX = game.getCurrentPiece().getX();
                         }
@@ -188,21 +192,32 @@ public class TetrisView extends View {
                     case MotionEvent.ACTION_MOVE:
                         if (isDragging && game.getCurrentPiece() != null) {
                             float deltaX = x - dragStartX;
-                            int blocksMoved = Math.round(deltaX / blockSize);
-                            int targetX = pieceStartX + blocksMoved;
-                            int currentX = game.getCurrentPiece().getX();
+                            float deltaY = y - dragStartY;
 
-                            // Move piece to target position
-                            if (targetX > currentX) {
-                                for (int i = 0; i < targetX - currentX; i++) {
-                                    game.moveRight();
-                                }
-                            } else if (targetX < currentX) {
-                                for (int i = 0; i < currentX - targetX; i++) {
-                                    game.moveLeft();
-                                }
+                            // Check if this is primarily a vertical swipe (for drop)
+                            // If vertical movement is greater than horizontal, don't allow horizontal drag
+                            if (!isVerticalSwipe && Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 30) {
+                                isVerticalSwipe = true;
                             }
-                            postInvalidate();
+
+                            // Only allow horizontal drag if not a vertical swipe
+                            if (!isVerticalSwipe) {
+                                int blocksMoved = Math.round(deltaX / blockSize);
+                                int targetX = pieceStartX + blocksMoved;
+                                int currentX = game.getCurrentPiece().getX();
+
+                                // Move piece to target position
+                                if (targetX > currentX) {
+                                    for (int i = 0; i < targetX - currentX; i++) {
+                                        game.moveRight();
+                                    }
+                                } else if (targetX < currentX) {
+                                    for (int i = 0; i < currentX - targetX; i++) {
+                                        game.moveLeft();
+                                    }
+                                }
+                                postInvalidate();
+                            }
                             return true;
                         }
                         break;
@@ -210,6 +225,7 @@ public class TetrisView extends View {
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
                         isDragging = false;
+                        isVerticalSwipe = false;
                         break;
                 }
             }
