@@ -136,19 +136,23 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         ImageButton btnDrop = findViewById(R.id.btnDrop);
 
         btnLeft.setOnClickListener(v -> {
+            v.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY);
             if (game != null) game.moveLeft();
         });
 
         btnRight.setOnClickListener(v -> {
+            v.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY);
             if (game != null) game.moveRight();
         });
 
         btnRotate.setOnClickListener(v -> {
+            v.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY);
             if (game != null) game.rotate();
         });
 
         // Hard drop - instant drop to bottom
         btnDrop.setOnClickListener(v -> {
+            v.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY);
             if (game != null) game.drop();
         });
     }
