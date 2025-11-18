@@ -248,23 +248,11 @@
                 android:orientation="vertical"
                 android:gravity="center">
 
-                <!-- D-Pad Top (Down button) -->
-                <ImageButton
-                    android:id="@+id/btnDown"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:src="@drawable/ic_arrow_down"
-                    android:contentDescription="@string/down"
-                    android:scaleType="centerInside"
-                    android:padding="10dp"
-                    android:background="@drawable/button_dpad_gb"/>
-
-                <!-- D-Pad Middle Row (Left and Right) -->
+                <!-- D-Pad Top Row (Left and Right) -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="3dp">
+                    android:orientation="horizontal">
 
                     <ImageButton
                         android:id="@+id/btnLeft"
@@ -290,6 +278,18 @@
                         android:padding="10dp"
                         android:background="@drawable/button_dpad_gb"/>
                 </LinearLayout>
+
+                <!-- D-Pad Bottom (Down button) -->
+                <ImageButton
+                    android:id="@+id/btnDown"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:src="@drawable/ic_arrow_down"
+                    android:contentDescription="@string/down"
+                    android:scaleType="centerInside"
+                    android:padding="10dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/button_dpad_gb"/>
             </LinearLayout>
 
             <!-- A/B Buttons (Right Side) -->
