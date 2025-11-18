@@ -11,7 +11,7 @@ import android.os.Looper;
 public class SoundManager {
     private static final String PREFS_NAME = "TetrisSettings";
     private static final String KEY_MUTED = "sound_muted";
-    private static final int SAMPLE_RATE = 22050;
+    private static final int SAMPLE_RATE = 16000; // Lower sample rate for more retro Game Boy sound
 
     private Context context;
     private SharedPreferences prefs;
@@ -52,17 +52,25 @@ public class SoundManager {
         byte[] sound = new byte[2 * numSamples];
         double sample;
 
-        // Generate square wave for retro game sound
+        // Generate square wave for Game Boy-style retro sound
         for (int i = 0; i < numSamples; i++) {
             double angle = 2.0 * Math.PI * i / (SAMPLE_RATE / frequency);
-            sample = Math.sin(angle) > 0 ? 1 : -1;
+            // Square wave with 12.5% duty cycle for classic Game Boy chirp
+            sample = (Math.sin(angle) > 0.75) ? 1 : -1;
 
-            // Apply volume envelope (fade out)
-            double envelope = 1.0 - (double) i / numSamples * 0.7;
+            // Apply Game Boy-style volume envelope (quick decay)
+            double envelope = 1.0;
+            if (i < numSamples * 0.05) {
+                // Very fast attack
+                envelope = (double) i / (numSamples * 0.05);
+            } else {
+                // Exponential decay like Game Boy
+                envelope = Math.pow(1.0 - (double) i / numSamples, 0.8);
+            }
             sample = sample * envelope;
 
             // Convert to 16-bit PCM
-            short val = (short) (sample * 32767 * 0.12); // 12% volume - 再降低音效音量
+            short val = (short) (sample * 32767 * 0.15); // 15% volume for Game Boy-style SFX
             sound[i * 2] = (byte) (val & 0x00ff);
             sound[i * 2 + 1] = (byte) ((val & 0xff00) >>> 8);
         }
@@ -256,24 +264,25 @@ public class SoundManager {
         byte[] sound = new byte[2 * numSamples];
         double sample;
 
-        // Generate smoother sine wave for music (not square wave)
+        // Generate square wave for authentic Game Boy sound
         for (int i = 0; i < numSamples; i++) {
             double angle = 2.0 * Math.PI * i / (SAMPLE_RATE / frequency);
-            sample = Math.sin(angle);
+            // Square wave with 25% duty cycle for more authentic Game Boy sound
+            sample = (Math.sin(angle) > 0.5) ? 1 : -1;
 
-            // Apply gentle envelope for smoother music
+            // Apply Game Boy-style envelope for music
             double envelope = 1.0;
-            if (i < numSamples * 0.05) {
-                // Fade in
-                envelope = (double) i / (numSamples * 0.05);
-            } else if (i > numSamples * 0.8) {
-                // Fade out
-                envelope = 1.0 - ((double) i - numSamples * 0.8) / (numSamples * 0.2);
+            if (i < numSamples * 0.03) {
+                // Quick attack
+                envelope = (double) i / (numSamples * 0.03);
+            } else if (i > numSamples * 0.85) {
+                // Quick decay at end
+                envelope = 1.0 - ((double) i - numSamples * 0.85) / (numSamples * 0.15);
             }
             sample = sample * envelope;
 
-            // Convert to 16-bit PCM (balanced volume for background music)
-            short val = (short) (sample * 32767 * 0.18); // 18% volume - 背景音乐更清晰
+            // Convert to 16-bit PCM (slightly higher volume for clearer square wave)
+            short val = (short) (sample * 32767 * 0.20); // 20% volume for Game Boy-style music
             sound[i * 2] = (byte) (val & 0x00ff);
             sound[i * 2 + 1] = (byte) ((val & 0xff00) >>> 8);
         }

@@ -49,7 +49,7 @@ public class TetrisView extends View {
 
         gridPaint = new Paint();
         gridPaint.setStyle(Paint.Style.STROKE);
-        gridPaint.setColor(Color.parseColor("#8BAC0F")); // GBC grid line color
+        gridPaint.setColor(Color.parseColor("#3C3836")); // Dark gray grid lines for terminal theme
         gridPaint.setStrokeWidth(1);
         gridPaint.setAntiAlias(true);
 
@@ -59,12 +59,12 @@ public class TetrisView extends View {
 
         shadowPaint = new Paint();
         shadowPaint.setStyle(Paint.Style.FILL);
-        shadowPaint.setColor(Color.parseColor("#20000000"));
+        shadowPaint.setColor(Color.parseColor("#30000000"));
         shadowPaint.setAntiAlias(true);
 
         borderPaint = new Paint();
         borderPaint.setStyle(Paint.Style.STROKE);
-        borderPaint.setColor(Color.parseColor("#0F380F")); // GBC dark green border
+        borderPaint.setColor(Color.parseColor("#FE8019")); // Amber border for terminal theme
         borderPaint.setStrokeWidth(8);
         borderPaint.setAntiAlias(true);
 
@@ -119,15 +119,23 @@ public class TetrisView extends View {
                 float diffY = e2.getY() - e1.getY();
 
                 // Reduced threshold from 50 to 30 for faster response
-                // Swipe left
+                // Swipe left - smart distance-based movement
                 if (Math.abs(diffX) > Math.abs(diffY) && diffX < -30) {
-                    game.moveLeft();
+                    // Calculate number of moves based on swipe distance
+                    int moves = Math.max(1, Math.min(5, (int)(Math.abs(diffX) / (blockSize * 1.5f))));
+                    for (int i = 0; i < moves; i++) {
+                        game.moveLeft();
+                    }
                     postInvalidate();
                     return true;
                 }
-                // Swipe right
+                // Swipe right - smart distance-based movement
                 else if (Math.abs(diffX) > Math.abs(diffY) && diffX > 30) {
-                    game.moveRight();
+                    // Calculate number of moves based on swipe distance
+                    int moves = Math.max(1, Math.min(5, (int)(Math.abs(diffX) / (blockSize * 1.5f))));
+                    for (int i = 0; i < moves; i++) {
+                        game.moveRight();
+                    }
                     postInvalidate();
                     return true;
                 }
@@ -214,8 +222,8 @@ public class TetrisView extends View {
 
         if (game == null) return;
 
-        // Draw background - GBC screen greenish-yellow
-        canvas.drawColor(Color.parseColor("#9BBC0F"));
+        // Draw background - Terminal dark theme
+        canvas.drawColor(Color.parseColor("#1D2021"));
 
         TetrisBoard board = game.getBoard();
         int[][] boardState = board.getBoard();
@@ -406,7 +414,7 @@ public class TetrisView extends View {
         // Draw "Next:" label with background
         textPaint.setTextSize(28);
         textPaint.setTextAlign(Paint.Align.LEFT);
-        textPaint.setColor(Color.parseColor("#FFD700"));
+        textPaint.setColor(Color.parseColor("#FE8019")); // Amber color for terminal theme
         canvas.drawText("NEXT", previewX, previewY + 25, textPaint);
 
         // Draw next piece with 3D effect
