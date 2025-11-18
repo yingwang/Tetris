@@ -224,13 +224,13 @@ public class TetrisView extends View {
         if (game != null) {
             TetrisBoard board = game.getBoard();
 
-            // Reserve space for next preview on the right (about 25% of width)
-            float previewSpace = w * 0.25f;
+            // Reserve space for next preview on the right (about 22% of width)
+            float previewSpace = w * 0.22f;
             float availableWidth = w - previewSpace;
 
-            // Calculate max board dimensions
-            boardWidth = availableWidth * 0.85f;  // Use 85% of available space
-            boardHeight = h * 0.9f;
+            // Calculate max board dimensions - increased from 0.85 to 0.95 for larger grid
+            boardWidth = availableWidth * 0.95f;  // Use 95% of available space
+            boardHeight = h * 0.95f;  // Use 95% of height
 
             float blockWidth = boardWidth / board.getCols();
             float blockHeight = boardHeight / board.getRows();

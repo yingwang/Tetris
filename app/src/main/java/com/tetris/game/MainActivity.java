@@ -404,7 +404,22 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
                 title = "★ NEW HIGH SCORE ★";
             }
 
-            RetroDialog.showMessage(MainActivity.this, title, message);
+            // Show game over dialog with New Game and High Scores options
+            new RetroDialog(MainActivity.this)
+                    .setTitle(title)
+                    .setMessage(message)
+                    .setCancelable(false)
+                    .setButton("New Game", v -> {
+                        // Start a new game immediately
+                        startNewGame();
+                    })
+                    .setSecondButton("High Scores", v -> {
+                        // Show high scores and return to main menu
+                        Intent intent = new Intent(MainActivity.this, HighScoresActivity.class);
+                        startActivity(intent);
+                        showMainMenu();
+                    })
+                    .show();
         });
     }
 
