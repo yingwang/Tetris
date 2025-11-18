@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         setupGameControls();
         setupGameControlButtons();
 
-        // Start directly in game
-        startNewGame();
+        // Show main menu on startup
+        showMainMenu();
     }
 
     private void loadSettings() {
@@ -262,6 +262,41 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         }
     }
 
+    private void showMainMenu() {
+        // Hide game layout and stop any running game
+        gameLayout.setVisibility(View.GONE);
+        if (game != null) {
+            stopGame();
+        }
+
+        Dialog mainMenuDialog = new Dialog(this);
+        mainMenuDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mainMenuDialog.setContentView(R.layout.dialog_main_menu);
+        mainMenuDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        mainMenuDialog.setCancelable(false);
+
+        Button btnNewGame = mainMenuDialog.findViewById(R.id.menuBtnNewGame);
+        Button btnSettings = mainMenuDialog.findViewById(R.id.menuBtnSettings);
+        Button btnQuit = mainMenuDialog.findViewById(R.id.menuBtnQuit);
+
+        btnNewGame.setOnClickListener(v -> {
+            mainMenuDialog.dismiss();
+            gameLayout.setVisibility(View.VISIBLE);
+            startNewGame();
+        });
+
+        btnSettings.setOnClickListener(v -> {
+            showSettingsDialog();
+        });
+
+        btnQuit.setOnClickListener(v -> {
+            mainMenuDialog.dismiss();
+            finish(); // Exit the app
+        });
+
+        mainMenuDialog.show();
+    }
+
     private void showPauseDialog() {
         Dialog pauseDialog = new Dialog(this);
         pauseDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -290,7 +325,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         btnQuit.setOnClickListener(v -> {
             pauseDialog.dismiss();
             stopGame();
-            finish(); // Exit the app
+            showMainMenu(); // Return to main menu instead of exiting
         });
 
         pauseDialog.show();

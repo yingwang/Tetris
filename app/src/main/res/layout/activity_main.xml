@@ -6,13 +6,13 @@
     android:background="@drawable/game_background"
     android:padding="16dp">
 
-    <!-- Game Layout (now starts directly) -->
+    <!-- Game Layout (shown after menu) -->
     <LinearLayout
         android:id="@+id/gameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <!-- Top Control Bar -->
         <LinearLayout
