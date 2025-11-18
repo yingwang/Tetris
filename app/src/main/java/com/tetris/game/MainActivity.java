@@ -35,6 +35,11 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     private SoundManager soundManager;
     private SharedPreferences preferences;
 
+    // For down button long press
+    private Handler downButtonHandler = new Handler();
+    private Runnable downButtonRunnable;
+    private boolean isDownButtonPressed = false;
+
     private int selectedSpeed = 5; // Default speed
     private int selectedStartingLines = 0; // Default starting lines
 
@@ -140,8 +145,36 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
             if (game != null) game.moveRight();
         });
 
-        btnDown.setOnClickListener(v -> {
-            if (game != null) game.moveDown();
+        // Down button with long press support for continuous speed up
+        btnDown.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case android.view.MotionEvent.ACTION_DOWN:
+                    // Initial press
+                    if (game != null) game.moveDown();
+                    isDownButtonPressed = true;
+
+                    // Start repeating after short delay
+                    downButtonRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isDownButtonPressed && game != null) {
+                                game.moveDown();
+                                downButtonHandler.postDelayed(this, 100); // Repeat every 100ms
+                            }
+                        }
+                    };
+                    downButtonHandler.postDelayed(downButtonRunnable, 150); // Start repeating after 150ms
+                    return true;
+
+                case android.view.MotionEvent.ACTION_UP:
+                case android.view.MotionEvent.ACTION_CANCEL:
+                    // Stop repeating
+                    isDownButtonPressed = false;
+                    downButtonHandler.removeCallbacks(downButtonRunnable);
+                    v.performClick(); // Accessibility
+                    return true;
+            }
+            return false;
         });
 
         btnRotate.setOnClickListener(v -> {
@@ -366,6 +399,13 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     protected void onDestroy() {
         super.onDestroy();
         stopGame();
+
+        // Clean up down button handler
+        isDownButtonPressed = false;
+        if (downButtonHandler != null && downButtonRunnable != null) {
+            downButtonHandler.removeCallbacks(downButtonRunnable);
+        }
+
         if (soundManager != null) {
             soundManager.release();
         }

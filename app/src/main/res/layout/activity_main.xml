@@ -169,14 +169,14 @@
             android:id="@+id/tetrisView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.75"
+            android:layout_weight="0.6"
             android:layout_marginBottom="8dp"/>
 
         <!-- Control Buttons - Game Boy Color Style -->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="140dp"
-            android:paddingBottom="8dp"
+            android:layout_height="160dp"
+            android:paddingBottom="24dp"
             android:paddingTop="8dp">
 
             <!-- D-Pad Container (Left Side) - Cross Layout -->
@@ -190,14 +190,23 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp">
 
+                <!-- Center reference point -->
+                <View
+                    android:id="@+id/centerPoint"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_centerInParent="true"/>
+
                 <!-- Left button -->
                 <ImageButton
                     android:id="@+id/btnLeft"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentLeft="true"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_toLeftOf="@id/centerPoint"
+                    android:layout_toStartOf="@id/centerPoint"
                     android:layout_centerVertical="true"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginRight="4dp"
                     android:src="@drawable/ic_arrow_left"
                     android:contentDescription="@string/left"
                     android:scaleType="centerInside"
@@ -207,30 +216,27 @@
                 <!-- Right button -->
                 <ImageButton
                     android:id="@+id/btnRight"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_toRightOf="@id/btnLeft"
-                    android:layout_toEndOf="@id/btnLeft"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_toRightOf="@id/centerPoint"
+                    android:layout_toEndOf="@id/centerPoint"
                     android:layout_centerVertical="true"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginLeft="4dp"
                     android:src="@drawable/ic_arrow_right"
                     android:contentDescription="@string/right"
                     android:scaleType="centerInside"
                     android:padding="12dp"
                     android:background="@drawable/gbc_dpad_button_selector"/>
 
-                <!-- Down button - Below and between Left/Right -->
+                <!-- Down button - Below center -->
                 <ImageButton
                     android:id="@+id/btnDown"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_below="@id/btnLeft"
-                    android:layout_toRightOf="@id/btnLeft"
-                    android:layout_toEndOf="@id/btnLeft"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginStart="-26dp"
-                    android:layout_marginLeft="-26dp"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_below="@id/centerPoint"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="4dp"
                     android:src="@drawable/ic_arrow_down"
                     android:contentDescription="Speed Up"
                     android:scaleType="centerInside"
