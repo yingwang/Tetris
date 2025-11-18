@@ -270,6 +270,18 @@
                 android:padding="18dp"
                 android:background="@drawable/button_background_enhanced"/>
 
+            <!-- Down button - center (soft drop) -->
+            <ImageButton
+                android:id="@+id/btnDown"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_arrow_down"
+                android:contentDescription="@string/down"
+                android:scaleType="centerInside"
+                android:padding="18dp"
+                android:background="@drawable/button_background_enhanced"/>
+
             <!-- Right button - far right -->
             <ImageButton
                 android:id="@+id/btnRight"

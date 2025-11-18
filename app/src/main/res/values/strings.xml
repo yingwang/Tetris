@@ -16,6 +16,7 @@
     <string name="left">Left</string>
     <string name="right">Right</string>
     <string name="rotate">Rotate</string>
+    <string name="down">Down</string>
     <string name="drop">Drop</string>
     <string name="high_scores">High Scores</string>
     <string name="high_scores_title">HIGH SCORES</string>

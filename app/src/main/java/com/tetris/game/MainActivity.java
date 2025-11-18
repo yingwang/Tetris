@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         ImageButton btnLeft = findViewById(R.id.btnLeft);
         ImageButton btnRight = findViewById(R.id.btnRight);
         ImageButton btnRotate = findViewById(R.id.btnRotate);
+        ImageButton btnDown = findViewById(R.id.btnDown);
         ImageButton btnDrop = findViewById(R.id.btnDrop);
 
         btnLeft.setOnClickListener(v -> {
@@ -147,6 +148,12 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
             if (game != null) game.rotate();
         });
 
+        // Soft drop - press to move down faster
+        btnDown.setOnClickListener(v -> {
+            if (game != null) game.moveDown();
+        });
+
+        // Hard drop - instant drop to bottom
         btnDrop.setOnClickListener(v -> {
             if (game != null) game.drop();
         });
@@ -156,7 +163,14 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         Button btnNewGame = findViewById(R.id.btnNewGame);
         Button btnHighScores = findViewById(R.id.btnHighScores);
 
-        btnNewGame.setOnClickListener(v -> showSpeedSelection());
+        // Short click - quick restart with saved settings
+        btnNewGame.setOnClickListener(v -> startNewGame());
+
+        // Long press - show settings dialog
+        btnNewGame.setOnLongClickListener(v -> {
+            showSpeedSelection();
+            return true;
+        });
 
         btnPause.setOnClickListener(v -> togglePause());
 
