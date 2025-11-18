@@ -36,6 +36,14 @@ public class TetrisView extends View {
     private float dragStartY = 0;
     private int pieceStartX = 0;
     private boolean isVerticalSwipe = false;
+    private long touchStartTime = 0;
+    private float lastDragX = 0;
+
+    // Touch zones for rotation (left/right thirds of screen)
+    private static final float ROTATION_ZONE_WIDTH = 0.25f; // 25% on each side for rotation
+    private static final int SWIPE_THRESHOLD = 50;
+    private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+    private static final int TAP_TIMEOUT = 200; // milliseconds
 
     public TetrisView(Context context) {
         super(context);
@@ -97,18 +105,33 @@ public class TetrisView extends View {
             }
 
             @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-                // Tap on game board to rotate - using onSingleTapUp for faster response
+            public boolean onSingleTapConfirmed(MotionEvent e) {
+                // Zone-based tap controls for rotation
                 if (game != null && !game.isGameOver() && !game.isPaused()) {
                     float x = e.getX();
                     float y = e.getY();
+                    float screenWidth = getWidth();
 
-                    // Check if tap is within game board
-                    if (x >= offsetX && x <= offsetX + boardWidth &&
-                        y >= offsetY && y <= offsetY + boardHeight) {
-                        game.rotate();
-                        postInvalidate();
-                        return true;
+                    // Check if tap is within game board vertically
+                    if (y >= offsetY && y <= offsetY + boardHeight) {
+                        // Left zone - rotate counterclockwise (or just rotate for simplicity)
+                        if (x < screenWidth * ROTATION_ZONE_WIDTH) {
+                            game.rotate();
+                            postInvalidate();
+                            return true;
+                        }
+                        // Right zone - rotate clockwise (or same as left for single rotate)
+                        else if (x > screenWidth * (1 - ROTATION_ZONE_WIDTH)) {
+                            game.rotate();
+                            postInvalidate();
+                            return true;
+                        }
+                        // Middle zone - also rotate on tap (entire screen rotates)
+                        else if (x >= offsetX && x <= offsetX + boardWidth) {
+                            game.rotate();
+                            postInvalidate();
+                            return true;
+                        }
                     }
                 }
                 return false;
@@ -122,12 +145,27 @@ public class TetrisView extends View {
 
                 float diffX = e2.getX() - e1.getX();
                 float diffY = e2.getY() - e1.getY();
+                float absVelocityX = Math.abs(velocityX);
+                float absVelocityY = Math.abs(velocityY);
 
-                // Swipe down (drop) - only vertical fling
-                if (Math.abs(diffY) > Math.abs(diffX) && diffY > 50) {
+                // Fast downward swipe - instant drop
+                if (absVelocityY > absVelocityX && absVelocityY > SWIPE_VELOCITY_THRESHOLD && diffY > SWIPE_THRESHOLD) {
                     game.drop();
                     postInvalidate();
                     return true;
+                }
+
+                // Fast horizontal swipe - move piece one block
+                if (absVelocityX > absVelocityY && absVelocityX > SWIPE_VELOCITY_THRESHOLD) {
+                    if (diffX > SWIPE_THRESHOLD) {
+                        game.moveRight();
+                        postInvalidate();
+                        return true;
+                    } else if (diffX < -SWIPE_THRESHOLD) {
+                        game.moveLeft();
+                        postInvalidate();
+                        return true;
+                    }
                 }
 
                 return false;
@@ -169,65 +207,76 @@ public class TetrisView extends View {
         // First try gesture detector for tap and fling
         boolean gestureHandled = gestureDetector.onTouchEvent(event);
 
-        // Then handle drag for horizontal movement
+        // Then handle drag for smooth horizontal movement
         if (game != null && !game.isGameOver() && !game.isPaused()) {
             float x = event.getX();
             float y = event.getY();
 
-            // Check if touch is within game board
-            if (x >= offsetX && x <= offsetX + boardWidth &&
-                y >= offsetY && y <= offsetY + boardHeight) {
-
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    // Check if touch is in draggable area (middle zone, on the board)
+                    if (x >= offsetX && x <= offsetX + boardWidth &&
+                        y >= offsetY && y <= offsetY + boardHeight) {
                         isDragging = true;
                         dragStartX = x;
                         dragStartY = y;
+                        lastDragX = x;
                         isVerticalSwipe = false;
+                        touchStartTime = System.currentTimeMillis();
                         if (game.getCurrentPiece() != null) {
                             pieceStartX = game.getCurrentPiece().getX();
                         }
                         return true;
+                    }
+                    break;
 
-                    case MotionEvent.ACTION_MOVE:
-                        if (isDragging && game.getCurrentPiece() != null) {
-                            float deltaX = x - dragStartX;
-                            float deltaY = y - dragStartY;
+                case MotionEvent.ACTION_MOVE:
+                    if (isDragging && game.getCurrentPiece() != null) {
+                        float deltaX = x - dragStartX;
+                        float deltaY = y - dragStartY;
+                        float moveDeltaX = x - lastDragX;
 
-                            // Check if this is primarily a vertical swipe (for drop)
-                            // If vertical movement is greater than horizontal, don't allow horizontal drag
-                            if (!isVerticalSwipe && Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 30) {
-                                isVerticalSwipe = true;
-                            }
+                        // Detect if this is a vertical swipe gesture
+                        if (!isVerticalSwipe && Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 40) {
+                            isVerticalSwipe = true;
+                        }
 
-                            // Only allow horizontal drag if not a vertical swipe
-                            if (!isVerticalSwipe) {
-                                int blocksMoved = Math.round(deltaX / blockSize);
-                                int targetX = pieceStartX + blocksMoved;
-                                int currentX = game.getCurrentPiece().getX();
-
-                                // Move piece to target position
-                                if (targetX > currentX) {
-                                    for (int i = 0; i < targetX - currentX; i++) {
-                                        game.moveRight();
-                                    }
-                                } else if (targetX < currentX) {
-                                    for (int i = 0; i < currentX - targetX; i++) {
-                                        game.moveLeft();
-                                    }
-                                }
+                        // Handle horizontal drag - smooth movement
+                        if (!isVerticalSwipe && Math.abs(moveDeltaX) >= blockSize * 0.8f) {
+                            // Move one block at a time based on accumulated movement
+                            if (moveDeltaX > 0) {
+                                game.moveRight();
+                                lastDragX = x;
+                                postInvalidate();
+                            } else {
+                                game.moveLeft();
+                                lastDragX = x;
                                 postInvalidate();
                             }
-                            return true;
                         }
-                        break;
+                        return true;
+                    }
+                    break;
 
-                    case MotionEvent.ACTION_UP:
-                    case MotionEvent.ACTION_CANCEL:
-                        isDragging = false;
-                        isVerticalSwipe = false;
-                        break;
-                }
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    // Check if this was a quick tap (not handled by gesture detector yet)
+                    long touchDuration = System.currentTimeMillis() - touchStartTime;
+                    float totalDeltaX = event.getX() - dragStartX;
+                    float totalDeltaY = event.getY() - dragStartY;
+                    float totalDistance = (float) Math.sqrt(totalDeltaX * totalDeltaX + totalDeltaY * totalDeltaY);
+
+                    // If touch was short and didn't move much, treat as tap for rotation
+                    if (isDragging && touchDuration < TAP_TIMEOUT && totalDistance < 20 && !gestureHandled) {
+                        if (game != null && !game.isGameOver() && !game.isPaused()) {
+                            game.rotate();
+                            postInvalidate();
+                        }
+                    }
+
+                    isDragging = false;
+                    isVerticalSwipe = false;
+                    break;
             }
         }
 
