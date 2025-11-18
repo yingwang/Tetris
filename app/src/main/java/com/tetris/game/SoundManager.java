@@ -62,7 +62,7 @@ public class SoundManager {
             sample = sample * envelope;
 
             // Convert to 16-bit PCM
-            short val = (short) (sample * 32767 * 0.12); // 12% volume - 再降低音效音量
+            short val = (short) (sample * 32767 * 0.12); // 12% volume
             sound[i * 2] = (byte) (val & 0x00ff);
             sound[i * 2 + 1] = (byte) ((val & 0xff00) >>> 8);
         }
@@ -273,7 +273,7 @@ public class SoundManager {
             sample = sample * envelope;
 
             // Convert to 16-bit PCM (balanced volume for background music)
-            short val = (short) (sample * 32767 * 0.18); // 18% volume - 背景音乐更清晰
+            short val = (short) (sample * 32767 * 0.18); // 18% volume
             sound[i * 2] = (byte) (val & 0x00ff);
             sound[i * 2 + 1] = (byte) ((val & 0xff00) >>> 8);
         }

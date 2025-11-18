@@ -8,6 +8,8 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class TetrisView extends View {
@@ -26,6 +28,22 @@ public class TetrisView extends View {
     private int[] clearingLines;
     private int flashAlpha = 0;
     private boolean isFlashing = false;
+    private GestureDetector gestureDetector;
+    private float boardWidth;
+    private float boardHeight;
+    private boolean isDragging = false;
+    private float dragStartX = 0;
+    private float dragStartY = 0;
+    private int pieceStartX = 0;
+    private boolean isVerticalSwipe = false;
+    private long touchStartTime = 0;
+    private float lastDragX = 0;
+
+    // Touch zones for rotation (left/right thirds of screen)
+    private static final float ROTATION_ZONE_WIDTH = 0.25f; // 25% on each side for rotation
+    private static final int SWIPE_THRESHOLD = 50;
+    private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+    private static final int TAP_TIMEOUT = 200; // milliseconds
 
     public TetrisView(Context context) {
         super(context);
@@ -44,7 +62,7 @@ public class TetrisView extends View {
 
         gridPaint = new Paint();
         gridPaint.setStyle(Paint.Style.STROKE);
-        gridPaint.setColor(Color.parseColor("#8BAC0F")); // GBC grid line color
+        gridPaint.setColor(Color.parseColor("#3C3836")); // Dark gray grid lines for terminal theme
         gridPaint.setStrokeWidth(1);
         gridPaint.setAntiAlias(true);
 
@@ -54,12 +72,12 @@ public class TetrisView extends View {
 
         shadowPaint = new Paint();
         shadowPaint.setStyle(Paint.Style.FILL);
-        shadowPaint.setColor(Color.parseColor("#20000000"));
+        shadowPaint.setColor(Color.parseColor("#30000000"));
         shadowPaint.setAntiAlias(true);
 
         borderPaint = new Paint();
         borderPaint.setStyle(Paint.Style.STROKE);
-        borderPaint.setColor(Color.parseColor("#0F380F")); // GBC dark green border
+        borderPaint.setColor(Color.parseColor("#FE8019")); // Amber border for terminal theme
         borderPaint.setStrokeWidth(8);
         borderPaint.setAntiAlias(true);
 
@@ -78,6 +96,81 @@ public class TetrisView extends View {
         ghostPaint.setStrokeWidth(3);
         ghostPaint.setAntiAlias(true);
         ghostPaint.setAlpha(100); // 半透明虚线效果
+
+        // Initialize gesture detector for touch controls
+        gestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent e) {
+                return true;
+            }
+
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent e) {
+                // Zone-based tap controls for rotation
+                if (game != null && !game.isGameOver() && !game.isPaused()) {
+                    float x = e.getX();
+                    float y = e.getY();
+                    float screenWidth = getWidth();
+
+                    // Check if tap is within game board vertically
+                    if (y >= offsetY && y <= offsetY + boardHeight) {
+                        // Left zone - rotate counterclockwise (or just rotate for simplicity)
+                        if (x < screenWidth * ROTATION_ZONE_WIDTH) {
+                            game.rotate();
+                            postInvalidate();
+                            return true;
+                        }
+                        // Right zone - rotate clockwise (or same as left for single rotate)
+                        else if (x > screenWidth * (1 - ROTATION_ZONE_WIDTH)) {
+                            game.rotate();
+                            postInvalidate();
+                            return true;
+                        }
+                        // Middle zone - also rotate on tap (entire screen rotates)
+                        else if (x >= offsetX && x <= offsetX + boardWidth) {
+                            game.rotate();
+                            postInvalidate();
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                if (game == null || game.isGameOver() || game.isPaused()) {
+                    return false;
+                }
+
+                float diffX = e2.getX() - e1.getX();
+                float diffY = e2.getY() - e1.getY();
+                float absVelocityX = Math.abs(velocityX);
+                float absVelocityY = Math.abs(velocityY);
+
+                // Fast downward swipe - instant drop
+                if (absVelocityY > absVelocityX && absVelocityY > SWIPE_VELOCITY_THRESHOLD && diffY > SWIPE_THRESHOLD) {
+                    game.drop();
+                    postInvalidate();
+                    return true;
+                }
+
+                // Fast horizontal swipe - move piece one block
+                if (absVelocityX > absVelocityY && absVelocityX > SWIPE_VELOCITY_THRESHOLD) {
+                    if (diffX > SWIPE_THRESHOLD) {
+                        game.moveRight();
+                        postInvalidate();
+                        return true;
+                    } else if (diffX < -SWIPE_THRESHOLD) {
+                        game.moveLeft();
+                        postInvalidate();
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        });
     }
 
     public void startLineClearAnimation(int[] lines) {
@@ -110,19 +203,111 @@ public class TetrisView extends View {
     }
 
     @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        // First try gesture detector for tap and fling
+        boolean gestureHandled = gestureDetector.onTouchEvent(event);
+
+        // Then handle drag for smooth horizontal movement
+        if (game != null && !game.isGameOver() && !game.isPaused()) {
+            float x = event.getX();
+            float y = event.getY();
+
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    // Check if touch is in draggable area (middle zone, on the board)
+                    if (x >= offsetX && x <= offsetX + boardWidth &&
+                        y >= offsetY && y <= offsetY + boardHeight) {
+                        isDragging = true;
+                        dragStartX = x;
+                        dragStartY = y;
+                        lastDragX = x;
+                        isVerticalSwipe = false;
+                        touchStartTime = System.currentTimeMillis();
+                        if (game.getCurrentPiece() != null) {
+                            pieceStartX = game.getCurrentPiece().getX();
+                        }
+                        return true;
+                    }
+                    break;
+
+                case MotionEvent.ACTION_MOVE:
+                    if (isDragging && game.getCurrentPiece() != null) {
+                        float deltaX = x - dragStartX;
+                        float deltaY = y - dragStartY;
+                        float moveDeltaX = x - lastDragX;
+
+                        // Detect if this is a vertical swipe gesture
+                        if (!isVerticalSwipe && Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 40) {
+                            isVerticalSwipe = true;
+                        }
+
+                        // Handle horizontal drag - smooth movement
+                        if (!isVerticalSwipe && Math.abs(moveDeltaX) >= blockSize * 0.8f) {
+                            // Move one block at a time based on accumulated movement
+                            if (moveDeltaX > 0) {
+                                game.moveRight();
+                                lastDragX = x;
+                                postInvalidate();
+                            } else {
+                                game.moveLeft();
+                                lastDragX = x;
+                                postInvalidate();
+                            }
+                        }
+                        return true;
+                    }
+                    break;
+
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    // Check if this was a quick tap (not handled by gesture detector yet)
+                    long touchDuration = System.currentTimeMillis() - touchStartTime;
+                    float totalDeltaX = event.getX() - dragStartX;
+                    float totalDeltaY = event.getY() - dragStartY;
+                    float totalDistance = (float) Math.sqrt(totalDeltaX * totalDeltaX + totalDeltaY * totalDeltaY);
+
+                    // If touch was short and didn't move much, treat as tap for rotation
+                    if (isDragging && touchDuration < TAP_TIMEOUT && totalDistance < 20 && !gestureHandled) {
+                        if (game != null && !game.isGameOver() && !game.isPaused()) {
+                            game.rotate();
+                            postInvalidate();
+                        }
+                    }
+
+                    isDragging = false;
+                    isVerticalSwipe = false;
+                    break;
+            }
+        }
+
+        return gestureHandled || super.onTouchEvent(event);
+    }
+
+    @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         if (game != null) {
             TetrisBoard board = game.getBoard();
-            float boardWidth = w * 0.8f;
-            float boardHeight = h * 0.9f;
+
+            // Reserve space for next preview on the right (about 22% of width)
+            float previewSpace = w * 0.22f;
+            float availableWidth = w - previewSpace;
+
+            // Calculate max board dimensions - increased from 0.85 to 0.95 for larger grid
+            boardWidth = availableWidth * 0.95f;  // Use 95% of available space
+            boardHeight = h * 0.95f;  // Use 95% of height
 
             float blockWidth = boardWidth / board.getCols();
             float blockHeight = boardHeight / board.getRows();
             blockSize = Math.min(blockWidth, blockHeight);
 
-            offsetX = (w - blockSize * board.getCols()) / 2;
-            offsetY = (h - blockSize * board.getRows()) / 2;
+            // Recalculate actual board dimensions based on blockSize
+            this.boardWidth = blockSize * board.getCols();
+            this.boardHeight = blockSize * board.getRows();
+
+            // Center the board horizontally in the available space
+            offsetX = (availableWidth - this.boardWidth) / 2;
+            offsetY = (h - this.boardHeight) / 2;
         }
     }
 
@@ -132,8 +317,8 @@ public class TetrisView extends View {
 
         if (game == null) return;
 
-        // Draw background - GBC screen greenish-yellow
-        canvas.drawColor(Color.parseColor("#9BBC0F"));
+        // Draw background - Terminal dark theme
+        canvas.drawColor(Color.parseColor("#1D2021"));
 
         TetrisBoard board = game.getBoard();
         int[][] boardState = board.getBoard();
@@ -317,22 +502,22 @@ public class TetrisView extends View {
         if (nextPiece == null) return;
 
         int[][] shape = nextPiece.getShape();
-        float previewBlockSize = blockSize * 0.55f;
-        float previewX = offsetX + (game.getBoard().getCols() * blockSize) + 15;
+        float previewBlockSize = blockSize * 0.7f;
+        float previewX = offsetX + (game.getBoard().getCols() * blockSize) + 30;
         float previewY = offsetY + 10;
 
         // Draw "Next:" label with background
-        textPaint.setTextSize(24);
+        textPaint.setTextSize(28);
         textPaint.setTextAlign(Paint.Align.LEFT);
-        textPaint.setColor(Color.parseColor("#FFD700"));
-        canvas.drawText("NEXT", previewX, previewY + 20, textPaint);
+        textPaint.setColor(Color.parseColor("#FE8019")); // Amber color for terminal theme
+        canvas.drawText("NEXT", previewX, previewY + 25, textPaint);
 
         // Draw next piece with 3D effect
         for (int i = 0; i < shape.length; i++) {
             for (int j = 0; j < shape[i].length; j++) {
                 if (shape[i][j] != 0) {
                     float x = previewX + j * previewBlockSize;
-                    float y = previewY + 30 + i * previewBlockSize;
+                    float y = previewY + 40 + i * previewBlockSize;
                     draw3DBlock(canvas, x, y, previewBlockSize, nextPiece.getColor());
                 }
             }

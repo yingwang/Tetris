@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/retro_dialog_background"
+    android:padding="32dp">
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PAUSED"
+        android:textColor="@color/text_accent"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:fontFamily="monospace"
+        android:letterSpacing="0.15"
+        android:layout_gravity="center"
+        android:layout_marginBottom="32dp"
+        android:shadowColor="@color/shadow_color"
+        android:shadowDx="3"
+        android:shadowDy="3"
+        android:shadowRadius="5"/>
+
+    <!-- Continue Button -->
+    <Button
+        android:id="@+id/pauseBtnContinue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CONTINUE"
+        android:textColor="@color/text_primary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:fontFamily="monospace"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/menu_button_selector"
+        android:elevation="4dp"/>
+
+    <!-- New Game Button -->
+    <Button
+        android:id="@+id/pauseBtnNewGame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NEW GAME"
+        android:textColor="@color/text_primary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:fontFamily="monospace"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/menu_button_selector"
+        android:elevation="4dp"/>
+
+    <!-- Quit Button -->
+    <Button
+        android:id="@+id/pauseBtnQuit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="MAIN MENU"
+        android:textColor="@color/text_primary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:fontFamily="monospace"
+        android:background="@drawable/menu_button_selector"
+        android:elevation="4dp"/>
+</LinearLayout>

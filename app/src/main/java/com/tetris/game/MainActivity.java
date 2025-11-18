@@ -1,11 +1,14 @@
 package com.tetris.game;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -16,18 +19,29 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity implements TetrisGame.GameListener {
+    private static final String PREFS_NAME = "TetrisPrefs";
+    private static final String PREF_SPEED = "speed";
+    private static final String PREF_LINES = "starting_lines";
+
     private TetrisView tetrisView;
     private TetrisGame game;
     private Handler gameHandler;
     private Runnable gameRunnable;
     private boolean isGameRunning = false;
 
-    private LinearLayout speedSelectionLayout;
     private LinearLayout gameLayout;
     private TextView tvScore;
     private TextView tvLevel;
+    private ImageButton btnPauseGame;
+    private ImageButton btnSettings;
     private HighScoreManager scoreManager;
     private SoundManager soundManager;
+    private SharedPreferences preferences;
+
+    // For down button long press
+    private Handler downButtonHandler = new Handler();
+    private Runnable downButtonRunnable;
+    private boolean isDownButtonPressed = false;
 
     private int selectedSpeed = 5; // Default speed
     private int selectedStartingLines = 0; // Default starting lines
@@ -35,67 +49,51 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Hide action bar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         setContentView(R.layout.activity_main);
 
+        loadSettings();
         initializeViews();
-        setupSeekBars();
-        setupStartGameButton();
         setupGameControls();
+        setupGameControlButtons();
+
+        // Show main menu on startup
+        showMainMenu();
+    }
+
+    private void loadSettings() {
+        preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        selectedSpeed = preferences.getInt(PREF_SPEED, 5);
+        selectedStartingLines = preferences.getInt(PREF_LINES, 0);
+    }
+
+    private void saveSettings() {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(PREF_SPEED, selectedSpeed);
+        editor.putInt(PREF_LINES, selectedStartingLines);
+        editor.apply();
     }
 
     private void initializeViews() {
-        speedSelectionLayout = findViewById(R.id.speedSelectionLayout);
         gameLayout = findViewById(R.id.gameLayout);
         tetrisView = findViewById(R.id.tetrisView);
         tvScore = findViewById(R.id.tvScore);
         tvLevel = findViewById(R.id.tvLevel);
+        btnPauseGame = findViewById(R.id.btnPauseGame);
+        btnSettings = findViewById(R.id.btnSettings);
         scoreManager = new HighScoreManager(this);
         soundManager = new SoundManager(this);
-    }
-
-    private void setupSeekBars() {
-        SeekBar seekBarSpeed = findViewById(R.id.seekBarSpeed);
-        SeekBar seekBarLines = findViewById(R.id.seekBarLines);
-        TextView tvSpeedValue = findViewById(R.id.tvSpeedValue);
-        TextView tvLinesValue = findViewById(R.id.tvLinesValue);
-
-        seekBarSpeed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                selectedSpeed = progress + 1; // 0-8 becomes 1-9
-                tvSpeedValue.setText(String.valueOf(selectedSpeed));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
-
-        seekBarLines.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                selectedStartingLines = progress; // 0-9
-                tvLinesValue.setText(String.valueOf(selectedStartingLines));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
-    }
-
-    private void setupStartGameButton() {
-        Button btnStartGame = findViewById(R.id.btnStartGame);
-        btnStartGame.setOnClickListener(v -> startGame());
     }
 
     private void setupGameControls() {
         ImageButton btnLeft = findViewById(R.id.btnLeft);
         ImageButton btnRight = findViewById(R.id.btnRight);
+        ImageButton btnDown = findViewById(R.id.btnDown);
         ImageButton btnRotate = findViewById(R.id.btnRotate);
         ImageButton btnDrop = findViewById(R.id.btnDrop);
 
@@ -107,6 +105,38 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
             if (game != null) game.moveRight();
         });
 
+        // Down button with long press support for continuous speed up
+        btnDown.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case android.view.MotionEvent.ACTION_DOWN:
+                    // Initial press
+                    if (game != null) game.moveDown();
+                    isDownButtonPressed = true;
+
+                    // Start repeating after short delay
+                    downButtonRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isDownButtonPressed && game != null) {
+                                game.moveDown();
+                                downButtonHandler.postDelayed(this, 100); // Repeat every 100ms
+                            }
+                        }
+                    };
+                    downButtonHandler.postDelayed(downButtonRunnable, 150); // Start repeating after 150ms
+                    return true;
+
+                case android.view.MotionEvent.ACTION_UP:
+                case android.view.MotionEvent.ACTION_CANCEL:
+                    // Stop repeating
+                    isDownButtonPressed = false;
+                    downButtonHandler.removeCallbacks(downButtonRunnable);
+                    v.performClick(); // Accessibility
+                    return true;
+            }
+            return false;
+        });
+
         btnRotate.setOnClickListener(v -> {
             if (game != null) game.rotate();
         });
@@ -116,64 +146,207 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         });
     }
 
+    private void setupGameControlButtons() {
+        btnPauseGame.setOnClickListener(v -> togglePauseFromButton());
+
+        btnSettings.setOnClickListener(v -> showSettingsDialog());
+
+        // Initialize button states
+        updatePauseButton();
+    }
+
+    private void updatePauseButton() {
+        if (game != null && game.isPaused()) {
+            btnPauseGame.setImageResource(android.R.drawable.ic_media_play);
+        } else {
+            btnPauseGame.setImageResource(android.R.drawable.ic_media_pause);
+        }
+    }
+
+    private void showSettingsDialog() {
+        // Pause game if playing
+        boolean wasPaused = game != null && game.isPaused();
+        if (game != null && !game.isGameOver()) {
+            game.setPaused(true);
+            if (soundManager != null) {
+                soundManager.pauseMusic();
+            }
+        }
+
+        Dialog settingsDialog = new Dialog(this);
+        settingsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        settingsDialog.setContentView(R.layout.dialog_settings);
+        settingsDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        settingsDialog.setCancelable(false);
+
+        // Get views
+        SeekBar speedSeekBar = settingsDialog.findViewById(R.id.settingsSeekBarSpeed);
+        TextView speedValue = settingsDialog.findViewById(R.id.settingsTvSpeedValue);
+        SeekBar linesSeekBar = settingsDialog.findViewById(R.id.settingsSeekBarLines);
+        TextView linesValue = settingsDialog.findViewById(R.id.settingsTvLinesValue);
+        ImageButton muteBtn = settingsDialog.findViewById(R.id.settingsBtnMute);
+        Button closeBtn = settingsDialog.findViewById(R.id.settingsBtnClose);
+
+        // Set current values
+        speedSeekBar.setProgress(selectedSpeed - 1);
+        speedValue.setText(String.valueOf(selectedSpeed));
+        linesSeekBar.setProgress(selectedStartingLines);
+        linesValue.setText(String.valueOf(selectedStartingLines));
+        updateMuteButtonIcon(muteBtn);
+
+        // Speed seekbar listener
+        speedSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                selectedSpeed = progress + 1;
+                speedValue.setText(String.valueOf(selectedSpeed));
+                if (fromUser) {
+                    saveSettings();
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        // Lines seekbar listener
+        linesSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                selectedStartingLines = progress;
+                linesValue.setText(String.valueOf(selectedStartingLines));
+                if (fromUser) {
+                    saveSettings();
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        // Mute button listener
+        muteBtn.setOnClickListener(v -> {
+            if (soundManager != null) {
+                soundManager.toggleMute();
+                updateMuteButtonIcon(muteBtn);
+            }
+        });
+
+        // Close button listener
+        closeBtn.setOnClickListener(v -> {
+            settingsDialog.dismiss();
+            // Resume game if it wasn't paused before
+            if (game != null && !game.isGameOver() && !wasPaused) {
+                game.setPaused(false);
+                if (soundManager != null) {
+                    soundManager.resumeMusic();
+                }
+                updatePauseButton();
+            }
+        });
+
+        settingsDialog.show();
+    }
+
+    private void updateMuteButtonIcon(ImageButton btn) {
+        if (soundManager != null && soundManager.isMuted()) {
+            btn.setImageResource(android.R.drawable.ic_lock_silent_mode);
+        } else {
+            btn.setImageResource(android.R.drawable.ic_lock_silent_mode_off);
+        }
+    }
+
+    private void showMainMenu() {
+        // Hide game layout and stop any running game
+        gameLayout.setVisibility(View.GONE);
+        if (game != null) {
+            stopGame();
+        }
+
+        Dialog mainMenuDialog = new Dialog(this);
+        mainMenuDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mainMenuDialog.setContentView(R.layout.dialog_main_menu);
+        mainMenuDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        mainMenuDialog.setCancelable(false);
+
+        Button btnNewGame = mainMenuDialog.findViewById(R.id.menuBtnNewGame);
+        Button btnSettings = mainMenuDialog.findViewById(R.id.menuBtnSettings);
+        Button btnQuit = mainMenuDialog.findViewById(R.id.menuBtnQuit);
+
+        btnNewGame.setOnClickListener(v -> {
+            mainMenuDialog.dismiss();
+            gameLayout.setVisibility(View.VISIBLE);
+            startNewGame();
+        });
+
+        btnSettings.setOnClickListener(v -> {
+            showSettingsDialog();
+        });
+
+        btnQuit.setOnClickListener(v -> {
+            mainMenuDialog.dismiss();
+            finish(); // Exit the app
+        });
+
+        mainMenuDialog.show();
+    }
+
+    private void showPauseDialog() {
+        Dialog pauseDialog = new Dialog(this);
+        pauseDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        pauseDialog.setContentView(R.layout.dialog_pause);
+        pauseDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        pauseDialog.setCancelable(false);
+
+        Button btnContinue = pauseDialog.findViewById(R.id.pauseBtnContinue);
+        Button btnNewGame = pauseDialog.findViewById(R.id.pauseBtnNewGame);
+        Button btnQuit = pauseDialog.findViewById(R.id.pauseBtnQuit);
+
+        btnContinue.setOnClickListener(v -> {
+            pauseDialog.dismiss();
+            game.setPaused(false);
+            updatePauseButton();
+            if (soundManager != null) {
+                soundManager.resumeMusic();
+            }
+        });
+
+        btnNewGame.setOnClickListener(v -> {
+            pauseDialog.dismiss();
+            startNewGame();
+        });
+
+        btnQuit.setOnClickListener(v -> {
+            pauseDialog.dismiss();
+            stopGame();
+            showMainMenu(); // Return to main menu instead of exiting
+        });
+
+        pauseDialog.show();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.game_menu, menu);
+        // No menu needed anymore
         return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem pauseItem = menu.findItem(R.id.menu_pause);
-        if (game != null && game.isPaused()) {
-            pauseItem.setTitle(R.string.resume);
-            pauseItem.setIcon(android.R.drawable.ic_media_play);
-        } else {
-            pauseItem.setTitle(R.string.pause);
-            pauseItem.setIcon(android.R.drawable.ic_media_pause);
-        }
-
-        MenuItem muteItem = menu.findItem(R.id.menu_mute);
-        if (soundManager != null && soundManager.isMuted()) {
-            muteItem.setTitle(R.string.unmute);
-        } else {
-            muteItem.setTitle(R.string.mute);
-        }
-
+        // No menu needed
         return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.menu_new_game) {
-            showSpeedSelection();
-            return true;
-        } else if (id == R.id.menu_pause) {
-            togglePause();
-            return true;
-        } else if (id == R.id.menu_high_scores) {
-            Intent intent = new Intent(this, HighScoresActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (id == R.id.menu_mute) {
-            if (soundManager != null) {
-                soundManager.toggleMute();
-                invalidateOptionsMenu();
-                String message = soundManager.isMuted() ? "Sound Muted" : "Sound Enabled";
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-            }
-            return true;
-        }
-
+        // No menu needed
         return super.onOptionsItemSelected(item);
-    }
-
-    private void startGame() {
-        speedSelectionLayout.setVisibility(View.GONE);
-        gameLayout.setVisibility(View.VISIBLE);
-        startNewGame();
     }
 
     private void startNewGame() {
@@ -226,31 +399,23 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         }
     }
 
-    private void togglePause() {
-        if (game != null) {
+    private void togglePauseFromButton() {
+        // Only allow pause if game is running and game layout is visible
+        if (game != null && isGameRunning && gameLayout.getVisibility() == View.VISIBLE) {
             game.togglePause();
-            invalidateOptionsMenu(); // Update menu to change Pause/Resume text
+            updatePauseButton();
             if (game.isPaused()) {
-                Toast.makeText(this, "Game Paused", Toast.LENGTH_SHORT).show();
                 if (soundManager != null) {
                     soundManager.pauseMusic();
                 }
+                // Show pause dialog with Continue, New Game, and Quit options
+                showPauseDialog();
             } else {
-                Toast.makeText(this, "Game Resumed", Toast.LENGTH_SHORT).show();
                 if (soundManager != null) {
                     soundManager.resumeMusic();
                 }
             }
         }
-    }
-
-    private void showSpeedSelection() {
-        stopGame();
-        if (soundManager != null) {
-            soundManager.stopBackgroundMusic();
-        }
-        gameLayout.setVisibility(View.GONE);
-        speedSelectionLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -277,11 +442,26 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
             int rank = scoreManager.getRank(finalScore);
 
             String message = getString(R.string.game_over_message, finalScore, rank);
+            String title = "GAME OVER";
             if (scoreManager.isHighScore(finalScore)) {
-                message = getString(R.string.new_high_score) + "\n" + message;
+                title = "★ NEW HIGH SCORE ★";
             }
 
-            Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+            // Show game over dialog with New Game and High Scores options
+            new RetroDialog(MainActivity.this)
+                    .setTitle(title)
+                    .setMessage(message)
+                    .setCancelable(false)
+                    .setButton("New Game", v -> {
+                        // Start a new game immediately
+                        startNewGame();
+                    })
+                    .setSecondButton("High Scores", v -> {
+                        // Show high scores, user can return with back button
+                        Intent intent = new Intent(MainActivity.this, HighScoresActivity.class);
+                        startActivity(intent);
+                    })
+                    .show();
         });
     }
 
@@ -329,6 +509,13 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     protected void onDestroy() {
         super.onDestroy();
         stopGame();
+
+        // Clean up down button handler
+        isDownButtonPressed = false;
+        if (downButtonHandler != null && downButtonRunnable != null) {
+            downButtonHandler.removeCallbacks(downButtonRunnable);
+        }
+
         if (soundManager != null) {
             soundManager.release();
         }

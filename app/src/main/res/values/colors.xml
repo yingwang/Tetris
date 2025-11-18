@@ -10,20 +10,29 @@
     <color name="game_background">#FF222222</color>
     <color name="grid_line">#FF444444</color>
 
-    <!-- Game Boy Color Theme Colors -->
-    <color name="gbc_screen_bg">#9BBC0F</color>        <!-- Classic GBC screen greenish-yellow -->
-    <color name="gbc_screen_border">#0F380F</color>    <!-- Dark green border -->
-    <color name="gbc_grid_line">#8BAC0F</color>        <!-- Grid lines -->
-    <color name="gbc_body">#7C5EBF</color>             <!-- GBC Purple body -->
-    <color name="gbc_button">#6B4C9A</color>           <!-- Button color -->
-    <color name="gbc_button_pressed">#4A3570</color>   <!-- Pressed button -->
+    <!-- Mac Homebrew / Retro Terminal Theme Colors -->
+    <color name="gbc_screen_bg">#1D2021</color>        <!-- Dark terminal background -->
+    <color name="gbc_screen_border">#FE8019</color>    <!-- Amber/orange border -->
+    <color name="gbc_grid_line">#3C3836</color>        <!-- Subtle grid lines -->
+    <color name="gbc_body">#282828</color>             <!-- Dark body -->
+    <color name="gbc_button">#504945</color>           <!-- Button base color -->
+    <color name="gbc_button_pressed">#3C3836</color>   <!-- Pressed button -->
 
-    <!-- GBC Tetris Piece Colors (vibrant but retro) -->
-    <color name="gbc_cyan">#00E5E5</color>              <!-- I piece -->
-    <color name="gbc_yellow">#FFD700</color>            <!-- O piece -->
-    <color name="gbc_purple">#D946EF</color>            <!-- T piece -->
-    <color name="gbc_green">#00D500</color>             <!-- S piece -->
-    <color name="gbc_red">#FF3030</color>               <!-- Z piece -->
-    <color name="gbc_blue">#4169FF</color>              <!-- J piece -->
-    <color name="gbc_orange">#FF8C00</color>            <!-- L piece -->
+    <!-- Homebrew Tetris Piece Colors (amber/green terminal palette) -->
+    <color name="gbc_cyan">#83A598</color>              <!-- I piece - blue-ish -->
+    <color name="gbc_yellow">#FABD2F</color>            <!-- O piece - amber -->
+    <color name="gbc_purple">#D3869B</color>            <!-- T piece - purple-pink -->
+    <color name="gbc_green">#B8BB26</color>             <!-- S piece - bright green -->
+    <color name="gbc_red">#FB4934</color>               <!-- Z piece - red -->
+    <color name="gbc_blue">#83A598</color>              <!-- J piece - blue -->
+    <color name="gbc_orange">#FE8019</color>            <!-- L piece - orange -->
+
+    <!-- Additional terminal theme colors -->
+    <color name="gb_darkest">#1D2021</color>            <!-- Darkest terminal bg -->
+    <color name="gb_dark">#282828</color>               <!-- Dark bg -->
+    <color name="text_accent">#FE8019</color>           <!-- Amber accent -->
+    <color name="text_primary">#EBDBB2</color>          <!-- Cream text -->
+    <color name="text_secondary">#A89984</color>        <!-- Muted text -->
+    <color name="rank_gold">#FABD2F</color>             <!-- Gold for ranks -->
+    <color name="shadow_color">#000000</color>          <!-- Shadow -->
 </resources>

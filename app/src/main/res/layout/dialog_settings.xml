@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/retro_dialog_background"
+    android:padding="24dp">
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SETTINGS"
+        android:textColor="@color/text_accent"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:fontFamily="monospace"
+        android:letterSpacing="0.1"
+        android:layout_gravity="center"
+        android:layout_marginBottom="32dp"
+        android:shadowColor="@color/shadow_color"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="3"/>
+
+    <!-- Speed Setting -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/speed_label"
+        android:textColor="#EBDBB2"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <SeekBar
+            android:id="@+id/settingsSeekBarSpeed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:max="8"
+            android:progress="4"
+            android:progressTint="@color/text_accent"
+            android:thumbTint="@color/text_accent"/>
+
+        <TextView
+            android:id="@+id/settingsTvSpeedValue"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:text="5"
+            android:textColor="@color/text_accent"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginStart="16dp"/>
+    </LinearLayout>
+
+    <!-- Starting Lines Setting -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/starting_lines_label"
+        android:textColor="#EBDBB2"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <SeekBar
+            android:id="@+id/settingsSeekBarLines"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:max="9"
+            android:progress="0"
+            android:progressTint="@color/text_accent"
+            android:thumbTint="@color/text_accent"/>
+
+        <TextView
+            android:id="@+id/settingsTvLinesValue"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="@color/text_accent"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginStart="16dp"/>
+    </LinearLayout>
+
+    <!-- Mute Setting -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="24dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Sound"
+            android:textColor="#EBDBB2"
+            android:textSize="16sp"/>
+
+        <ImageButton
+            android:id="@+id/settingsBtnMute"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@android:drawable/ic_lock_silent_mode_off"
+            android:contentDescription="Toggle Sound"
+            android:scaleType="centerInside"
+            android:padding="12dp"
+            android:background="@drawable/button_background_enhanced"/>
+    </LinearLayout>
+
+    <!-- Close Button -->
+    <Button
+        android:id="@+id/settingsBtnClose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CLOSE"
+        android:textColor="@color/text_primary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:fontFamily="monospace"
+        android:layout_gravity="center"
+        android:background="@drawable/menu_button_selector"
+        android:elevation="4dp"/>
+</LinearLayout>

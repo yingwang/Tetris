@@ -6,109 +6,7 @@
     android:background="@drawable/game_background"
     android:padding="16dp">
 
-    <!-- Game Configuration (visible before game starts) -->
-    <LinearLayout
-        android:id="@+id/speedSelectionLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_marginTop="100dp"
-        android:paddingHorizontal="32dp"
-        android:visibility="visible">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/game_settings"
-            android:textColor="#FFD700"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="40dp"
-            android:shadowColor="#000000"
-            android:shadowDx="2"
-            android:shadowDy="2"
-            android:shadowRadius="4"/>
-
-        <!-- Speed Setting -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/speed_label"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp"/>
-
-        <TextView
-            android:id="@+id/tvSpeedValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="5"
-            android:textColor="#4CAF50"
-            android:textSize="48sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp"
-            android:shadowColor="#000000"
-            android:shadowDx="2"
-            android:shadowDy="2"
-            android:shadowRadius="3"/>
-
-        <SeekBar
-            android:id="@+id/seekBarSpeed"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="8"
-            android:progress="4"
-            android:progressTint="#4CAF50"
-            android:thumbTint="#4CAF50"
-            android:layout_marginBottom="40dp"/>
-
-        <!-- Starting Lines Setting -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/starting_lines_label"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp"/>
-
-        <TextView
-            android:id="@+id/tvLinesValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textColor="#4CAF50"
-            android:textSize="48sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp"
-            android:shadowColor="#000000"
-            android:shadowDx="2"
-            android:shadowDy="2"
-            android:shadowRadius="3"/>
-
-        <SeekBar
-            android:id="@+id/seekBarLines"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="9"
-            android:progress="0"
-            android:progressTint="#4CAF50"
-            android:thumbTint="#4CAF50"
-            android:layout_marginBottom="50dp"/>
-
-        <Button
-            android:id="@+id/btnStartGame"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/start_game"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:paddingHorizontal="60dp"
-            android:paddingVertical="16dp"
-            android:background="@drawable/button_background_enhanced"/>
-    </LinearLayout>
-
-    <!-- Game Layout (visible during game) -->
+    <!-- Game Layout (shown after menu) -->
     <LinearLayout
         android:id="@+id/gameLayout"
         android:layout_width="match_parent"
@@ -116,15 +14,17 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-        <!-- Score and Level Display -->
+        <!-- Top Control Bar -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical"
+            android:layout_marginTop="48dp"
+            android:layout_marginBottom="4dp"
             android:padding="8dp">
 
+            <!-- Score and Level -->
             <TextView
                 android:id="@+id/tvScore"
                 android:layout_width="0dp"
@@ -133,11 +33,11 @@
                 android:layout_marginEnd="4dp"
                 android:layout_marginRight="4dp"
                 android:text="@string/score"
-                android:textColor="#FFD700"
-                android:textSize="18sp"
+                android:textColor="@color/text_accent"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:gravity="center"
-                android:padding="12dp"
+                android:padding="8dp"
                 android:background="@drawable/score_background"
                 android:shadowColor="#000000"
                 android:shadowDx="2"
@@ -151,17 +51,47 @@
                 android:layout_weight="1"
                 android:layout_marginStart="4dp"
                 android:layout_marginLeft="4dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 android:text="@string/level"
-                android:textColor="#FFD700"
-                android:textSize="18sp"
+                android:textColor="@color/text_accent"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:gravity="center"
-                android:padding="12dp"
+                android:padding="8dp"
                 android:background="@drawable/score_background"
                 android:shadowColor="#000000"
                 android:shadowDx="2"
                 android:shadowDy="2"
                 android:shadowRadius="3"/>
+
+            <!-- Control Buttons -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btnPauseGame"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@android:drawable/ic_media_pause"
+                    android:contentDescription="Pause"
+                    android:scaleType="centerInside"
+                    android:padding="8dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@drawable/button_background_enhanced"/>
+
+                <ImageButton
+                    android:id="@+id/btnSettings"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@android:drawable/ic_menu_preferences"
+                    android:contentDescription="Settings"
+                    android:scaleType="centerInside"
+                    android:padding="8dp"
+                    android:background="@drawable/button_background_enhanced"/>
+            </LinearLayout>
         </LinearLayout>
 
         <!-- Game View -->
@@ -169,64 +99,111 @@
             android:id="@+id/tetrisView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginBottom="56dp"/>
+            android:layout_weight="0.4"
+            android:layout_marginBottom="8dp"/>
 
         <!-- Control Buttons - Game Boy Color Style -->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="8dp"
+            android:layout_height="180dp"
+            android:paddingBottom="32dp"
             android:paddingTop="8dp">
 
-            <!-- D-Pad Container (Left Side) -->
-            <RelativeLayout
+            <!-- D-Pad Container (Left Side) - Grid Layout -->
+            <GridLayout
                 android:id="@+id/dpadContainer"
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp">
+                android:layout_marginLeft="20dp"
+                android:columnCount="3"
+                android:rowCount="2"
+                android:useDefaultMargins="false">
 
-                <!-- Left button -->
+                <!-- Left button (top row) -->
                 <ImageButton
                     android:id="@+id/btnLeft"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_row="0"
+                    android:layout_column="0"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_marginBottom="4dp"
                     android:src="@drawable/ic_arrow_left"
                     android:contentDescription="@string/left"
                     android:scaleType="centerInside"
                     android:padding="12dp"
                     android:background="@drawable/gbc_dpad_button_selector"/>
 
-                <!-- Right button -->
+                <!-- Empty top center -->
+                <Space
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_row="0"
+                    android:layout_column="1"/>
+
+                <!-- Right button (top row) -->
                 <ImageButton
                     android:id="@+id/btnRight"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_toRightOf="@id/btnLeft"
-                    android:layout_toEndOf="@id/btnLeft"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_centerVertical="true"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_row="0"
+                    android:layout_column="2"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginBottom="4dp"
                     android:src="@drawable/ic_arrow_right"
                     android:contentDescription="@string/right"
                     android:scaleType="centerInside"
                     android:padding="12dp"
                     android:background="@drawable/gbc_dpad_button_selector"/>
-            </RelativeLayout>
+
+                <!-- Empty bottom left -->
+                <Space
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_row="1"
+                    android:layout_column="0"/>
+
+                <!-- Down button (bottom center) -->
+                <ImageButton
+                    android:id="@+id/btnDown"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_row="1"
+                    android:layout_column="1"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_marginTop="4dp"
+                    android:src="@drawable/ic_arrow_down"
+                    android:contentDescription="Speed Up"
+                    android:scaleType="centerInside"
+                    android:padding="12dp"
+                    android:background="@drawable/gbc_dpad_button_selector"/>
+
+                <!-- Empty bottom right -->
+                <Space
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_row="1"
+                    android:layout_column="2"/>
+            </GridLayout>
 
             <!-- Action Buttons Container (Right Side) - GBC A/B Layout -->
-            <RelativeLayout
+            <FrameLayout
                 android:id="@+id/actionButtonsContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="180dp"
+                android:layout_height="160dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp">
 
@@ -235,7 +212,10 @@
                     android:id="@+id/btnDrop"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
-                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="bottom|start"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginBottom="35dp"
                     android:src="@drawable/ic_drop"
                     android:contentDescription="@string/drop"
                     android:scaleType="centerInside"
@@ -247,18 +227,16 @@
                     android:id="@+id/btnRotate"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
-                    android:layout_toRightOf="@id/btnDrop"
-                    android:layout_toEndOf="@id/btnDrop"
-                    android:layout_above="@id/btnDrop"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginBottom="-20dp"
+                    android:layout_gravity="top|end"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginRight="0dp"
                     android:src="@drawable/ic_rotate"
                     android:contentDescription="@string/rotate"
                     android:scaleType="centerInside"
                     android:padding="18dp"
                     android:background="@drawable/gbc_button_round_selector"/>
-            </RelativeLayout>
+            </FrameLayout>
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

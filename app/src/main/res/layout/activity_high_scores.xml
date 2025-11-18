@@ -5,21 +5,42 @@
     android:orientation="vertical"
     android:background="@drawable/game_background">
 
-    <!-- Title -->
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- Title Bar with Back Button -->
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/high_scores_title"
-        android:textColor="#FFD700"
-        android:textSize="36sp"
-        android:textStyle="bold"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="48dp"
         android:layout_marginBottom="16dp"
-        android:shadowColor="#000000"
-        android:shadowDx="3"
-        android:shadowDy="3"
-        android:shadowRadius="5"/>
+        android:paddingHorizontal="16dp">
+
+        <!-- Back Button -->
+        <ImageButton
+            android:id="@+id/btnBackToMenu"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@android:drawable/ic_menu_revert"
+            android:contentDescription="Back"
+            android:scaleType="centerInside"
+            android:padding="8dp"
+            android:background="@drawable/button_background_enhanced"/>
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/high_scores_title"
+            android:textColor="#FFD700"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            android:shadowColor="#000000"
+            android:shadowDx="3"
+            android:shadowDy="3"
+            android:shadowRadius="5"/>
+    </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
