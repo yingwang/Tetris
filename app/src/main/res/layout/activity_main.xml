@@ -226,16 +226,16 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="8dp"/>
 
         <!-- Game Boy Style Controls -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="24dp"
-            android:paddingTop="4dp"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:layout_marginBottom="32dp">
+            android:layout_marginBottom="40dp">
 
             <!-- D-Pad (Left Side) -->
             <LinearLayout
@@ -251,8 +251,8 @@
                 <!-- D-Pad Top (Down button) -->
                 <ImageButton
                     android:id="@+id/btnDown"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
                     android:src="@drawable/ic_arrow_down"
                     android:contentDescription="@string/down"
                     android:scaleType="centerInside"
@@ -268,8 +268,8 @@
 
                     <ImageButton
                         android:id="@+id/btnLeft"
-                        android:layout_width="55dp"
-                        android:layout_height="55dp"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
                         android:src="@drawable/ic_arrow_left"
                         android:contentDescription="@string/left"
                         android:scaleType="centerInside"
@@ -277,13 +277,13 @@
                         android:background="@drawable/button_dpad_gb"/>
 
                     <Space
-                        android:layout_width="55dp"
-                        android:layout_height="55dp"/>
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"/>
 
                     <ImageButton
                         android:id="@+id/btnRight"
-                        android:layout_width="55dp"
-                        android:layout_height="55dp"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
                         android:src="@drawable/ic_arrow_right"
                         android:contentDescription="@string/right"
                         android:scaleType="centerInside"
@@ -311,8 +311,8 @@
 
                     <ImageButton
                         android:id="@+id/btnRotate"
-                        android:layout_width="62dp"
-                        android:layout_height="62dp"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:src="@drawable/ic_rotate"
                         android:contentDescription="@string/rotate"
                         android:scaleType="centerInside"
@@ -330,8 +330,8 @@
 
                     <ImageButton
                         android:id="@+id/btnDrop"
-                        android:layout_width="62dp"
-                        android:layout_height="62dp"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:src="@drawable/ic_drop"
                         android:contentDescription="@string/drop"
                         android:scaleType="centerInside"

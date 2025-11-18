@@ -115,8 +115,8 @@ public class TetrisView extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         if (game != null) {
             TetrisBoard board = game.getBoard();
-            float boardWidth = w * 0.90f;
-            float boardHeight = h * 0.92f;
+            float boardWidth = w * 0.85f;
+            float boardHeight = h * 0.87f;
 
             float blockWidth = boardWidth / board.getCols();
             float blockHeight = boardHeight / board.getRows();
