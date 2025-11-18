@@ -9,4 +9,21 @@
     <color name="white">#FFFFFFFF</color>
     <color name="game_background">#FF222222</color>
     <color name="grid_line">#FF444444</color>
+
+    <!-- Game Boy Color Theme Colors -->
+    <color name="gbc_screen_bg">#9BBC0F</color>        <!-- Classic GBC screen greenish-yellow -->
+    <color name="gbc_screen_border">#0F380F</color>    <!-- Dark green border -->
+    <color name="gbc_grid_line">#8BAC0F</color>        <!-- Grid lines -->
+    <color name="gbc_body">#7C5EBF</color>             <!-- GBC Purple body -->
+    <color name="gbc_button">#6B4C9A</color>           <!-- Button color -->
+    <color name="gbc_button_pressed">#4A3570</color>   <!-- Pressed button -->
+
+    <!-- GBC Tetris Piece Colors (vibrant but retro) -->
+    <color name="gbc_cyan">#00E5E5</color>              <!-- I piece -->
+    <color name="gbc_yellow">#FFD700</color>            <!-- O piece -->
+    <color name="gbc_purple">#D946EF</color>            <!-- T piece -->
+    <color name="gbc_green">#00D500</color>             <!-- S piece -->
+    <color name="gbc_red">#FF3030</color>               <!-- Z piece -->
+    <color name="gbc_blue">#4169FF</color>              <!-- J piece -->
+    <color name="gbc_orange">#FF8C00</color>            <!-- L piece -->
 </resources>

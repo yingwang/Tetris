@@ -172,71 +172,93 @@
             android:layout_weight="1"
             android:layout_marginBottom="56dp"/>
 
-        <!-- Control Buttons -->
+        <!-- Control Buttons - Game Boy Color Style -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="8dp">
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp">
 
-            <!-- Left button - far left -->
-            <ImageButton
-                android:id="@+id/btnLeft"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+            <!-- D-Pad Container (Left Side) -->
+            <RelativeLayout
+                android:id="@+id/dpadContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                android:layout_marginStart="4dp"
-                android:layout_marginLeft="4dp"
-                android:src="@drawable/ic_arrow_left"
-                android:contentDescription="@string/left"
-                android:scaleType="centerInside"
-                android:padding="18dp"
-                android:background="@drawable/button_background_enhanced"/>
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp">
 
-            <!-- Rotate button - close to left button -->
-            <ImageButton
-                android:id="@+id/btnRotate"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_toEndOf="@id/btnLeft"
-                android:layout_toRightOf="@id/btnLeft"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:src="@drawable/ic_rotate"
-                android:contentDescription="@string/rotate"
-                android:scaleType="centerInside"
-                android:padding="18dp"
-                android:background="@drawable/button_background_enhanced"/>
+                <!-- Left button -->
+                <ImageButton
+                    android:id="@+id/btnLeft"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_arrow_left"
+                    android:contentDescription="@string/left"
+                    android:scaleType="centerInside"
+                    android:padding="12dp"
+                    android:background="@drawable/gbc_dpad_button_selector"/>
 
-            <!-- Right button - far right -->
-            <ImageButton
-                android:id="@+id/btnRight"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                <!-- Right button -->
+                <ImageButton
+                    android:id="@+id/btnRight"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_toRightOf="@id/btnLeft"
+                    android:layout_toEndOf="@id/btnLeft"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_arrow_right"
+                    android:contentDescription="@string/right"
+                    android:scaleType="centerInside"
+                    android:padding="12dp"
+                    android:background="@drawable/gbc_dpad_button_selector"/>
+            </RelativeLayout>
+
+            <!-- Action Buttons Container (Right Side) - GBC A/B Layout -->
+            <RelativeLayout
+                android:id="@+id/actionButtonsContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginEnd="4dp"
-                android:layout_marginRight="4dp"
-                android:src="@drawable/ic_arrow_right"
-                android:contentDescription="@string/right"
-                android:scaleType="centerInside"
-                android:padding="18dp"
-                android:background="@drawable/button_background_enhanced"/>
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp">
 
-            <!-- Drop button - close to right button -->
-            <ImageButton
-                android:id="@+id/btnDrop"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_toStartOf="@id/btnRight"
-                android:layout_toLeftOf="@id/btnRight"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:src="@drawable/ic_drop"
-                android:contentDescription="@string/drop"
-                android:scaleType="centerInside"
-                android:padding="18dp"
-                android:background="@drawable/button_background_enhanced"/>
+                <!-- B Button (Drop) - Bottom Left -->
+                <ImageButton
+                    android:id="@+id/btnDrop"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentBottom="true"
+                    android:src="@drawable/ic_drop"
+                    android:contentDescription="@string/drop"
+                    android:scaleType="centerInside"
+                    android:padding="18dp"
+                    android:background="@drawable/gbc_button_round_selector"/>
+
+                <!-- A Button (Rotate) - Top Right -->
+                <ImageButton
+                    android:id="@+id/btnRotate"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_toRightOf="@id/btnDrop"
+                    android:layout_toEndOf="@id/btnDrop"
+                    android:layout_above="@id/btnDrop"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginBottom="-20dp"
+                    android:src="@drawable/ic_rotate"
+                    android:contentDescription="@string/rotate"
+                    android:scaleType="centerInside"
+                    android:padding="18dp"
+                    android:background="@drawable/gbc_button_round_selector"/>
+            </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

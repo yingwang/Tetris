@@ -67,27 +67,28 @@ public class TetrisPiece {
     }
 
     private void initializeColor() {
+        // Game Boy Color themed colors - vibrant but retro
         switch (type) {
             case I:
-                color = Color.CYAN;
+                color = Color.parseColor("#00E5E5"); // GBC Cyan
                 break;
             case O:
-                color = Color.YELLOW;
+                color = Color.parseColor("#FFD700"); // GBC Yellow
                 break;
             case T:
-                color = Color.MAGENTA;
+                color = Color.parseColor("#D946EF"); // GBC Purple
                 break;
             case S:
-                color = Color.GREEN;
+                color = Color.parseColor("#00D500"); // GBC Green
                 break;
             case Z:
-                color = Color.RED;
+                color = Color.parseColor("#FF3030"); // GBC Red
                 break;
             case J:
-                color = Color.BLUE;
+                color = Color.parseColor("#4169FF"); // GBC Blue
                 break;
             case L:
-                color = Color.rgb(255, 165, 0); // Orange
+                color = Color.parseColor("#FF8C00"); // GBC Orange
                 break;
         }
     }

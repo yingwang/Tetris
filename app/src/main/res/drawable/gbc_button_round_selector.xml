@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- GBC button state selector -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="oval">
+            <solid android:color="@color/gbc_button_pressed"/>
+            <stroke
+                android:width="3dp"
+                android:color="#2A1550"/>
+            <size
+                android:width="70dp"
+                android:height="70dp"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/gbc_button"/>
+            <stroke
+                android:width="3dp"
+                android:color="#4A3570"/>
+            <size
+                android:width="70dp"
+                android:height="70dp"/>
+        </shape>
+    </item>
+</selector>
