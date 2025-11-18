@@ -6,16 +6,71 @@
     android:background="@drawable/game_background"
     android:padding="16dp">
 
-    <!-- Game Configuration (visible before game starts) -->
+    <!-- Main Menu (visible before game starts) -->
     <LinearLayout
-        android:id="@+id/speedSelectionLayout"
+        android:id="@+id/mainMenuLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_marginTop="100dp"
         android:paddingHorizontal="32dp"
         android:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TETRIS"
+            android:textColor="@color/text_accent"
+            android:textSize="56sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="80dp"
+            android:shadowColor="#000000"
+            android:shadowDx="3"
+            android:shadowDy="3"
+            android:shadowRadius="5"/>
+
+        <Button
+            android:id="@+id/btnStartGame"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:text="@string/start_game"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:paddingVertical="16dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/button_background_enhanced"/>
+
+        <Button
+            android:id="@+id/btnSettings"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:paddingVertical="16dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/button_background_enhanced"/>
+
+        <Button
+            android:id="@+id/btnHighScoresMenu"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:text="@string/high_scores"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:paddingVertical="16dp"
+            android:background="@drawable/button_background_enhanced"/>
+    </LinearLayout>
+
+    <!-- Settings Layout -->
+    <LinearLayout
+        android:id="@+id/settingsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingHorizontal="32dp"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -97,10 +152,10 @@
             android:layout_marginBottom="50dp"/>
 
         <Button
-            android:id="@+id/btnStartGame"
+            android:id="@+id/btnBackToMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/start_game"
+            android:text="Back"
             android:textSize="24sp"
             android:textStyle="bold"
             android:paddingHorizontal="60dp"
@@ -267,10 +322,10 @@
             </GridLayout>
 
             <!-- Action Buttons Container (Right Side) - GBC A/B Layout -->
-            <RelativeLayout
+            <FrameLayout
                 android:id="@+id/actionButtonsContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="180dp"
+                android:layout_height="160dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
@@ -282,14 +337,10 @@
                     android:id="@+id/btnDrop"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginBottom="25dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
+                    android:layout_gravity="bottom|start"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginBottom="35dp"
                     android:src="@drawable/ic_drop"
                     android:contentDescription="@string/drop"
                     android:scaleType="centerInside"
@@ -301,18 +352,16 @@
                     android:id="@+id/btnRotate"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
-                    android:layout_above="@id/btnDrop"
-                    android:layout_toRightOf="@id/btnDrop"
-                    android:layout_toEndOf="@id/btnDrop"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_gravity="top|end"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginRight="0dp"
                     android:src="@drawable/ic_rotate"
                     android:contentDescription="@string/rotate"
                     android:scaleType="centerInside"
                     android:padding="18dp"
                     android:background="@drawable/gbc_button_round_selector"/>
-            </RelativeLayout>
+            </FrameLayout>
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

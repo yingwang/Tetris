@@ -27,7 +27,8 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     private Runnable gameRunnable;
     private boolean isGameRunning = false;
 
-    private LinearLayout speedSelectionLayout;
+    private LinearLayout mainMenuLayout;
+    private LinearLayout settingsLayout;
     private LinearLayout gameLayout;
     private TextView tvScore;
     private TextView tvLevel;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         loadSettings();
         initializeViews();
         setupSeekBars();
-        setupStartGameButton();
+        setupMenuButtons();
         setupGameControls();
     }
 
@@ -69,7 +70,8 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     }
 
     private void initializeViews() {
-        speedSelectionLayout = findViewById(R.id.speedSelectionLayout);
+        mainMenuLayout = findViewById(R.id.mainMenuLayout);
+        settingsLayout = findViewById(R.id.settingsLayout);
         gameLayout = findViewById(R.id.gameLayout);
         tetrisView = findViewById(R.id.tetrisView);
         tvScore = findViewById(R.id.tvScore);
@@ -125,9 +127,22 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         });
     }
 
-    private void setupStartGameButton() {
+    private void setupMenuButtons() {
+        // Main menu buttons
         Button btnStartGame = findViewById(R.id.btnStartGame);
+        Button btnSettings = findViewById(R.id.btnSettings);
+        Button btnHighScoresMenu = findViewById(R.id.btnHighScoresMenu);
+
         btnStartGame.setOnClickListener(v -> startGame());
+        btnSettings.setOnClickListener(v -> showSettings());
+        btnHighScoresMenu.setOnClickListener(v -> {
+            Intent intent = new Intent(this, HighScoresActivity.class);
+            startActivity(intent);
+        });
+
+        // Settings screen button
+        Button btnBackToMenu = findViewById(R.id.btnBackToMenu);
+        btnBackToMenu.setOnClickListener(v -> showMainMenu());
     }
 
     private void setupGameControls() {
@@ -218,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         int id = item.getItemId();
 
         if (id == R.id.menu_new_game) {
-            showSpeedSelection();
+            showMainMenu();
             return true;
         } else if (id == R.id.menu_pause) {
             togglePause();
@@ -240,8 +255,28 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         return super.onOptionsItemSelected(item);
     }
 
+    private void showSettings() {
+        mainMenuLayout.setVisibility(View.GONE);
+        settingsLayout.setVisibility(View.VISIBLE);
+        gameLayout.setVisibility(View.GONE);
+    }
+
+    private void showMainMenu() {
+        // Stop game if running
+        if (isGameRunning) {
+            stopGame();
+            if (soundManager != null) {
+                soundManager.stopBackgroundMusic();
+            }
+        }
+        mainMenuLayout.setVisibility(View.VISIBLE);
+        settingsLayout.setVisibility(View.GONE);
+        gameLayout.setVisibility(View.GONE);
+    }
+
     private void startGame() {
-        speedSelectionLayout.setVisibility(View.GONE);
+        mainMenuLayout.setVisibility(View.GONE);
+        settingsLayout.setVisibility(View.GONE);
         gameLayout.setVisibility(View.VISIBLE);
         startNewGame();
     }
@@ -297,7 +332,8 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     }
 
     private void togglePause() {
-        if (game != null) {
+        // Only allow pause if game is running and game layout is visible
+        if (game != null && isGameRunning && gameLayout.getVisibility() == View.VISIBLE) {
             game.togglePause();
             invalidateOptionsMenu(); // Update menu to change Pause/Resume text
             if (game.isPaused()) {
@@ -318,7 +354,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
                         })
                         .setSecondButton("Quit", v -> {
                             // Quit the game
-                            showSpeedSelection();
+                            showMainMenu();
                         })
                         .show();
             } else {
@@ -327,15 +363,6 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
                 }
             }
         }
-    }
-
-    private void showSpeedSelection() {
-        stopGame();
-        if (soundManager != null) {
-            soundManager.stopBackgroundMusic();
-        }
-        gameLayout.setVisibility(View.GONE);
-        speedSelectionLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
