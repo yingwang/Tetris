@@ -178,11 +178,24 @@
             <Button
                 android:id="@+id/btnNewGame"
                 android:layout_width="0dp"
-                android:layout_height="42dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="4dp"
+                android:layout_marginEnd="3dp"
                 android:text="New"
-                android:textSize="12sp"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:background="@drawable/button_background_selector"/>
+
+            <Button
+                android:id="@+id/btnSettings"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                android:text="Set"
+                android:textSize="11sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:background="@drawable/button_background_selector"/>
@@ -190,12 +203,12 @@
             <Button
                 android:id="@+id/btnPause"
                 android:layout_width="0dp"
-                android:layout_height="42dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
                 android:text="Pause"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:background="@drawable/button_background_selector"/>
@@ -203,12 +216,12 @@
             <Button
                 android:id="@+id/btnMute"
                 android:layout_width="0dp"
-                android:layout_height="42dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
                 android:text="Mute"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:background="@drawable/button_background_selector"/>
@@ -216,11 +229,11 @@
             <Button
                 android:id="@+id/btnHighScores"
                 android:layout_width="0dp"
-                android:layout_height="42dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
-                android:layout_marginStart="4dp"
-                android:text="Scores"
-                android:textSize="12sp"
+                android:layout_marginStart="3dp"
+                android:text="Score"
+                android:textSize="11sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:background="@drawable/button_background_selector"/>
@@ -232,85 +245,79 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="16dp"/>
 
-        <!-- Control Buttons -->
-        <RelativeLayout
+        <!-- Control Buttons - 2 Row Layout -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="24dp">
+            android:orientation="vertical"
+            android:paddingBottom="48dp">
 
-            <!-- Left button - far left -->
-            <ImageButton
-                android:id="@+id/btnLeft"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_marginStart="4dp"
-                android:layout_marginLeft="4dp"
-                android:src="@drawable/ic_arrow_left"
-                android:contentDescription="@string/left"
-                android:scaleType="centerInside"
-                android:padding="18dp"
-                android:background="@drawable/button_background_enhanced"/>
+            <!-- Top Row: Rotate and Drop (centered) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="12dp">
 
-            <!-- Rotate button - close to left button -->
-            <ImageButton
-                android:id="@+id/btnRotate"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_toEndOf="@id/btnLeft"
-                android:layout_toRightOf="@id/btnLeft"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:src="@drawable/ic_rotate"
-                android:contentDescription="@string/rotate"
-                android:scaleType="centerInside"
-                android:padding="18dp"
-                android:background="@drawable/button_background_enhanced"/>
+                <ImageButton
+                    android:id="@+id/btnRotate"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/ic_rotate"
+                    android:contentDescription="@string/rotate"
+                    android:scaleType="centerInside"
+                    android:padding="20dp"
+                    android:background="@drawable/button_background_enhanced"/>
 
-            <!-- Down button - center (soft drop) -->
-            <ImageButton
-                android:id="@+id/btnDown"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_arrow_down"
-                android:contentDescription="@string/down"
-                android:scaleType="centerInside"
-                android:padding="18dp"
-                android:background="@drawable/button_background_enhanced"/>
+                <ImageButton
+                    android:id="@+id/btnDrop"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/ic_drop"
+                    android:contentDescription="@string/drop"
+                    android:scaleType="centerInside"
+                    android:padding="20dp"
+                    android:background="@drawable/button_background_enhanced"/>
+            </LinearLayout>
 
-            <!-- Right button - far right -->
-            <ImageButton
-                android:id="@+id/btnRight"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginEnd="4dp"
-                android:layout_marginRight="4dp"
-                android:src="@drawable/ic_arrow_right"
-                android:contentDescription="@string/right"
-                android:scaleType="centerInside"
-                android:padding="18dp"
-                android:background="@drawable/button_background_enhanced"/>
+            <!-- Bottom Row: Left and Right (spread apart) -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <!-- Drop button - close to right button -->
-            <ImageButton
-                android:id="@+id/btnDrop"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_toStartOf="@id/btnRight"
-                android:layout_toLeftOf="@id/btnRight"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:src="@drawable/ic_drop"
-                android:contentDescription="@string/drop"
-                android:scaleType="centerInside"
-                android:padding="18dp"
-                android:background="@drawable/button_background_enhanced"/>
-        </RelativeLayout>
+                <ImageButton
+                    android:id="@+id/btnLeft"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:src="@drawable/ic_arrow_left"
+                    android:contentDescription="@string/left"
+                    android:scaleType="centerInside"
+                    android:padding="20dp"
+                    android:background="@drawable/button_background_enhanced"/>
+
+                <ImageButton
+                    android:id="@+id/btnRight"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginRight="24dp"
+                    android:src="@drawable/ic_arrow_right"
+                    android:contentDescription="@string/right"
+                    android:scaleType="centerInside"
+                    android:padding="20dp"
+                    android:background="@drawable/button_background_enhanced"/>
+            </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
