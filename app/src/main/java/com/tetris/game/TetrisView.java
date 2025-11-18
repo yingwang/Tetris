@@ -92,8 +92,8 @@ public class TetrisView extends View {
             }
 
             @Override
-            public boolean onSingleTapConfirmed(MotionEvent e) {
-                // Tap on game board to rotate
+            public boolean onSingleTapUp(MotionEvent e) {
+                // Tap on game board to rotate - using onSingleTapUp for faster response
                 if (game != null && !game.isGameOver() && !game.isPaused()) {
                     float x = e.getX();
                     float y = e.getY();
@@ -102,7 +102,7 @@ public class TetrisView extends View {
                     if (x >= offsetX && x <= offsetX + boardWidth &&
                         y >= offsetY && y <= offsetY + boardHeight) {
                         game.rotate();
-                        invalidate();
+                        postInvalidate();
                         return true;
                     }
                 }
@@ -118,22 +118,23 @@ public class TetrisView extends View {
                 float diffX = e2.getX() - e1.getX();
                 float diffY = e2.getY() - e1.getY();
 
+                // Reduced threshold from 50 to 30 for faster response
                 // Swipe left
-                if (Math.abs(diffX) > Math.abs(diffY) && diffX < -50) {
+                if (Math.abs(diffX) > Math.abs(diffY) && diffX < -30) {
                     game.moveLeft();
-                    invalidate();
+                    postInvalidate();
                     return true;
                 }
                 // Swipe right
-                else if (Math.abs(diffX) > Math.abs(diffY) && diffX > 50) {
+                else if (Math.abs(diffX) > Math.abs(diffY) && diffX > 30) {
                     game.moveRight();
-                    invalidate();
+                    postInvalidate();
                     return true;
                 }
                 // Swipe down (drop)
-                else if (Math.abs(diffY) > Math.abs(diffX) && diffY > 50) {
+                else if (Math.abs(diffY) > Math.abs(diffX) && diffY > 30) {
                     game.drop();
-                    invalidate();
+                    postInvalidate();
                     return true;
                 }
 
@@ -184,19 +185,26 @@ public class TetrisView extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         if (game != null) {
             TetrisBoard board = game.getBoard();
-            boardWidth = w * 0.65f;  // Reduce board width to make room for next preview
+
+            // Reserve space for next preview on the right (about 25% of width)
+            float previewSpace = w * 0.25f;
+            float availableWidth = w - previewSpace;
+
+            // Calculate max board dimensions
+            boardWidth = availableWidth * 0.85f;  // Use 85% of available space
             boardHeight = h * 0.9f;
 
             float blockWidth = boardWidth / board.getCols();
             float blockHeight = boardHeight / board.getRows();
             blockSize = Math.min(blockWidth, blockHeight);
 
-            offsetX = (w * 0.1f); // Offset from left
-            offsetY = (h - blockSize * board.getRows()) / 2;
-
             // Recalculate actual board dimensions based on blockSize
             this.boardWidth = blockSize * board.getCols();
             this.boardHeight = blockSize * board.getRows();
+
+            // Center the board horizontally in the available space
+            offsetX = (availableWidth - this.boardWidth) / 2;
+            offsetY = (h - this.boardHeight) / 2;
         }
     }
 
