@@ -1,69 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Homebrew Terminal Theme - Retro Green on Black -->
+    <!-- Game Boy DMG Original Color Palette -->
+    <color name="gb_lightest">#9BBC0F</color>               <!-- Lightest LCD green -->
+    <color name="gb_light">#8BAC0F</color>                  <!-- Light LCD green -->
+    <color name="gb_dark">#306230</color>                   <!-- Dark LCD green -->
+    <color name="gb_darkest">#0F380F</color>                <!-- Darkest LCD green -->
 
     <!-- Background Colors -->
-    <color name="game_background">#000000</color>           <!-- Pure black -->
-    <color name="background_primary">#0A0A0A</color>        <!-- Very dark gray -->
-    <color name="background_secondary">#121212</color>      <!-- Dark gray -->
-    <color name="background_elevated">#1A1A1A</color>       <!-- Slightly lighter -->
+    <color name="game_background">#9BBC0F</color>           <!-- LCD screen background -->
+    <color name="background_primary">#9BBC0F</color>        <!-- Primary background -->
+    <color name="background_secondary">#8BAC0F</color>      <!-- Secondary background -->
+    <color name="background_elevated">#306230</color>       <!-- Elevated elements -->
 
-    <!-- Neon Accent Colors -->
-    <color name="neon_cyan">#00F5FF</color>                 <!-- Bright cyan -->
-    <color name="neon_purple">#C77DFF</color>               <!-- Bright purple -->
-    <color name="neon_pink">#FF006E</color>                 <!-- Bright pink -->
-    <color name="neon_blue">#3D5AFE</color>                 <!-- Bright blue -->
-    <color name="neon_green">#00FF00</color>                <!-- Terminal green -->
-
-    <!-- Primary Game Colors -->
-    <color name="accent_primary">#00FF00</color>            <!-- Terminal green -->
-    <color name="accent_secondary">#FFCC00</color>          <!-- Amber/yellow -->
-    <color name="accent_gold">#FFD700</color>               <!-- Gold -->
+    <!-- Primary UI Colors -->
+    <color name="accent_primary">#0F380F</color>            <!-- Dark green accent -->
+    <color name="accent_secondary">#306230</color>          <!-- Medium green -->
+    <color name="accent_gold">#306230</color>               <!-- Replaced gold -->
 
     <!-- UI Elements -->
-    <color name="grid_line">#1A3A1A</color>                 <!-- Subtle dark green -->
-    <color name="border_color">#00FF00</color>              <!-- Green border -->
-    <color name="border_glow">#4000FF00</color>             <!-- Green glow -->
-    <color name="shadow_color">#00000080</color>            <!-- Black shadow -->
+    <color name="grid_line">#8BAC0F</color>                 <!-- Grid lines -->
+    <color name="border_color">#0F380F</color>              <!-- Dark borders -->
+    <color name="border_glow">#0F380F</color>               <!-- No glow effect -->
+    <color name="shadow_color">#0F380F</color>              <!-- Shadows -->
 
     <!-- Text Colors -->
-    <color name="text_primary">#CCCCCC</color>              <!-- Light gray -->
-    <color name="text_secondary">#808080</color>            <!-- Medium gray -->
-    <color name="text_accent">#00FF00</color>               <!-- Terminal green -->
-    <color name="text_gold">#FFCC00</color>                 <!-- Amber -->
-    <color name="text_purple">#C77DFF</color>               <!-- Purple -->
+    <color name="text_primary">#0F380F</color>              <!-- Dark text -->
+    <color name="text_secondary">#306230</color>            <!-- Medium text -->
+    <color name="text_accent">#0F380F</color>               <!-- Accent text -->
+    <color name="text_gold">#0F380F</color>                 <!-- All text dark -->
+    <color name="text_purple">#0F380F</color>               <!-- All text dark -->
 
     <!-- Score & Status Backgrounds -->
-    <color name="score_background">#0A0A0A</color>          <!-- Very dark gray -->
-    <color name="score_border">#00FF00</color>              <!-- Green border -->
-    <color name="level_background">#0A0A0A</color>          <!-- Very dark gray -->
-    <color name="level_border">#00FF00</color>              <!-- Green border -->
+    <color name="score_background">#8BAC0F</color>          <!-- Light background -->
+    <color name="score_border">#0F380F</color>              <!-- Dark border -->
+    <color name="level_background">#8BAC0F</color>          <!-- Light background -->
+    <color name="level_border">#0F380F</color>              <!-- Dark border -->
 
     <!-- Button Colors -->
-    <color name="button_normal">#00AA00</color>             <!-- Dark green -->
-    <color name="button_pressed">#008800</color>            <!-- Darker green -->
-    <color name="button_gradient_start">#00CC00</color>     <!-- Light green -->
-    <color name="button_gradient_end">#008800</color>       <!-- Dark green -->
-    <color name="button_border">#00FF00</color>             <!-- Bright green -->
+    <color name="button_normal">#306230</color>             <!-- Medium green -->
+    <color name="button_pressed">#0F380F</color>            <!-- Dark green -->
+    <color name="button_gradient_start">#306230</color>     <!-- No gradient -->
+    <color name="button_gradient_end">#306230</color>       <!-- No gradient -->
+    <color name="button_border">#0F380F</color>             <!-- Dark border -->
 
     <!-- High Scores -->
-    <color name="rank_gold">#FFD700</color>                 <!-- Gold -->
-    <color name="rank_silver">#C0C0C0</color>               <!-- Silver -->
-    <color name="rank_bronze">#CD7F32</color>               <!-- Bronze -->
-    <color name="high_score_bg">#0A0A0A</color>             <!-- Very dark gray -->
-    <color name="high_score_top_bg">#121212</color>         <!-- Dark gray -->
+    <color name="rank_gold">#0F380F</color>                 <!-- Monochrome -->
+    <color name="rank_silver">#306230</color>               <!-- Monochrome -->
+    <color name="rank_bronze">#306230</color>               <!-- Monochrome -->
+    <color name="high_score_bg">#8BAC0F</color>             <!-- Light background -->
+    <color name="high_score_top_bg">#9BBC0F</color>         <!-- Lighter background -->
 
-    <!-- Terminal-style Tetris Piece Colors - Retro Bright -->
-    <color name="piece_cyan">#00FFFF</color>                <!-- I-piece: Cyan -->
-    <color name="piece_yellow">#FFFF00</color>              <!-- O-piece: Yellow -->
-    <color name="piece_magenta">#FF00FF</color>             <!-- T-piece: Magenta -->
-    <color name="piece_green">#00FF00</color>               <!-- S-piece: Green -->
-    <color name="piece_red">#FF0000</color>                 <!-- Z-piece: Red -->
-    <color name="piece_blue">#0080FF</color>                <!-- J-piece: Blue -->
-    <color name="piece_orange">#FF8800</color>              <!-- L-piece: Orange -->
+    <!-- Tetris Piece Colors - All monochrome in Game Boy style -->
+    <color name="piece_cyan">#0F380F</color>                <!-- I-piece: Dark -->
+    <color name="piece_yellow">#0F380F</color>              <!-- O-piece: Dark -->
+    <color name="piece_magenta">#0F380F</color>             <!-- T-piece: Dark -->
+    <color name="piece_green">#0F380F</color>               <!-- S-piece: Dark -->
+    <color name="piece_red">#0F380F</color>                 <!-- Z-piece: Dark -->
+    <color name="piece_blue">#0F380F</color>                <!-- J-piece: Dark -->
+    <color name="piece_orange">#0F380F</color>              <!-- L-piece: Dark -->
 
     <!-- Ghost Piece -->
-    <color name="ghost_piece">#333333</color>               <!-- Dark gray -->
+    <color name="ghost_piece">#306230</color>               <!-- Medium green -->
 
     <!-- System Colors -->
     <color name="black">#000000</color>

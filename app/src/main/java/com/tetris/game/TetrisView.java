@@ -40,45 +40,45 @@ public class TetrisView extends View {
     private void init() {
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
-        paint.setAntiAlias(true);
+        paint.setAntiAlias(false);  // Pixel-perfect rendering
 
         gridPaint = new Paint();
         gridPaint.setStyle(Paint.Style.STROKE);
-        gridPaint.setColor(Color.parseColor("#1A3A1A"));
+        gridPaint.setColor(Color.parseColor("#8BAC0F"));  // GB light
         gridPaint.setStrokeWidth(1);
-        gridPaint.setAntiAlias(true);
+        gridPaint.setAntiAlias(false);
 
         highlightPaint = new Paint();
         highlightPaint.setStyle(Paint.Style.FILL);
-        highlightPaint.setAntiAlias(true);
+        highlightPaint.setAntiAlias(false);
 
         shadowPaint = new Paint();
         shadowPaint.setStyle(Paint.Style.FILL);
-        shadowPaint.setColor(Color.parseColor("#00000080"));
-        shadowPaint.setAntiAlias(true);
+        shadowPaint.setColor(Color.parseColor("#306230"));  // GB dark
+        shadowPaint.setAntiAlias(false);
 
         borderPaint = new Paint();
         borderPaint.setStyle(Paint.Style.STROKE);
-        borderPaint.setColor(Color.parseColor("#00FF00"));
-        borderPaint.setStrokeWidth(5);
-        borderPaint.setAntiAlias(true);
-        borderPaint.setShadowLayer(8, 0, 0, Color.parseColor("#4000FF00"));
+        borderPaint.setColor(Color.parseColor("#0F380F"));  // GB darkest
+        borderPaint.setStrokeWidth(4);
+        borderPaint.setAntiAlias(false);
 
         textPaint = new Paint();
-        textPaint.setColor(Color.parseColor("#00FF00"));
+        textPaint.setColor(Color.parseColor("#0F380F"));  // GB darkest
         textPaint.setTextSize(40);
-        textPaint.setAntiAlias(true);
-        textPaint.setShadowLayer(8, 0, 0, Color.parseColor("#00FF00"));
+        textPaint.setAntiAlias(false);
+        textPaint.setTypeface(android.graphics.Typeface.MONOSPACE);
 
         flashPaint = new Paint();
         flashPaint.setStyle(Paint.Style.FILL);
-        flashPaint.setAntiAlias(true);
+        flashPaint.setAntiAlias(false);
 
         ghostPaint = new Paint();
         ghostPaint.setStyle(Paint.Style.STROKE);
-        ghostPaint.setStrokeWidth(3);
-        ghostPaint.setAntiAlias(true);
-        ghostPaint.setAlpha(100); // 半透明虚线效果
+        ghostPaint.setStrokeWidth(2);
+        ghostPaint.setAntiAlias(false);
+        ghostPaint.setColor(Color.parseColor("#306230"));  // GB dark
+        ghostPaint.setAlpha(150);
     }
 
     public void startLineClearAnimation(int[] lines) {
@@ -133,8 +133,8 @@ public class TetrisView extends View {
 
         if (game == null) return;
 
-        // Draw background
-        canvas.drawColor(Color.parseColor("#000000"));
+        // Draw Game Boy LCD background
+        canvas.drawColor(Color.parseColor("#9BBC0F"));  // GB lightest
 
         TetrisBoard board = game.getBoard();
         int[][] boardState = board.getBoard();
@@ -156,9 +156,9 @@ public class TetrisView extends View {
                 // Draw grid
                 canvas.drawRect(x, y, x + blockSize, y + blockSize, gridPaint);
 
-                // Draw placed blocks with 3D effect
+                // Draw placed blocks - simple flat style
                 if (boardState[i][j] != 0) {
-                    draw3DBlock(canvas, x, y, blockSize, colors[i][j]);
+                    drawPixelBlock(canvas, x, y, blockSize);
                 }
             }
         }
@@ -190,7 +190,7 @@ public class TetrisView extends View {
             }
         }
 
-        // Draw current piece with 3D effect
+        // Draw current piece - simple flat style
         if (!game.isGameOver()) {
             TetrisPiece currentPiece = game.getCurrentPiece();
             int[][] shape = currentPiece.getShape();
@@ -204,7 +204,7 @@ public class TetrisView extends View {
                         if (boardY >= 0) {
                             float x = offsetX + boardX * blockSize;
                             float y = offsetY + boardY * blockSize;
-                            draw3DBlock(canvas, x, y, blockSize, currentPiece.getColor());
+                            drawPixelBlock(canvas, x, y, blockSize);
                         }
                     }
                 }
@@ -214,104 +214,34 @@ public class TetrisView extends View {
         // Draw next piece preview
         drawNextPiece(canvas);
 
-        // Draw line clear flash animation
+        // Draw line clear flash animation - Game Boy style
         if (isFlashing && clearingLines != null) {
-            flashPaint.setColor(Color.argb(flashAlpha, 255, 255, 255));
+            int alpha = (int) (flashAlpha * 0.6f);  // Reduce intensity
+            flashPaint.setColor(Color.argb(alpha, 155, 188, 15));  // GB lightest with transparency
             for (int lineIndex : clearingLines) {
                 float y = offsetY + lineIndex * blockSize;
                 canvas.drawRect(offsetX, y, offsetX + blockSize * board.getCols(), y + blockSize, flashPaint);
             }
         }
 
-        // Draw game over text
+        // Draw game over text - Game Boy style
         if (game.isGameOver()) {
-            textPaint.setTextSize(80);
+            textPaint.setTextSize(60);
             textPaint.setTextAlign(Paint.Align.CENTER);
-            textPaint.setColor(Color.parseColor("#FF0000"));
-            textPaint.setShadowLayer(15, 0, 0, Color.parseColor("#FF0000"));
+            textPaint.setColor(Color.parseColor("#0F380F"));  // GB darkest
             canvas.drawText("GAME OVER", getWidth() / 2f, getHeight() / 2f, textPaint);
         }
     }
 
-    private void draw3DBlock(Canvas canvas, float x, float y, float size, int color) {
-        float inset = 3;
-        float highlightInset = 5;
+    private void drawPixelBlock(Canvas canvas, float x, float y, float size) {
+        // Game Boy style - simple filled rectangle with border
+        paint.setColor(Color.parseColor("#0F380F"));  // GB darkest for blocks
+        canvas.drawRect(x + 1, y + 1, x + size - 1, y + size - 1, paint);
 
-        // Draw shadow (bottom-right)
-        canvas.drawRect(x + size - 4, y + 4, x + size, y + size, shadowPaint);
-        canvas.drawRect(x + 4, y + size - 4, x + size, y + size, shadowPaint);
-
-        // Main block with gradient
-        int baseColor = color;
-        int lightColor = lightenColor(baseColor, 0.3f);
-        int darkColor = darkenColor(baseColor, 0.2f);
-
-        LinearGradient gradient = new LinearGradient(
-            x, y, x, y + size,
-            lightColor, darkColor,
-            Shader.TileMode.CLAMP
-        );
-        paint.setShader(gradient);
-        canvas.drawRect(x + inset, y + inset, x + size - inset, y + size - inset, paint);
-        paint.setShader(null);
-
-        // Highlight (top-left)
-        highlightPaint.setColor(lightenColor(baseColor, 0.5f));
-        canvas.drawRect(
-            x + highlightInset,
-            y + highlightInset,
-            x + size - highlightInset,
-            y + highlightInset + 2,
-            highlightPaint
-        );
-        canvas.drawRect(
-            x + highlightInset,
-            y + highlightInset,
-            x + highlightInset + 2,
-            y + size - highlightInset,
-            highlightPaint
-        );
-
-        // Dark edge (bottom-right)
-        highlightPaint.setColor(darkenColor(baseColor, 0.4f));
-        canvas.drawRect(
-            x + highlightInset,
-            y + size - highlightInset - 2,
-            x + size - highlightInset,
-            y + size - highlightInset,
-            highlightPaint
-        );
-        canvas.drawRect(
-            x + size - highlightInset - 2,
-            y + highlightInset,
-            x + size - highlightInset,
-            y + size - highlightInset,
-            highlightPaint
-        );
-    }
-
-    private int lightenColor(int color, float factor) {
-        int r = Color.red(color);
-        int g = Color.green(color);
-        int b = Color.blue(color);
-
-        r = Math.min(255, (int) (r + (255 - r) * factor));
-        g = Math.min(255, (int) (g + (255 - g) * factor));
-        b = Math.min(255, (int) (b + (255 - b) * factor));
-
-        return Color.rgb(r, g, b);
-    }
-
-    private int darkenColor(int color, float factor) {
-        int r = Color.red(color);
-        int g = Color.green(color);
-        int b = Color.blue(color);
-
-        r = Math.max(0, (int) (r * (1 - factor)));
-        g = Math.max(0, (int) (g * (1 - factor)));
-        b = Math.max(0, (int) (b * (1 - factor)));
-
-        return Color.rgb(r, g, b);
+        // Optional: Add a subtle border for definition
+        paint.setColor(Color.parseColor("#306230"));  // GB dark for border
+        canvas.drawRect(x + 2, y + 2, x + size - 2, y + 2 + 1, paint);  // Top highlight
+        canvas.drawRect(x + 2, y + 2, x + 2 + 1, y + size - 2, paint);  // Left highlight
     }
 
     private void drawNextPiece(Canvas canvas) {
@@ -323,20 +253,19 @@ public class TetrisView extends View {
         float previewX = offsetX + (game.getBoard().getCols() * blockSize) + 15;
         float previewY = offsetY + 10;
 
-        // Draw "Next:" label with background
-        textPaint.setTextSize(24);
+        // Draw "NEXT" label - Game Boy style
+        textPaint.setTextSize(20);
         textPaint.setTextAlign(Paint.Align.LEFT);
-        textPaint.setColor(Color.parseColor("#00FF00"));
-        textPaint.setShadowLayer(6, 0, 0, Color.parseColor("#00FF00"));
+        textPaint.setColor(Color.parseColor("#0F380F"));  // GB darkest
         canvas.drawText("NEXT", previewX, previewY + 20, textPaint);
 
-        // Draw next piece with 3D effect
+        // Draw next piece - simple pixel style
         for (int i = 0; i < shape.length; i++) {
             for (int j = 0; j < shape[i].length; j++) {
                 if (shape[i][j] != 0) {
                     float x = previewX + j * previewBlockSize;
                     float y = previewY + 30 + i * previewBlockSize;
-                    draw3DBlock(canvas, x, y, previewBlockSize, nextPiece.getColor());
+                    drawPixelBlock(canvas, x, y, previewBlockSize);
                 }
             }
         }

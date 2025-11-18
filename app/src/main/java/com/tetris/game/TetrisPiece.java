@@ -67,29 +67,8 @@ public class TetrisPiece {
     }
 
     private void initializeColor() {
-        switch (type) {
-            case I:
-                color = Color.parseColor("#00FFFF"); // Cyan
-                break;
-            case O:
-                color = Color.parseColor("#FFFF00"); // Yellow
-                break;
-            case T:
-                color = Color.parseColor("#FF00FF"); // Magenta
-                break;
-            case S:
-                color = Color.parseColor("#00FF00"); // Green
-                break;
-            case Z:
-                color = Color.parseColor("#FF0000"); // Red
-                break;
-            case J:
-                color = Color.parseColor("#0080FF"); // Blue
-                break;
-            case L:
-                color = Color.parseColor("#FF8800"); // Orange
-                break;
-        }
+        // Game Boy style - all pieces use the same dark color
+        color = Color.parseColor("#0F380F"); // GB darkest
     }
 
     public void rotate() {
