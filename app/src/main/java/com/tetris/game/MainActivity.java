@@ -1,6 +1,7 @@
 package com.tetris.game;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -16,6 +17,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity implements TetrisGame.GameListener {
+    private static final String PREFS_NAME = "TetrisPrefs";
+    private static final String PREF_SPEED = "speed";
+    private static final String PREF_LINES = "starting_lines";
+
     private TetrisView tetrisView;
     private TetrisGame game;
     private Handler gameHandler;
@@ -28,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     private TextView tvLevel;
     private HighScoreManager scoreManager;
     private SoundManager soundManager;
+    private SharedPreferences preferences;
 
     private int selectedSpeed = 5; // Default speed
     private int selectedStartingLines = 0; // Default starting lines
@@ -37,10 +43,24 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        loadSettings();
         initializeViews();
         setupSeekBars();
         setupStartGameButton();
         setupGameControls();
+    }
+
+    private void loadSettings() {
+        preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        selectedSpeed = preferences.getInt(PREF_SPEED, 5);
+        selectedStartingLines = preferences.getInt(PREF_LINES, 0);
+    }
+
+    private void saveSettings() {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(PREF_SPEED, selectedSpeed);
+        editor.putInt(PREF_LINES, selectedStartingLines);
+        editor.apply();
     }
 
     private void initializeViews() {
@@ -59,11 +79,20 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         TextView tvSpeedValue = findViewById(R.id.tvSpeedValue);
         TextView tvLinesValue = findViewById(R.id.tvLinesValue);
 
+        // Set initial values from saved settings
+        seekBarSpeed.setProgress(selectedSpeed - 1); // 1-9 becomes 0-8
+        seekBarLines.setProgress(selectedStartingLines);
+        tvSpeedValue.setText(String.valueOf(selectedSpeed));
+        tvLinesValue.setText(String.valueOf(selectedStartingLines));
+
         seekBarSpeed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 selectedSpeed = progress + 1; // 0-8 becomes 1-9
                 tvSpeedValue.setText(String.valueOf(selectedSpeed));
+                if (fromUser) {
+                    saveSettings();
+                }
             }
 
             @Override
@@ -78,6 +107,9 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 selectedStartingLines = progress; // 0-9
                 tvLinesValue.setText(String.valueOf(selectedStartingLines));
+                if (fromUser) {
+                    saveSettings();
+                }
             }
 
             @Override
@@ -96,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     private void setupGameControls() {
         ImageButton btnLeft = findViewById(R.id.btnLeft);
         ImageButton btnRight = findViewById(R.id.btnRight);
+        ImageButton btnDown = findViewById(R.id.btnDown);
         ImageButton btnRotate = findViewById(R.id.btnRotate);
         ImageButton btnDrop = findViewById(R.id.btnDrop);
 
@@ -105,6 +138,10 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
 
         btnRight.setOnClickListener(v -> {
             if (game != null) game.moveRight();
+        });
+
+        btnDown.setOnClickListener(v -> {
+            if (game != null) game.moveDown();
         });
 
         btnRotate.setOnClickListener(v -> {

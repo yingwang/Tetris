@@ -169,22 +169,21 @@
             android:id="@+id/tetrisView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="0.75"
             android:layout_marginBottom="8dp"/>
 
         <!-- Control Buttons - Game Boy Color Style -->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="140dp"
             android:paddingBottom="8dp"
             android:paddingTop="8dp">
 
-            <!-- D-Pad Container (Left Side) -->
-            <LinearLayout
+            <!-- D-Pad Container (Left Side) - Cross Layout -->
+            <RelativeLayout
                 android:id="@+id/dpadContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
@@ -196,6 +195,9 @@
                     android:id="@+id/btnLeft"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
                     android:src="@drawable/ic_arrow_left"
                     android:contentDescription="@string/left"
                     android:scaleType="centerInside"
@@ -207,14 +209,34 @@
                     android:id="@+id/btnRight"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
+                    android:layout_toRightOf="@id/btnLeft"
+                    android:layout_toEndOf="@id/btnLeft"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
+                    android:layout_centerVertical="true"
                     android:src="@drawable/ic_arrow_right"
                     android:contentDescription="@string/right"
                     android:scaleType="centerInside"
                     android:padding="12dp"
                     android:background="@drawable/gbc_dpad_button_selector"/>
-            </LinearLayout>
+
+                <!-- Down button - Below and between Left/Right -->
+                <ImageButton
+                    android:id="@+id/btnDown"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_below="@id/btnLeft"
+                    android:layout_toRightOf="@id/btnLeft"
+                    android:layout_toEndOf="@id/btnLeft"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="-26dp"
+                    android:layout_marginLeft="-26dp"
+                    android:src="@drawable/ic_arrow_down"
+                    android:contentDescription="Speed Up"
+                    android:scaleType="centerInside"
+                    android:padding="12dp"
+                    android:background="@drawable/gbc_dpad_button_selector"/>
+            </RelativeLayout>
 
             <!-- Action Buttons Container (Right Side) - GBC A/B Layout -->
             <FrameLayout
