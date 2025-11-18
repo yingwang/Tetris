@@ -8,6 +8,8 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class TetrisView extends View {
@@ -26,6 +28,9 @@ public class TetrisView extends View {
     private int[] clearingLines;
     private int flashAlpha = 0;
     private boolean isFlashing = false;
+    private GestureDetector gestureDetector;
+    private float boardWidth;
+    private float boardHeight;
 
     public TetrisView(Context context) {
         super(context);
@@ -78,6 +83,63 @@ public class TetrisView extends View {
         ghostPaint.setStrokeWidth(3);
         ghostPaint.setAntiAlias(true);
         ghostPaint.setAlpha(100); // 半透明虚线效果
+
+        // Initialize gesture detector for touch controls
+        gestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent e) {
+                return true;
+            }
+
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent e) {
+                // Tap on game board to rotate
+                if (game != null && !game.isGameOver() && !game.isPaused()) {
+                    float x = e.getX();
+                    float y = e.getY();
+
+                    // Check if tap is within game board
+                    if (x >= offsetX && x <= offsetX + boardWidth &&
+                        y >= offsetY && y <= offsetY + boardHeight) {
+                        game.rotate();
+                        invalidate();
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                if (game == null || game.isGameOver() || game.isPaused()) {
+                    return false;
+                }
+
+                float diffX = e2.getX() - e1.getX();
+                float diffY = e2.getY() - e1.getY();
+
+                // Swipe left
+                if (Math.abs(diffX) > Math.abs(diffY) && diffX < -50) {
+                    game.moveLeft();
+                    invalidate();
+                    return true;
+                }
+                // Swipe right
+                else if (Math.abs(diffX) > Math.abs(diffY) && diffX > 50) {
+                    game.moveRight();
+                    invalidate();
+                    return true;
+                }
+                // Swipe down (drop)
+                else if (Math.abs(diffY) > Math.abs(diffX) && diffY > 50) {
+                    game.drop();
+                    invalidate();
+                    return true;
+                }
+
+                return false;
+            }
+        });
     }
 
     public void startLineClearAnimation(int[] lines) {
@@ -110,19 +172,31 @@ public class TetrisView extends View {
     }
 
     @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (gestureDetector.onTouchEvent(event)) {
+            return true;
+        }
+        return super.onTouchEvent(event);
+    }
+
+    @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         if (game != null) {
             TetrisBoard board = game.getBoard();
-            float boardWidth = w * 0.8f;
-            float boardHeight = h * 0.9f;
+            boardWidth = w * 0.65f;  // Reduce board width to make room for next preview
+            boardHeight = h * 0.9f;
 
             float blockWidth = boardWidth / board.getCols();
             float blockHeight = boardHeight / board.getRows();
             blockSize = Math.min(blockWidth, blockHeight);
 
-            offsetX = (w - blockSize * board.getCols()) / 2;
+            offsetX = (w * 0.1f); // Offset from left
             offsetY = (h - blockSize * board.getRows()) / 2;
+
+            // Recalculate actual board dimensions based on blockSize
+            this.boardWidth = blockSize * board.getCols();
+            this.boardHeight = blockSize * board.getRows();
         }
     }
 
@@ -317,22 +391,22 @@ public class TetrisView extends View {
         if (nextPiece == null) return;
 
         int[][] shape = nextPiece.getShape();
-        float previewBlockSize = blockSize * 0.55f;
-        float previewX = offsetX + (game.getBoard().getCols() * blockSize) + 15;
+        float previewBlockSize = blockSize * 0.7f;
+        float previewX = offsetX + (game.getBoard().getCols() * blockSize) + 30;
         float previewY = offsetY + 10;
 
         // Draw "Next:" label with background
-        textPaint.setTextSize(24);
+        textPaint.setTextSize(28);
         textPaint.setTextAlign(Paint.Align.LEFT);
         textPaint.setColor(Color.parseColor("#FFD700"));
-        canvas.drawText("NEXT", previewX, previewY + 20, textPaint);
+        canvas.drawText("NEXT", previewX, previewY + 25, textPaint);
 
         // Draw next piece with 3D effect
         for (int i = 0; i < shape.length; i++) {
             for (int j = 0; j < shape[i].length; j++) {
                 if (shape[i][j] != 0) {
                     float x = previewX + j * previewBlockSize;
-                    float y = previewY + 30 + i * previewBlockSize;
+                    float y = previewY + 40 + i * previewBlockSize;
                     draw3DBlock(canvas, x, y, previewBlockSize, nextPiece.getColor());
                 }
             }

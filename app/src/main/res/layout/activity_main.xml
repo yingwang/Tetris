@@ -177,7 +177,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="24dp"
             android:layout_marginBottom="4dp"
             android:padding="8dp">
 
@@ -266,7 +266,7 @@
             android:id="@+id/tetrisView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5"
+            android:layout_weight="0.4"
             android:layout_marginBottom="8dp"/>
 
         <!-- Control Buttons - Game Boy Color Style -->
