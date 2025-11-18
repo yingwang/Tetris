@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- GBC D-pad button state selector -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#1A1A1A"/>
+            <corners android:radius="4dp"/>
+            <stroke
+                android:width="2dp"
+                android:color="#0A0A0A"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#2C2C2C"/>
+            <corners android:radius="4dp"/>
+            <stroke
+                android:width="2dp"
+                android:color="#1A1A1A"/>
+        </shape>
+    </item>
+</selector>

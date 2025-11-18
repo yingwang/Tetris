@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- GBC themed button background -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <gradient
                 android:angle="90"
-                android:startColor="#2E7D32"
-                android:endColor="#388E3C"
+                android:startColor="@color/gbc_button_pressed"
+                android:endColor="#3A2560"
                 android:type="linear"/>
             <corners android:radius="12dp"/>
             <stroke
                 android:width="3dp"
-                android:color="#66BB6A"/>
+                android:color="#2A1550"/>
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
             <gradient
                 android:angle="90"
-                android:startColor="#43A047"
-                android:endColor="#4CAF50"
+                android:startColor="@color/gbc_button"
+                android:endColor="#5A3C8A"
                 android:type="linear"/>
             <corners android:radius="12dp"/>
             <stroke
                 android:width="3dp"
-                android:color="#81C784"/>
+                android:color="#7C5EBF"/>
             <padding
                 android:left="2dp"
                 android:top="2dp"

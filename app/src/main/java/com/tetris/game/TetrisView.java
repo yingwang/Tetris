@@ -44,8 +44,8 @@ public class TetrisView extends View {
 
         gridPaint = new Paint();
         gridPaint.setStyle(Paint.Style.STROKE);
-        gridPaint.setColor(Color.parseColor("#333333"));
-        gridPaint.setStrokeWidth(2);
+        gridPaint.setColor(Color.parseColor("#8BAC0F")); // GBC grid line color
+        gridPaint.setStrokeWidth(1);
         gridPaint.setAntiAlias(true);
 
         highlightPaint = new Paint();
@@ -59,8 +59,8 @@ public class TetrisView extends View {
 
         borderPaint = new Paint();
         borderPaint.setStyle(Paint.Style.STROKE);
-        borderPaint.setColor(Color.parseColor("#4CAF50"));
-        borderPaint.setStrokeWidth(4);
+        borderPaint.setColor(Color.parseColor("#0F380F")); // GBC dark green border
+        borderPaint.setStrokeWidth(8);
         borderPaint.setAntiAlias(true);
 
         textPaint = new Paint();
@@ -132,8 +132,8 @@ public class TetrisView extends View {
 
         if (game == null) return;
 
-        // Draw background
-        canvas.drawColor(Color.parseColor("#0F1419"));
+        // Draw background - GBC screen greenish-yellow
+        canvas.drawColor(Color.parseColor("#9BBC0F"));
 
         TetrisBoard board = game.getBoard();
         int[][] boardState = board.getBoard();
