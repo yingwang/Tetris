@@ -48,21 +48,33 @@ public class SoundManager {
     }
 
     private void playTone(double frequency, int durationMs) {
+        playTone(frequency, durationMs, 0.5); // Default 50% duty cycle
+    }
+
+    private void playTone(double frequency, int durationMs, double dutyCycle) {
         int numSamples = durationMs * SAMPLE_RATE / 1000;
         byte[] sound = new byte[2 * numSamples];
         double sample;
 
-        // Generate square wave for retro game sound
+        // Generate Game Boy style square wave with adjustable duty cycle
         for (int i = 0; i < numSamples; i++) {
-            double angle = 2.0 * Math.PI * i / (SAMPLE_RATE / frequency);
-            sample = Math.sin(angle) > 0 ? 1 : -1;
+            double phase = (i * frequency / SAMPLE_RATE) % 1.0;
+            sample = phase < dutyCycle ? 1.0 : -1.0;
 
-            // Apply volume envelope (fade out)
-            double envelope = 1.0 - (double) i / numSamples * 0.7;
+            // Game Boy style volume envelope - sharp attack, quick decay
+            double envelope = 1.0;
+            if (i < numSamples * 0.02) {
+                // Very fast attack (2%)
+                envelope = (double) i / (numSamples * 0.02);
+            } else if (i > numSamples * 0.3) {
+                // Quick exponential decay starting at 30%
+                double decayPos = ((double) i - numSamples * 0.3) / (numSamples * 0.7);
+                envelope = Math.pow(1.0 - decayPos, 2.0); // Exponential decay
+            }
             sample = sample * envelope;
 
-            // Convert to 16-bit PCM
-            short val = (short) (sample * 32767 * 0.12); // 12% volume - 再降低音效音量
+            // Convert to 16-bit PCM - Game Boy had limited bit depth
+            short val = (short) (sample * 32767 * 0.15); // Slightly louder for clarity
             sound[i * 2] = (byte) (val & 0x00ff);
             sound[i * 2 + 1] = (byte) ((val & 0xff00) >>> 8);
         }
@@ -92,34 +104,43 @@ public class SoundManager {
     }
 
     public void playMove() {
-        // Very short, simple blip - classic Tetris move sound
-        playSound(new double[]{1200}, new int[]{30});
+        // Game Boy style - ultra short blip with 25% duty cycle (thinner sound)
+        if (isMuted) return;
+        new Thread(() -> playTone(1047, 25, 0.25)).start(); // High C, very short
     }
 
     public void playRotate() {
-        // Slightly higher pitched blip - classic Tetris rotate
-        playSound(new double[]{1400}, new int[]{35});
+        // Game Boy style - short chirp with 12.5% duty cycle (even thinner)
+        if (isMuted) return;
+        new Thread(() -> {
+            playTone(1318, 30, 0.125); // E, thin pulse
+        }).start();
     }
 
     public void playDrop() {
-        // Bright, satisfying drop sound - descending chirp
-        playSound(new double[]{880, 660}, new int[]{60, 80});
+        // Game Boy style - quick descending tone (like original GB Tetris)
+        if (isMuted) return;
+        new Thread(() -> {
+            playTone(784, 40, 0.5);  // G
+            try { Thread.sleep(5); } catch (InterruptedException e) {}
+            playTone(523, 60, 0.5);  // C
+        }).start();
     }
 
     public void playLineClear() {
-        // Bright, triumphant ascending arpeggio - rewarding and celebratory
-        // C - E - G - C(high) - E(high) with crescendo ending
-        playSound(new double[]{523, 659, 784, 1047, 1319}, new int[]{80, 80, 80, 100, 140});
+        // Game Boy Tetris style - characteristic ascending arpeggio
+        // Using 50% duty cycle for fuller sound on important events
+        playSound(new double[]{659, 784, 988, 1318}, new int[]{60, 60, 60, 200});
     }
 
     public void playGameOver() {
-        // Simple descending tones - classic game over
-        playSound(new double[]{523, 440, 349, 262}, new int[]{150, 150, 150, 400});
+        // Game Boy style - descending tones with sustain on final note
+        playSound(new double[]{659, 523, 440, 349}, new int[]{120, 120, 120, 350});
     }
 
     public void playLevelUp() {
-        // Bright ascending fanfare
-        playSound(new double[]{523, 659, 784, 1047, 1319}, new int[]{80, 80, 80, 80, 300});
+        // Game Boy style - triumphant fanfare
+        playSound(new double[]{784, 988, 1175, 1568}, new int[]{70, 70, 70, 250});
     }
 
     public boolean isMuted() {
@@ -204,34 +225,56 @@ public class SoundManager {
     }
 
     private void playMusicLoop() {
-        // 欢快有节奏感的游戏旋律 - Energetic, rhythmic game melody
-        // 类似经典街机游戏风格
+        // Classic Game Boy Tetris Theme (Korobeiniki / Type A)
+        // The iconic Russian folk melody
         double[] notes = {
-            659, 659, 0, 659,       // E E - E  (节奏感开场)
-            523, 659, 784,          // C E G    (跳跃上行)
-            392, 0, 523, 0,         // G - C -  (停顿增加节奏)
-            392, 330, 349, 440,     // G E F A  (快速音阶)
-            523, 587, 523, 440,     // C D C A  (活泼跳跃)
-            392, 523, 659,          // G C E    (再次上行)
-            587, 659, 587, 523,     // D E D C  (下行回旋)
-            440, 392, 523           // A G C    (结束)
+            // Main theme - first phrase
+            659, 494, 523, 587,     // E B C D
+            523, 494, 440,          // C B A
+            440, 523, 659,          // A C E
+            587, 523, 494,          // D C B
+
+            // Second phrase
+            523, 587, 659,          // C D E
+            523, 440, 440,          // C A A
+            0,                      // rest
+
+            // Third phrase
+            587, 698, 880,          // D F A
+            784, 698, 659,          // G F E
+            523, 659, 587,          // C E D
+            523, 494,               // C B
+
+            // Fourth phrase (ending)
+            494, 523, 587, 659,     // B C D E
+            523, 440, 440,          // C A A
+            0                       // rest
         };
 
-        // 节奏模式 - varied rhythm for more energy
-        // 1 = 正常, 0.5 = 短促, 1.5 = 长音
+        // Rhythm pattern matching original Game Boy Tetris
+        // 1.0 = quarter note, 0.5 = eighth note, 2.0 = half note
         double[] rhythmPattern = {
-            0.7, 0.7, 0.4, 0.7,     // 快速节奏
-            0.7, 0.7, 1.2,          // 跳跃感
-            1.0, 0.4, 1.0, 0.4,     // 停顿节奏
-            0.6, 0.6, 0.6, 0.6,     // 快速音阶
-            0.7, 0.7, 0.7, 0.7,     // 均匀节奏
-            0.7, 0.7, 1.2,          // 再次跳跃
-            0.6, 0.6, 0.6, 0.6,     // 快速下行
-            0.7, 0.7, 1.5           // 结束长音
+            1.0, 0.5, 0.5, 1.0,     // E B C D
+            0.5, 0.5, 1.0,          // C B A
+            0.5, 0.5, 1.0,          // A C E
+            0.5, 0.5, 1.0,          // D C B
+
+            0.5, 0.5, 1.0,          // C D E
+            1.0, 1.0, 1.0,          // C A A
+            1.0,                    // rest
+
+            0.5, 0.5, 1.0,          // D F A
+            0.5, 0.5, 1.0,          // G F E
+            0.5, 0.5, 1.0,          // C E D
+            0.5, 0.5,               // C B
+
+            1.0, 0.5, 0.5, 1.0,     // B C D E
+            1.0, 1.0, 1.0,          // C A A
+            1.0                     // rest
         };
 
-        // 根据musicSpeed调整节奏 - rhythm adjusted by music speed
-        int baseNoteDuration = 320; // 更短的基础时长，更快节奏
+        // Base tempo adjusted for music speed
+        int baseNoteDuration = 280; // Classic Tetris tempo
 
         try {
             for (int i = 0; i < notes.length && isPlayingMusic && !isMusicPaused; i++) {
@@ -256,24 +299,25 @@ public class SoundManager {
         byte[] sound = new byte[2 * numSamples];
         double sample;
 
-        // Generate smoother sine wave for music (not square wave)
+        // Generate Game Boy style square wave for music (50% duty cycle)
         for (int i = 0; i < numSamples; i++) {
-            double angle = 2.0 * Math.PI * i / (SAMPLE_RATE / frequency);
-            sample = Math.sin(angle);
+            // Pure square wave - authentic Game Boy sound
+            double phase = (i * frequency / SAMPLE_RATE) % 1.0;
+            sample = phase < 0.5 ? 1.0 : -1.0;
 
-            // Apply gentle envelope for smoother music
+            // Game Boy style envelope - maintain volume with slight fade
             double envelope = 1.0;
-            if (i < numSamples * 0.05) {
-                // Fade in
-                envelope = (double) i / (numSamples * 0.05);
-            } else if (i > numSamples * 0.8) {
-                // Fade out
-                envelope = 1.0 - ((double) i - numSamples * 0.8) / (numSamples * 0.2);
+            if (i < numSamples * 0.01) {
+                // Very quick attack
+                envelope = (double) i / (numSamples * 0.01);
+            } else if (i > numSamples * 0.85) {
+                // Quick fade out at end of note
+                envelope = 1.0 - ((double) i - numSamples * 0.85) / (numSamples * 0.15);
             }
             sample = sample * envelope;
 
-            // Convert to 16-bit PCM (balanced volume for background music)
-            short val = (short) (sample * 32767 * 0.18); // 18% volume - 背景音乐更清晰
+            // Convert to 16-bit PCM - Game Boy music volume
+            short val = (short) (sample * 32767 * 0.12); // Lower volume for background music
             sound[i * 2] = (byte) (val & 0x00ff);
             sound[i * 2 + 1] = (byte) ((val & 0xff00) >>> 8);
         }
