@@ -31,6 +31,9 @@ public class TetrisView extends View {
     private GestureDetector gestureDetector;
     private float boardWidth;
     private float boardHeight;
+    private boolean isDragging = false;
+    private float dragStartX = 0;
+    private int pieceStartX = 0;
 
     public TetrisView(Context context) {
         super(context);
@@ -118,29 +121,8 @@ public class TetrisView extends View {
                 float diffX = e2.getX() - e1.getX();
                 float diffY = e2.getY() - e1.getY();
 
-                // Reduced threshold from 50 to 30 for faster response
-                // Swipe left - smart distance-based movement
-                if (Math.abs(diffX) > Math.abs(diffY) && diffX < -30) {
-                    // Calculate number of moves based on swipe distance
-                    int moves = Math.max(1, Math.min(5, (int)(Math.abs(diffX) / (blockSize * 1.5f))));
-                    for (int i = 0; i < moves; i++) {
-                        game.moveLeft();
-                    }
-                    postInvalidate();
-                    return true;
-                }
-                // Swipe right - smart distance-based movement
-                else if (Math.abs(diffX) > Math.abs(diffY) && diffX > 30) {
-                    // Calculate number of moves based on swipe distance
-                    int moves = Math.max(1, Math.min(5, (int)(Math.abs(diffX) / (blockSize * 1.5f))));
-                    for (int i = 0; i < moves; i++) {
-                        game.moveRight();
-                    }
-                    postInvalidate();
-                    return true;
-                }
-                // Swipe down (drop)
-                else if (Math.abs(diffY) > Math.abs(diffX) && diffY > 30) {
+                // Swipe down (drop) - only vertical fling
+                if (Math.abs(diffY) > Math.abs(diffX) && diffY > 50) {
                     game.drop();
                     postInvalidate();
                     return true;
@@ -182,10 +164,58 @@ public class TetrisView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (gestureDetector.onTouchEvent(event)) {
-            return true;
+        // First try gesture detector for tap and fling
+        boolean gestureHandled = gestureDetector.onTouchEvent(event);
+
+        // Then handle drag for horizontal movement
+        if (game != null && !game.isGameOver() && !game.isPaused()) {
+            float x = event.getX();
+            float y = event.getY();
+
+            // Check if touch is within game board
+            if (x >= offsetX && x <= offsetX + boardWidth &&
+                y >= offsetY && y <= offsetY + boardHeight) {
+
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        isDragging = true;
+                        dragStartX = x;
+                        if (game.getCurrentPiece() != null) {
+                            pieceStartX = game.getCurrentPiece().getX();
+                        }
+                        return true;
+
+                    case MotionEvent.ACTION_MOVE:
+                        if (isDragging && game.getCurrentPiece() != null) {
+                            float deltaX = x - dragStartX;
+                            int blocksMoved = Math.round(deltaX / blockSize);
+                            int targetX = pieceStartX + blocksMoved;
+                            int currentX = game.getCurrentPiece().getX();
+
+                            // Move piece to target position
+                            if (targetX > currentX) {
+                                for (int i = 0; i < targetX - currentX; i++) {
+                                    game.moveRight();
+                                }
+                            } else if (targetX < currentX) {
+                                for (int i = 0; i < currentX - targetX; i++) {
+                                    game.moveLeft();
+                                }
+                            }
+                            postInvalidate();
+                            return true;
+                        }
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        isDragging = false;
+                        break;
+                }
+            }
         }
-        return super.onTouchEvent(event);
+
+        return gestureHandled || super.onTouchEvent(event);
     }
 
     @Override
