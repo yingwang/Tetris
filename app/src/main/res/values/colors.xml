@@ -1,69 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Professional Gaming Theme - Dark with Neon Accents -->
+    <!-- Homebrew Terminal Theme - Retro Green on Black -->
 
     <!-- Background Colors -->
-    <color name="game_background">#0A0E27</color>           <!-- Deep dark blue -->
-    <color name="background_primary">#12172B</color>        <!-- Dark blue-gray -->
-    <color name="background_secondary">#1A1F3A</color>      <!-- Lighter dark blue -->
-    <color name="background_elevated">#1E2542</color>       <!-- Elevated surface -->
+    <color name="game_background">#000000</color>           <!-- Pure black -->
+    <color name="background_primary">#0A0A0A</color>        <!-- Very dark gray -->
+    <color name="background_secondary">#121212</color>      <!-- Dark gray -->
+    <color name="background_elevated">#1A1A1A</color>       <!-- Slightly lighter -->
 
     <!-- Neon Accent Colors -->
     <color name="neon_cyan">#00F5FF</color>                 <!-- Bright cyan -->
     <color name="neon_purple">#C77DFF</color>               <!-- Bright purple -->
     <color name="neon_pink">#FF006E</color>                 <!-- Bright pink -->
     <color name="neon_blue">#3D5AFE</color>                 <!-- Bright blue -->
-    <color name="neon_green">#39FF14</color>                <!-- Neon green -->
+    <color name="neon_green">#00FF00</color>                <!-- Terminal green -->
 
     <!-- Primary Game Colors -->
-    <color name="accent_primary">#00F5FF</color>            <!-- Cyan accent -->
-    <color name="accent_secondary">#C77DFF</color>          <!-- Purple accent -->
+    <color name="accent_primary">#00FF00</color>            <!-- Terminal green -->
+    <color name="accent_secondary">#FFCC00</color>          <!-- Amber/yellow -->
     <color name="accent_gold">#FFD700</color>               <!-- Gold -->
 
     <!-- UI Elements -->
-    <color name="grid_line">#2A3050</color>                 <!-- Subtle grid -->
-    <color name="border_color">#00F5FF</color>              <!-- Cyan border -->
-    <color name="border_glow">#4000F5FF</color>             <!-- Cyan glow -->
+    <color name="grid_line">#1A3A1A</color>                 <!-- Subtle dark green -->
+    <color name="border_color">#00FF00</color>              <!-- Green border -->
+    <color name="border_glow">#4000FF00</color>             <!-- Green glow -->
     <color name="shadow_color">#00000080</color>            <!-- Black shadow -->
 
     <!-- Text Colors -->
-    <color name="text_primary">#FFFFFF</color>              <!-- White -->
-    <color name="text_secondary">#A8B2D1</color>            <!-- Light gray-blue -->
-    <color name="text_accent">#00F5FF</color>               <!-- Cyan -->
-    <color name="text_gold">#FFD700</color>                 <!-- Gold -->
+    <color name="text_primary">#CCCCCC</color>              <!-- Light gray -->
+    <color name="text_secondary">#808080</color>            <!-- Medium gray -->
+    <color name="text_accent">#00FF00</color>               <!-- Terminal green -->
+    <color name="text_gold">#FFCC00</color>                 <!-- Amber -->
     <color name="text_purple">#C77DFF</color>               <!-- Purple -->
 
     <!-- Score & Status Backgrounds -->
-    <color name="score_background">#1A1F3A</color>          <!-- Dark blue -->
-    <color name="score_border">#00F5FF</color>              <!-- Cyan border -->
-    <color name="level_background">#1E2542</color>          <!-- Dark elevated -->
-    <color name="level_border">#C77DFF</color>              <!-- Purple border -->
+    <color name="score_background">#0A0A0A</color>          <!-- Very dark gray -->
+    <color name="score_border">#00FF00</color>              <!-- Green border -->
+    <color name="level_background">#0A0A0A</color>          <!-- Very dark gray -->
+    <color name="level_border">#00FF00</color>              <!-- Green border -->
 
     <!-- Button Colors -->
-    <color name="button_normal">#C77DFF</color>             <!-- Purple -->
-    <color name="button_pressed">#9D4EDD</color>            <!-- Darker purple -->
-    <color name="button_gradient_start">#C77DFF</color>     <!-- Purple -->
-    <color name="button_gradient_end">#9D4EDD</color>       <!-- Dark purple -->
-    <color name="button_border">#E0AAFF</color>             <!-- Light purple -->
+    <color name="button_normal">#00AA00</color>             <!-- Dark green -->
+    <color name="button_pressed">#008800</color>            <!-- Darker green -->
+    <color name="button_gradient_start">#00CC00</color>     <!-- Light green -->
+    <color name="button_gradient_end">#008800</color>       <!-- Dark green -->
+    <color name="button_border">#00FF00</color>             <!-- Bright green -->
 
     <!-- High Scores -->
     <color name="rank_gold">#FFD700</color>                 <!-- Gold -->
     <color name="rank_silver">#C0C0C0</color>               <!-- Silver -->
     <color name="rank_bronze">#CD7F32</color>               <!-- Bronze -->
-    <color name="high_score_bg">#1E2542</color>             <!-- Dark elevated -->
-    <color name="high_score_top_bg">#2A1F1A</color>         <!-- Dark warm -->
+    <color name="high_score_bg">#0A0A0A</color>             <!-- Very dark gray -->
+    <color name="high_score_top_bg">#121212</color>         <!-- Dark gray -->
 
-    <!-- Enhanced Tetris Piece Colors - Vibrant & Glowing -->
-    <color name="piece_cyan">#00F5FF</color>                <!-- I-piece: Neon cyan -->
-    <color name="piece_yellow">#FFEA00</color>              <!-- O-piece: Bright yellow -->
-    <color name="piece_magenta">#FF00FF</color>             <!-- T-piece: Neon magenta -->
-    <color name="piece_green">#39FF14</color>               <!-- S-piece: Neon green -->
-    <color name="piece_red">#FF073A</color>                 <!-- Z-piece: Bright red -->
-    <color name="piece_blue">#3D5AFE</color>                <!-- J-piece: Vibrant blue -->
-    <color name="piece_orange">#FF9500</color>              <!-- L-piece: Bright orange -->
+    <!-- Terminal-style Tetris Piece Colors - Retro Bright -->
+    <color name="piece_cyan">#00FFFF</color>                <!-- I-piece: Cyan -->
+    <color name="piece_yellow">#FFFF00</color>              <!-- O-piece: Yellow -->
+    <color name="piece_magenta">#FF00FF</color>             <!-- T-piece: Magenta -->
+    <color name="piece_green">#00FF00</color>               <!-- S-piece: Green -->
+    <color name="piece_red">#FF0000</color>                 <!-- Z-piece: Red -->
+    <color name="piece_blue">#0080FF</color>                <!-- J-piece: Blue -->
+    <color name="piece_orange">#FF8800</color>              <!-- L-piece: Orange -->
 
     <!-- Ghost Piece -->
-    <color name="ghost_piece">#4A5578</color>               <!-- Subtle blue-gray -->
+    <color name="ghost_piece">#333333</color>               <!-- Dark gray -->
 
     <!-- System Colors -->
     <color name="black">#000000</color>

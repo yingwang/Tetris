@@ -44,7 +44,7 @@ public class TetrisView extends View {
 
         gridPaint = new Paint();
         gridPaint.setStyle(Paint.Style.STROKE);
-        gridPaint.setColor(Color.parseColor("#2A3050"));
+        gridPaint.setColor(Color.parseColor("#1A3A1A"));
         gridPaint.setStrokeWidth(1);
         gridPaint.setAntiAlias(true);
 
@@ -59,16 +59,16 @@ public class TetrisView extends View {
 
         borderPaint = new Paint();
         borderPaint.setStyle(Paint.Style.STROKE);
-        borderPaint.setColor(Color.parseColor("#00F5FF"));
+        borderPaint.setColor(Color.parseColor("#00FF00"));
         borderPaint.setStrokeWidth(5);
         borderPaint.setAntiAlias(true);
-        borderPaint.setShadowLayer(8, 0, 0, Color.parseColor("#4000F5FF"));
+        borderPaint.setShadowLayer(8, 0, 0, Color.parseColor("#4000FF00"));
 
         textPaint = new Paint();
-        textPaint.setColor(Color.WHITE);
+        textPaint.setColor(Color.parseColor("#00FF00"));
         textPaint.setTextSize(40);
         textPaint.setAntiAlias(true);
-        textPaint.setShadowLayer(8, 0, 0, Color.parseColor("#00F5FF"));
+        textPaint.setShadowLayer(8, 0, 0, Color.parseColor("#00FF00"));
 
         flashPaint = new Paint();
         flashPaint.setStyle(Paint.Style.FILL);
@@ -116,7 +116,7 @@ public class TetrisView extends View {
         if (game != null) {
             TetrisBoard board = game.getBoard();
             float boardWidth = w * 0.75f;
-            float boardHeight = h * 0.78f;
+            float boardHeight = h * 0.70f;
 
             float blockWidth = boardWidth / board.getCols();
             float blockHeight = boardHeight / board.getRows();
@@ -134,7 +134,7 @@ public class TetrisView extends View {
         if (game == null) return;
 
         // Draw background
-        canvas.drawColor(Color.parseColor("#0A0E27"));
+        canvas.drawColor(Color.parseColor("#000000"));
 
         TetrisBoard board = game.getBoard();
         int[][] boardState = board.getBoard();
@@ -227,8 +227,8 @@ public class TetrisView extends View {
         if (game.isGameOver()) {
             textPaint.setTextSize(80);
             textPaint.setTextAlign(Paint.Align.CENTER);
-            textPaint.setColor(Color.parseColor("#FF073A"));
-            textPaint.setShadowLayer(15, 0, 0, Color.parseColor("#FF073A"));
+            textPaint.setColor(Color.parseColor("#FF0000"));
+            textPaint.setShadowLayer(15, 0, 0, Color.parseColor("#FF0000"));
             canvas.drawText("GAME OVER", getWidth() / 2f, getHeight() / 2f, textPaint);
         }
     }
@@ -326,8 +326,8 @@ public class TetrisView extends View {
         // Draw "Next:" label with background
         textPaint.setTextSize(24);
         textPaint.setTextAlign(Paint.Align.LEFT);
-        textPaint.setColor(Color.parseColor("#00F5FF"));
-        textPaint.setShadowLayer(6, 0, 0, Color.parseColor("#00F5FF"));
+        textPaint.setColor(Color.parseColor("#00FF00"));
+        textPaint.setShadowLayer(6, 0, 0, Color.parseColor("#00FF00"));
         canvas.drawText("NEXT", previewX, previewY + 20, textPaint);
 
         // Draw next piece with 3D effect
