@@ -114,7 +114,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:visibility="gone">
 
         <!-- Score and Level Display -->
@@ -123,8 +123,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:paddingHorizontal="4dp">
 
             <TextView
@@ -232,13 +232,13 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginBottom="4dp"/>
+            android:layout_marginBottom="12dp"/>
 
         <!-- Control Buttons -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="32dp">
+            android:paddingBottom="24dp">
 
             <!-- Left button - far left -->
             <ImageButton
