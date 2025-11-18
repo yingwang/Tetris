@@ -31,5 +31,8 @@
     <color name="gb_darkest">#0F380F</color>            <!-- Darkest GB green -->
     <color name="gb_dark">#306230</color>               <!-- Dark GB green -->
     <color name="text_accent">#FFD700</color>           <!-- Text accent color -->
+    <color name="text_primary">#FFFFFF</color>          <!-- Primary text color -->
+    <color name="text_secondary">#999999</color>        <!-- Secondary text color -->
+    <color name="rank_gold">#FFD700</color>             <!-- Gold color for top ranks -->
     <color name="shadow_color">#000000</color>          <!-- Shadow color -->
 </resources>
