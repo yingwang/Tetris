@@ -1,7 +1,6 @@
 package com.tetris.game;
 
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,16 +18,19 @@ public class HighScoresActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_high_scores);
 
-        // Enable back button
+        // Hide action bar
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.high_scores);
+            getSupportActionBar().hide();
         }
+
+        setContentView(R.layout.activity_high_scores);
 
         scoresContainer = findViewById(R.id.scoresContainer);
         scoreManager = new HighScoreManager(this);
+
+        // Setup back button
+        findViewById(R.id.btnBackToMenu).setOnClickListener(v -> finish());
 
         displayHighScores();
     }
@@ -112,12 +114,4 @@ public class HighScoresActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }
