@@ -307,6 +307,7 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
                 // Show pause dialog with Continue and Quit options
                 new RetroDialog(this)
                         .setTitle("GAME PAUSED")
+                        .setCancelable(false)
                         .setButton("Continue", v -> {
                             // Resume the game
                             game.setPaused(false);

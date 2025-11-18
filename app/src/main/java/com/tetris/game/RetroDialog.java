@@ -57,6 +57,11 @@ public class RetroDialog {
         return this;
     }
 
+    public RetroDialog setCancelable(boolean cancelable) {
+        dialog.setCancelable(cancelable);
+        return this;
+    }
+
     public void show() {
         dialog.show();
     }
