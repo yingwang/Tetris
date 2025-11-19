@@ -38,10 +38,18 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
     private SoundManager soundManager;
     private SharedPreferences preferences;
 
-    // For down button long press
+    // For button long press
     private Handler downButtonHandler = new Handler();
     private Runnable downButtonRunnable;
     private boolean isDownButtonPressed = false;
+
+    private Handler leftButtonHandler = new Handler();
+    private Runnable leftButtonRunnable;
+    private boolean isLeftButtonPressed = false;
+
+    private Handler rightButtonHandler = new Handler();
+    private Runnable rightButtonRunnable;
+    private boolean isRightButtonPressed = false;
 
     private int selectedSpeed = 5; // Default speed
     private int selectedStartingLines = 0; // Default starting lines
@@ -97,12 +105,68 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         ImageButton btnRotate = findViewById(R.id.btnRotate);
         ImageButton btnDrop = findViewById(R.id.btnDrop);
 
-        btnLeft.setOnClickListener(v -> {
-            if (game != null) game.moveLeft();
+        // Left button with long press support for continuous movement
+        btnLeft.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case android.view.MotionEvent.ACTION_DOWN:
+                    // Initial press
+                    if (game != null) game.moveLeft();
+                    isLeftButtonPressed = true;
+
+                    // Start repeating after short delay
+                    leftButtonRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isLeftButtonPressed && game != null) {
+                                game.moveLeft();
+                                leftButtonHandler.postDelayed(this, 80); // Repeat every 80ms for smooth movement
+                            }
+                        }
+                    };
+                    leftButtonHandler.postDelayed(leftButtonRunnable, 120); // Start repeating after 120ms
+                    return true;
+
+                case android.view.MotionEvent.ACTION_UP:
+                case android.view.MotionEvent.ACTION_CANCEL:
+                    // Stop repeating
+                    isLeftButtonPressed = false;
+                    leftButtonHandler.removeCallbacks(leftButtonRunnable);
+                    v.performClick(); // Accessibility
+                    return true;
+            }
+            return false;
         });
 
-        btnRight.setOnClickListener(v -> {
-            if (game != null) game.moveRight();
+        // Right button with long press support for continuous movement
+        btnRight.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case android.view.MotionEvent.ACTION_DOWN:
+                    // Initial press
+                    if (game != null) game.moveRight();
+                    isRightButtonPressed = true;
+
+                    // Start repeating after short delay
+                    rightButtonRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isRightButtonPressed && game != null) {
+                                game.moveRight();
+                                rightButtonHandler.postDelayed(this, 80); // Repeat every 80ms for smooth movement
+                            }
+                        }
+                    };
+                    rightButtonHandler.postDelayed(rightButtonRunnable, 120); // Start repeating after 120ms
+                    return true;
+
+                case android.view.MotionEvent.ACTION_UP:
+                case android.view.MotionEvent.ACTION_CANCEL:
+                    // Stop repeating
+                    isRightButtonPressed = false;
+                    rightButtonHandler.removeCallbacks(rightButtonRunnable);
+                    v.performClick(); // Accessibility
+                    return true;
+            }
+            return false;
         });
 
         // Down button with long press support for continuous speed up
@@ -510,10 +574,20 @@ public class MainActivity extends AppCompatActivity implements TetrisGame.GameLi
         super.onDestroy();
         stopGame();
 
-        // Clean up down button handler
+        // Clean up button handlers
         isDownButtonPressed = false;
         if (downButtonHandler != null && downButtonRunnable != null) {
             downButtonHandler.removeCallbacks(downButtonRunnable);
+        }
+
+        isLeftButtonPressed = false;
+        if (leftButtonHandler != null && leftButtonRunnable != null) {
+            leftButtonHandler.removeCallbacks(leftButtonRunnable);
+        }
+
+        isRightButtonPressed = false;
+        if (rightButtonHandler != null && rightButtonRunnable != null) {
+            rightButtonHandler.removeCallbacks(rightButtonRunnable);
         }
 
         if (soundManager != null) {
